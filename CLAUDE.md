@@ -32,7 +32,6 @@ graph TD
         Pkg_DB["@repo/database"]
         Pkg_Auth["@repo/auth"]
         Pkg_Design["@repo/design"]
-        Pkg_AI_Client["@repo/ai (Client)"]
         Pkg_Analytics["@repo/analytics"]
         Pkg_Email_Lib["@repo/email (Lib)"]
         Pkg_Webhooks_Lib["@repo/webhooks (Lib)"]
@@ -53,8 +52,7 @@ graph TD
     App_Middleware["apps/app/middleware.ts"] --> Pkg_Auth
 
     %% AI Flow
-    App_API_Main -->|If AI feature| Pkg_AI_Client
-    Pkg_AI_Client --> App_AI
+    App_API_Main -->|If AI feature| App_AI
 
     %% UI and Styling
     App_Frontend --> Pkg_Design
@@ -76,7 +74,7 @@ graph TD
     classDef ext fill:#DAE8FC,stroke:#333,stroke-width:2px;
 
     class App_Frontend,App_AI,App_API_Standalone,App_Email app;
-    class Pkg_API,Pkg_DB,Pkg_Auth,Pkg_Design,Pkg_AI_Client,Pkg_Analytics,Pkg_Email_Lib,Pkg_Webhooks_Lib,Pkg_Config pkg;
+    class Pkg_API,Pkg_DB,Pkg_Auth,Pkg_Design,Pkg_Analytics,Pkg_Email_Lib,Pkg_Webhooks_Lib,Pkg_Config pkg;
     class User,External_Service ext;
 ```
 
