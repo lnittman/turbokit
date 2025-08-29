@@ -1,0 +1,559 @@
+# TurboKit Design System Architecture Guide for AI Agents
+
+This document provides comprehensive instructions for AI agents (Claude, GPT, etc.) to understand and modify the TurboKit design system. It serves as the authoritative source for design token manipulation, component styling, and theme variations.
+
+## Table of Contents
+1. [Core Design Philosophy](#core-design-philosophy)
+2. [Architecture Overview](#architecture-overview)
+3. [Design Token System](#design-token-system)
+4. [Component Organization](#component-organization)
+5. [Styling Paradigms](#styling-paradigms)
+6. [Modification Patterns](#modification-patterns)
+7. [Integration Points](#integration-points)
+8. [Common Tasks](#common-tasks)
+
+---
+
+## Core Design Philosophy
+
+TurboKit's design system is built on **compositional flexibility** - the ability to shift between design languages (brutalist, minimalist, corporate, playful) through systematic token manipulation rather than component replacement.
+
+### Key Principles
+1. **Token-First Design**: All visual properties flow from CSS custom properties
+2. **OKLCH Color Space**: Perceptually uniform color manipulation
+3. **Component Agnosticism**: Components adapt to token changes
+4. **Progressive Enhancement**: Base styles → Theme → Component → Instance
+
+---
+
+## Architecture Overview
+
+```
+packages/design/
+├── components/
+│   ├── shadcn/              # shadcn/ui components (rename from ui/)
+│   ├── motion/              # motion-primitives components
+│   ├── kibo/                # kibo-ui components
+│   └── apps/                # components shared between 2+ apps
+├── styles/
+│   ├── globals.css          # CSS variables & global styles
+│   ├── themes/              # Theme variations
+│   │   ├── brutalist.css    # Bauhaus/industrial theme
+│   │   ├── minimal.css      # Vercel-like clean theme
+│   │   └── playful.css      # Colorful/fun theme
+│   └── cmdk.css             # Command palette styles
+├── tokens/
+│   ├── colors.ts            # Color token definitions
+│   ├── typography.ts        # Font tokens
+│   ├── spacing.ts           # Spacing scale
+│   └── motion.ts            # Animation tokens
+├── lib/
+│   ├── utils.ts             # cn() and utilities
+│   └── fonts.ts             # Font loading/config
+└── providers/
+    └── theme.tsx            # Theme provider wrapper
+```
+
+---
+
+## Design Token System
+
+### Color Tokens (CSS Custom Properties)
+
+#### Location: `packages/design/styles/globals.css`
+
+```css
+:root {
+  /* Core Palette */
+  --background: oklch(L C H);      /* Page background */
+  --foreground: oklch(L C H);      /* Default text */
+  --card: oklch(L C H);             /* Card backgrounds */
+  --card-foreground: oklch(L C H);  /* Card text */
+  
+  /* Interactive States */
+  --primary: oklch(L C H);          /* Primary actions */
+  --primary-foreground: oklch(L C H);
+  --secondary: oklch(L C H);        /* Secondary actions */
+  --secondary-foreground: oklch(L C H);
+  
+  /* Semantic Colors */
+  --destructive: oklch(L C H);      /* Errors/danger */
+  --success: oklch(L C H);          /* Success states */
+  --warning: oklch(L C H);          /* Warnings */
+  --info: oklch(L C H);             /* Information */
+  
+  /* UI Elements */
+  --border: oklch(L C H);           /* Borders */
+  --input: oklch(L C H);            /* Input borders */
+  --ring: oklch(L C H);             /* Focus rings */
+  
+  /* Surfaces */
+  --muted: oklch(L C H);            /* Muted backgrounds */
+  --muted-foreground: oklch(L C H); /* Muted text */
+  --accent: oklch(L C H);           /* Accent surfaces */
+  --accent-foreground: oklch(L C H);
+  
+  /* Layout */
+  --radius: 0.5rem;                 /* Border radius */
+  --sidebar: oklch(L C H);          /* Sidebar background */
+  --sidebar-foreground: oklch(L C H);
+}
+```
+
+### OKLCH Color Space Guide
+
+OKLCH format: `oklch(Lightness Chroma Hue)`
+- **L (Lightness)**: 0-1 or 0%-100% (0 = black, 1 = white)
+- **C (Chroma)**: 0-0.4 (0 = grayscale, higher = more saturated)
+- **H (Hue)**: 0-360 (color wheel degrees)
+
+#### Quick Reference:
+- **Grayscale**: Set C to 0 (e.g., `oklch(0.5 0 0)`)
+- **Warm tones**: H around 60-90
+- **Cool tones**: H around 200-240
+- **Vibrant**: C > 0.15
+- **Muted**: C < 0.05
+
+---
+
+## Component Organization
+
+### Directory Structure Strategy
+
+**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps (e.g., `apps/web` marketing site and `apps/app` main client) belong in the design package.
+
+```typescript
+// packages/design/components/index.ts
+// Central export point for all components
+
+// shadcn components (base primitives)
+export * from './shadcn';
+
+// Motion components (animations)
+export * from './motion';
+
+// Kibo components (advanced UI)
+export * from './kibo';
+
+// Shared app components (used by 2+ apps)
+export * from './apps';
+```
+
+### Adding Component Libraries
+
+#### 1. Create dedicated directory:
+```bash
+mkdir packages/design/components/[library-name]
+```
+
+#### 2. Add components with consistent exports:
+```typescript
+// packages/design/components/kibo/index.ts
+export { default as KiboCard } from './card';
+export { default as KiboStack } from './stack';
+```
+
+### Shared App Components
+
+When components are needed by multiple apps:
+
+```typescript
+// packages/design/components/apps/header.tsx
+// Shared header used by both marketing and main app
+export function SharedHeader({ variant = 'default' }) {
+  // Component that adapts to context
+}
+
+// packages/design/components/apps/footer.tsx
+// Shared footer component
+export function SharedFooter({ links }) {
+  // Reusable across apps
+}
+```
+
+#### 3. Update main export:
+```typescript
+// packages/design/index.tsx
+export * from './components/kibo';
+```
+
+---
+
+## Styling Paradigms
+
+### 1. Brutalist/Bauhaus (arbor-xyz style)
+
+**Characteristics:**
+- Warm, paper-like backgrounds
+- Minimal color saturation
+- Strong typography (Highway Gothic)
+- Industrial spacing
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(0.98 0.005 85);  /* Warm off-white */
+  --foreground: oklch(0.2 0.01 85);    /* Warm black */
+  --primary: oklch(0.22 0.01 85);      /* Near black */
+  --radius: 0.125rem;                  /* Sharp corners */
+  --font-display: "HighwayGothic", sans-serif;
+  --font-mono: "IosevkaTerm-Regular", monospace;
+}
+```
+
+### 2. Minimal/Corporate (webs-xyz style)
+
+**Characteristics:**
+- Pure grayscale
+- Clean lines
+- System fonts (Geist)
+- Generous whitespace
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(1 0 0);       /* Pure white */
+  --foreground: oklch(0.145 0 0);   /* Pure black */
+  --primary: oklch(0.205 0 0);      /* Dark gray */
+  --radius: 0.625rem;               /* Soft corners */
+  --font-sans: "Geist", system-ui;
+  --font-mono: "Geist Mono", monospace;
+}
+```
+
+### 3. Playful/Modern
+
+**Characteristics:**
+- Vibrant colors
+- Gradient accents
+- Rounded corners
+- Dynamic animations
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(0.98 0.02 270);   /* Slight purple tint */
+  --foreground: oklch(0.2 0.03 270);    /* Purple-black */
+  --primary: oklch(0.7 0.25 270);       /* Vibrant purple */
+  --radius: 1rem;                       /* Rounded */
+  --animation-duration: 300ms;          /* Smooth animations */
+}
+```
+
+---
+
+## Modification Patterns
+
+### Task: Change Overall Aesthetic
+
+#### Files to modify:
+1. `packages/design/styles/globals.css` - Color tokens
+2. `packages/design/lib/fonts.ts` - Font configuration
+3. `packages/design/tailwind.config.ts` - Tailwind theme extension
+
+#### Example: Brutalist → Minimal
+```css
+/* packages/design/styles/globals.css */
+/* Change from warm brutalist to clean minimal */
+:root {
+  /* From */
+  --background: oklch(0.98 0.005 85);
+  /* To */
+  --background: oklch(1 0 0);
+  
+  /* Adjust all color tokens to grayscale */
+  /* Set all Chroma values to 0 */
+}
+```
+
+### Task: Add Custom Font
+
+#### Steps:
+1. Add font files to `packages/design/fonts/`
+2. Update font face declarations:
+```css
+/* packages/design/styles/globals.css */
+@font-face {
+  font-family: "CustomFont";
+  src: url("../fonts/custom.woff2") format("woff2");
+  font-display: swap;
+}
+```
+3. Update CSS variable:
+```css
+:root {
+  --font-custom: "CustomFont", sans-serif;
+}
+```
+4. Update Tailwind config:
+```typescript
+// packages/design/tailwind.config.ts
+fontFamily: {
+  custom: ["var(--font-custom)"],
+}
+```
+
+### Task: Integrate New Component Library (e.g., Motion Primitives)
+
+#### Steps:
+1. Install library:
+```bash
+cd packages/design
+pnpm add @motion-primitives/react
+```
+
+2. Create component wrapper:
+```typescript
+// packages/design/components/motion/drawer.tsx
+'use client';
+
+import { Drawer as MotionDrawer } from '@motion-primitives/react';
+import { cn } from '../../lib/utils';
+
+export function Drawer({ className, ...props }) {
+  return (
+    <MotionDrawer 
+      className={cn(
+        "bg-card text-card-foreground",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+```
+
+3. Export from index:
+```typescript
+// packages/design/components/motion/index.ts
+export { Drawer } from './drawer';
+```
+
+---
+
+## Integration Points
+
+### Apps Using Design System
+
+#### 1. Main App (`apps/app`)
+```typescript
+// apps/app/src/app/layout.tsx
+import '@repo/design/styles/globals.css';
+import { ThemeProvider } from '@repo/design/providers/theme';
+```
+
+#### 2. Docs App (`apps/docs`)
+```typescript
+// apps/docs/src/app/layout.tsx
+import '@repo/design/styles/globals.css';
+// Docs app inherits same design tokens
+```
+
+### Tailwind v4 Configuration
+
+```typescript
+// packages/design/tailwind.config.ts
+export default {
+  content: [
+    "./components/**/*.{ts,tsx}",
+    // Include app sources for purging
+    "../../apps/*/src/**/*.{ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Map CSS variables to Tailwind
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+      },
+      borderRadius: {
+        DEFAULT: "var(--radius)",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
+      },
+    },
+  },
+};
+```
+
+---
+
+## Common Tasks
+
+### 1. Dark Mode Support
+
+```css
+/* packages/design/styles/globals.css */
+.dark {
+  /* Invert lightness, maintain character */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  /* Continue for all tokens */
+}
+```
+
+### 2. Responsive Typography Scale
+
+```css
+/* packages/design/styles/globals.css */
+:root {
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+```
+
+### 3. Animation Tokens
+
+```css
+/* packages/design/styles/globals.css */
+:root {
+  --animation-fast: 150ms;
+  --animation-base: 250ms;
+  --animation-slow: 500ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+```
+
+### 4. Component Variant Through Tokens
+
+```typescript
+// Instead of creating new components, modify tokens
+// Example: Alert component that adapts to theme
+
+// Brutalist theme
+.brutalist .alert {
+  --alert-border-width: 2px;
+  --alert-bg: var(--background);
+  --alert-shadow: 4px 4px 0 var(--foreground);
+}
+
+// Minimal theme
+.minimal .alert {
+  --alert-border-width: 1px;
+  --alert-bg: var(--muted);
+  --alert-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+```
+
+---
+
+## AI Agent Instructions
+
+When modifying the design system:
+
+1. **Always start with tokens**, not components
+2. **Use OKLCH** for predictable color manipulation
+3. **Test in both light and dark modes**
+4. **Maintain semantic meaning** (primary = action, destructive = danger)
+5. **Document changes** in this file
+6. **Preserve accessibility** (WCAG AA contrast ratios)
+
+### Quick Commands for Agents
+
+```bash
+# Change to brutalist theme
+sed -i '' 's/oklch([0-9.]+ 0 [0-9]+)/oklch(\1 0.005 85)/g' packages/design/styles/globals.css
+
+# Change to minimal theme  
+sed -i '' 's/oklch([0-9.]+ [0-9.]+ [0-9]+)/oklch(\1 0 0)/g' packages/design/styles/globals.css
+
+# Increase border radius (softer)
+sed -i '' 's/--radius: [0-9.]+rem/--radius: 1rem/g' packages/design/styles/globals.css
+
+# Decrease border radius (sharper)
+sed -i '' 's/--radius: [0-9.]+rem/--radius: 0.125rem/g' packages/design/styles/globals.css
+```
+
+---
+
+## Theme Preset Templates
+
+### Copy-Paste Presets
+
+#### IBM Design Language
+```css
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.11 0 0);
+  --primary: oklch(0.37 0.18 248);      /* IBM Blue */
+  --secondary: oklch(0.18 0 0);
+  --destructive: oklch(0.53 0.24 27);   /* IBM Red */
+  --radius: 0;                          /* No radius */
+}
+```
+
+#### Apple Human Interface
+```css
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --primary: oklch(0.52 0.24 252);      /* Apple Blue */
+  --secondary: oklch(0.96 0 0);
+  --destructive: oklch(0.61 0.24 25);   /* Apple Red */
+  --radius: 0.75rem;                    /* Apple standard */
+}
+```
+
+#### Material Design 3
+```css
+:root {
+  --background: oklch(0.99 0.005 277);
+  --foreground: oklch(0.13 0.02 277);
+  --primary: oklch(0.45 0.16 277);      /* Material Purple */
+  --secondary: oklch(0.89 0.05 277);
+  --radius: 1rem;                       /* Material large */
+}
+```
+
+---
+
+## Troubleshooting
+
+### Issue: Components not reflecting token changes
+**Solution**: Clear Next.js cache
+```bash
+rm -rf apps/app/.next
+pnpm dev
+```
+
+### Issue: Dark mode not working
+**Solution**: Ensure theme provider wraps app
+```typescript
+// apps/app/src/app/layout.tsx
+<ThemeProvider attribute="class" defaultTheme="system">
+  {children}
+</ThemeProvider>
+```
+
+### Issue: Tailwind not picking up custom colors
+**Solution**: Use CSS variables in Tailwind config
+```typescript
+// Don't use direct OKLCH in Tailwind
+// Use CSS custom properties instead
+colors: {
+  primary: "oklch(var(--primary) / <alpha-value>)"
+}
+```
+
+---
+
+## Version History
+
+- v1.0.0: Initial design system architecture
+- v1.1.0: Added OKLCH color system
+- v1.2.0: Integrated motion primitives
+- v1.3.0: Added theme presets
+
+---
+
+*This document should be updated whenever the design system architecture changes.*

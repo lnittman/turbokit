@@ -5,14 +5,22 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "**/generated/**"]
+      "outputs": [".next/**", "!.next/cache/**", "**/generated/**", "convex/_generated/**"]
     },
     "analyze": {
       "dependsOn": ["^analyze"]
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^dev"]
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
     },
     "clean": {
       "cache": false

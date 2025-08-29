@@ -1,0 +1,233 @@
+<diagrams>
+  <purpose>
+    <description>automatic generation of visual architecture diagrams for every project</description>
+    <philosophy>every project needs clear visual documentation</philosophy>
+    <integration>uses halo diagram command for intelligent visualization</integration>
+  </purpose>
+  
+  <halo_diagram_command>
+    <path>.halo/commands/core/diagram.md</path>
+    <capabilities>
+      <capability>system architecture overview</capability>
+      <capability>data flow visualization</capability>
+      <capability>component hierarchy</capability>
+      <capability>deployment architecture</capability>
+      <capability>entity relationships</capability>
+      <capability>state machines</capability>
+    </capabilities>
+  </halo_diagram_command>
+  
+  <generation_triggers>
+    <trigger stage="after_scaffolding">
+      <action>analyze project structure</action>
+      <generate>system architecture diagram</generate>
+      <save_to>docs/diagrams/architecture.md</save_to>
+    </trigger>
+    
+    <trigger stage="after_documentation">
+      <action>analyze data models</action>
+      <generate>entity relationship diagram</generate>
+      <save_to>docs/diagrams/entity-relationships.md</save_to>
+    </trigger>
+    
+    <trigger stage="user_reference">
+      <condition>user provides reference url</condition>
+      <action>analyze reference architecture</action>
+      <generate>comparative architecture diagram</generate>
+      <save_to>docs/diagrams/reference-architecture.md</save_to>
+    </trigger>
+  </generation_triggers>
+  
+  <diagram_types>
+    <type name="system_architecture">
+      <description>high-level system components and relationships</description>
+      <mermaid_template>
+graph TB
+    subgraph "client layer"
+        Web[web app]
+        Mobile[mobile app]
+    end
+    
+    subgraph "application layer"
+        API[api service]
+        Auth[auth service]
+        AI[ai service]
+    end
+    
+    subgraph "data layer"
+        DB[(database)]
+        Cache[(cache)]
+        Storage[file storage]
+    end
+    
+    Web --> API
+    Mobile --> API
+    API --> Auth
+    API --> AI
+    API --> DB
+    API --> Cache
+    AI --> Storage
+      </mermaid_template>
+    </type>
+    
+    <type name="data_flow">
+      <description>request and data flow through the system</description>
+      <mermaid_template>
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API
+    participant Service
+    participant Database
+    
+    User->>Frontend: interaction
+    Frontend->>API: request
+    API->>Service: process
+    Service->>Database: query
+    Database-->>Service: data
+    Service-->>API: result
+    API-->>Frontend: response
+    Frontend-->>User: update ui
+      </mermaid_template>
+    </type>
+    
+    <type name="component_hierarchy">
+      <description>ui component structure and relationships</description>
+      <mermaid_template>
+graph TD
+    App[app root]
+    App --> Layout[layout]
+    App --> Providers[providers]
+    
+    Layout --> Header[header]
+    Layout --> Main[main content]
+    Layout --> Footer[footer]
+    
+    Providers --> AuthProvider[auth provider]
+    Providers --> ThemeProvider[theme provider]
+    Providers --> DataProvider[data provider]
+    
+    Main --> Router[router]
+    Router --> Pages[pages]
+    Pages --> Dashboard[dashboard]
+    Pages --> Profile[profile]
+    Pages --> Settings[settings]
+      </mermaid_template>
+    </type>
+    
+    <type name="deployment_architecture">
+      <description>infrastructure and deployment topology</description>
+      <mermaid_template>
+graph LR
+    subgraph "edge"
+        CDN[cdn]
+        WAF[firewall]
+    end
+    
+    subgraph "compute"
+        Vercel[vercel]
+        Workers[workers]
+    end
+    
+    subgraph "services"
+        DB[(postgresql)]
+        Redis[(redis)]
+        S3[object storage]
+    end
+    
+    CDN --> Vercel
+    WAF --> Workers
+    Vercel --> DB
+    Vercel --> Redis
+    Workers --> S3
+      </mermaid_template>
+    </type>
+    
+    <type name="entity_relationships">
+      <description>database schema and relationships</description>
+      <mermaid_template>
+erDiagram
+    User ||--o{ Post : creates
+    User ||--o{ Comment : writes
+    Post ||--o{ Comment : has
+    User {
+        string id PK
+        string email
+        string name
+        datetime createdAt
+    }
+    Post {
+        string id PK
+        string userId FK
+        string title
+        text content
+        datetime createdAt
+    }
+    Comment {
+        string id PK
+        string postId FK
+        string userId FK
+        text content
+        datetime createdAt
+    }
+      </mermaid_template>
+    </type>
+  </diagram_types>
+  
+  <intelligent_analysis>
+    <analyze_codebase>
+      <check>project structure</check>
+      <check>api routes</check>
+      <check>database schema</check>
+      <check>component hierarchy</check>
+      <check>deployment configuration</check>
+    </analyze_codebase>
+    
+    <suggest_diagrams>
+      <based_on>project type</based_on>
+      <based_on>complexity</based_on>
+      <based_on>user requirements</based_on>
+    </suggest_diagrams>
+    
+    <adapt_style>
+      <for_project_type>saas → detailed architecture</for_project_type>
+      <for_project_type>documentation → simple overview</for_project_type>
+      <for_project_type>ai agent → workflow focused</for_project_type>
+    </adapt_style>
+  </intelligent_analysis>
+  
+  <output_format>
+    <file_structure>
+# [diagram title]
+
+## overview
+[description of what the diagram shows]
+
+## diagram
+```mermaid
+[mermaid diagram code]
+```
+
+## key insights
+- [insight 1]
+- [insight 2]
+- [insight 3]
+
+## related diagrams
+- [link to related diagram 1]
+- [link to related diagram 2]
+    </file_structure>
+    
+    <save_locations>
+      <primary>docs/diagrams/</primary>
+      <exports>docs/brand/diagrams/</exports>
+      <reference>CLAUDE.md (embedded)</reference>
+    </save_locations>
+  </output_format>
+  
+  <integration_with_documentation>
+    <embed_in_claude_md>true</embed_in_claude_md>
+    <reference_in_agents_md>true</reference_in_agents_md>
+    <link_from_cursor_rules>true</link_from_cursor_rules>
+  </integration_with_documentation>
+</diagrams>

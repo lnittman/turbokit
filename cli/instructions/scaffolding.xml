@@ -1,0 +1,121 @@
+<scaffolding>
+  <project_naming>
+    <format>[name]-xyz</format>
+    <validation>lowercase, no spaces, alphanumeric with hyphens</validation>
+    <examples>
+      <example>radar-xyz</example>
+      <example>arbor-xyz</example>
+      <example>squish-xyz</example>
+    </examples>
+  </project_naming>
+  
+  <prerequisites>
+    <check>ensure project name doesn't already exist</check>
+    <check>verify turbokit paths are accessible</check>
+  </prerequisites>
+  
+  <steps>
+    <step order="1">
+      <action>create project directory</action>
+      <command>mkdir -p [project-name]</command>
+      <command>cd [project-name]</command>
+    </step>
+    
+    <step order="2">
+      <action>copy base turborepo structure</action>
+      <command>rsync -av --exclude='.git' --exclude='node_modules' --exclude='.DS_Store' [turbokit-base]/ .</command>
+      <includes>
+        <include>apps/app - next.js application (rsc-first)</include>
+        <include>apps/api - cloudflare worker (optional)</include>
+        <include>apps/mastra - ai service (mastra cloud)</include>
+        <include>apps/docs - documentation (mintlify)</include>
+        <include>packages/auth - clerk wrapper</include>
+        <include>packages/database - drizzle + drizzle-zod</include>
+        <include>packages/design - radix + shadcn components</include>
+        <include>packages/orpc - type-safe rpc layer</include>
+        <include>packages/services - business logic (only db consumer)</include>
+        <include>packages/typescript-config - shared configs</include>
+        <include>root config files</include>
+      </includes>
+      <note>follows tech-stack.md rules for structure</note>
+    </step>
+    
+    <step order="3">
+      <action>apply selected ui template</action>
+      <command>rsync -av [turbokit-templates]/[selected]/components/ apps/app/components/</command>
+      <command>rsync -av [turbokit-templates]/[selected]/styles/ apps/app/styles/</command>
+      <note>preserve existing component structure while adding template styles</note>
+    </step>
+    
+    <step order="4">
+      <action>copy documentation templates</action>
+      <commands>
+        <command>rsync -av [docs-template]/CLAUDE.md .</command>
+        <command>rsync -av [docs-template]/AGENTS.md .</command>
+        <command>rsync -av [docs-template]/.cursor/ .cursor/</command>
+        <command>mkdir -p docs/diagrams docs/brand/screenshots docs/vision</command>
+      </commands>
+      <note>creates ai-first documentation structure</note>
+    </step>
+    
+    <step order="4.5">
+      <action>integrate halo commands</action>
+      <commands>
+        <command>rsync -av [turbokit-base]/.halo/ .halo/</command>
+      </commands>
+      <note>includes diagram generation and other halo commands</note>
+    </step>
+    
+    <step order="5">
+      <action>customize package.json</action>
+      <updates>
+        <update>name field to [project-name]</update>
+        <update>description based on project vision</update>
+        <update>author information if available</update>
+      </updates>
+    </step>
+    
+    <step order="6">
+      <action>initialize git repository</action>
+      <commands>
+        <command>git init</command>
+        <command>git add .</command>
+        <command>git commit -m "initial scaffold from turbokit"</command>
+      </commands>
+    </step>
+    
+    <step order="7">
+      <action>generate project documentation</action>
+      <reference>documentation.xml</reference>
+      <note>creates all required documentation files with project-specific content</note>
+    </step>
+    
+    <step order="8">
+      <action>create environment template</action>
+      <file>.env.example</file>
+      <content>
+        <line># clerk authentication</line>
+        <line>next_public_clerk_publishable_key=</line>
+        <line>clerk_secret_key=</line>
+        <line></line>
+        <line># database</line>
+        <line>database_url=postgresql://user:password@localhost:5432/[project-name]</line>
+        <line></line>
+        <line># optional services</line>
+        <line>posthog_key=</line>
+        <line>sentry_dsn=</line>
+      </content>
+    </step>
+  </steps>
+  
+  <completion>
+    <message>[project-name] has been created successfully!</message>
+    <next_steps>
+      <step>cd [project-name]</step>
+      <step>pnpm install</step>
+      <step>cp .env.example .env.local and configure</step>
+      <step>pnpm dev</step>
+    </next_steps>
+    <documentation_note>comprehensive documentation available in docs/ and claude.md</documentation_note>
+  </completion>
+</scaffolding>

@@ -1,0 +1,4 @@
+
+> @repo/typescript-config@0.1.0 typecheck /Users/nit/Developer/_template/xyz/turbokit/packages/typescript-config
+> tsc --noEmit --emitDeclarationOnly false
+

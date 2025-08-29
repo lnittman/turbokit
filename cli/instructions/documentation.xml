@@ -1,0 +1,210 @@
+<documentation>
+  <philosophy>
+    <principle>documentation first development</principle>
+    <principle>ai agents as primary audience</principle>
+    <principle>cursor rules for consistent behavior</principle>
+    <principle>visual architecture through diagrams</principle>
+  </philosophy>
+  
+  <structure>
+    <required_files>
+      <file path="CLAUDE.md" priority="critical">
+        <purpose>primary codebase map and ai developer guide</purpose>
+        <sections>
+          <section name="project overview">
+            <content>clear description of what this project does</content>
+            <content>target users and use cases</content>
+            <content>key differentiators</content>
+          </section>
+          <section name="architecture">
+            <content>system components and relationships</content>
+            <content>data flow patterns</content>
+            <content>integration points</content>
+            <content>deployment architecture</content>
+          </section>
+          <section name="development patterns">
+            <content>component structure</content>
+            <content>state management approach</content>
+            <content>api design patterns</content>
+            <content>database schema philosophy</content>
+          </section>
+          <section name="agent instructions">
+            <content>how to add new features</content>
+            <content>where different code belongs</content>
+            <content>testing approach</content>
+            <content>deployment considerations</content>
+          </section>
+          <section name="quick reference">
+            <content>key commands and scripts</content>
+            <content>environment variables</content>
+            <content>common tasks</content>
+            <content>troubleshooting</content>
+          </section>
+        </sections>
+      </file>
+      
+      <file path="AGENTS.md" priority="critical">
+        <purpose>multi-agent coordination and task management</purpose>
+        <sections>
+          <section name="agent architecture">
+            <content>main agent responsibilities</content>
+            <content>sub-agent specializations</content>
+            <content>communication protocols</content>
+            <content>task delegation patterns</content>
+          </section>
+          <section name="agent capabilities">
+            <content>frontend development agent</content>
+            <content>backend api agent</content>
+            <content>database design agent</content>
+            <content>testing automation agent</content>
+            <content>deployment orchestration agent</content>
+          </section>
+          <section name="workflow patterns">
+            <content>feature development workflow</content>
+            <content>bug fixing workflow</content>
+            <content>refactoring workflow</content>
+            <content>documentation workflow</content>
+          </section>
+          <section name="coordination rules">
+            <content>agent handoff protocols</content>
+            <content>conflict resolution</content>
+            <content>priority management</content>
+            <content>error handling</content>
+          </section>
+        </sections>
+      </file>
+      
+      <directory path=".cursor/">
+        <subdirectory path="rules/">
+          <file name="core.md">
+            <purpose>fundamental coding standards and patterns</purpose>
+            <content>typescript conventions</content>
+            <content>react patterns</content>
+            <content>error handling rules</content>
+            <content>security requirements</content>
+          </file>
+          <file name="frontend.md">
+            <purpose>frontend-specific development rules</purpose>
+            <content>component architecture</content>
+            <content>state management patterns</content>
+            <content>ui/ux guidelines</content>
+            <content>accessibility standards</content>
+          </file>
+          <file name="backend.md">
+            <purpose>backend api and service rules</purpose>
+            <content>api design patterns</content>
+            <content>authentication flows</content>
+            <content>database interactions</content>
+            <content>caching strategies</content>
+          </file>
+          <file name="testing.md">
+            <purpose>testing standards and automation</purpose>
+            <content>unit test patterns</content>
+            <content>integration test requirements</content>
+            <content>e2e test scenarios</content>
+            <content>coverage requirements</content>
+          </file>
+          <file name="deployment.md">
+            <purpose>deployment and infrastructure rules</purpose>
+            <content>environment configuration</content>
+            <content>ci/cd pipeline requirements</content>
+            <content>monitoring setup</content>
+            <content>rollback procedures</content>
+          </file>
+        </subdirectory>
+      </directory>
+      
+      <directory path="docs/">
+        <subdirectory path="diagrams/">
+          <file name="architecture.md">
+            <content>system architecture diagrams</content>
+            <content>component relationships</content>
+            <content>deployment topology</content>
+          </file>
+          <file name="data-flow.md">
+            <content>request lifecycle diagrams</content>
+            <content>state management flows</content>
+            <content>authentication sequences</content>
+          </file>
+          <file name="entity-relationships.md">
+            <content>database schema diagrams</content>
+            <content>data model relationships</content>
+            <content>api entity mappings</content>
+          </file>
+        </subdirectory>
+        
+        <subdirectory path="brand/">
+          <directory name="screenshots/">
+            <content>reference ui captures</content>
+            <content>component examples</content>
+            <content>design inspiration</content>
+          </directory>
+        </subdirectory>
+        
+        <subdirectory path="vision/">
+          <file name="roadmap.md">
+            <content>feature timeline</content>
+            <content>technical milestones</content>
+            <content>growth projections</content>
+          </file>
+        </subdirectory>
+      </directory>
+    </required_files>
+  </structure>
+  
+  <generation_style>
+    <tone>technical yet accessible</tone>
+    <perspective>written for both human and ai developers</perspective>
+    <examples>include code examples where relevant</examples>
+    <diagrams>use mermaid for architecture diagrams</diagrams>
+    <formatting>
+      <headers>use proper markdown hierarchy</headers>
+      <lists>prefer bullet points for clarity</lists>
+      <code>include language hints for syntax highlighting</code>
+    </formatting>
+  </generation_style>
+  
+  <content_guidelines>
+    <guideline>be specific rather than generic</guideline>
+    <guideline>reference actual files and functions</guideline>
+    <guideline>explain the why, not just the what</guideline>
+    <guideline>anticipate common questions</guideline>
+    <guideline>provide clear next steps</guideline>
+  </content_guidelines>
+  
+  <halo_integration>
+    <note>turbokit includes halo commands for enhanced documentation</note>
+    <available_commands>
+      <command name="diagram">
+        <purpose>generate visual architecture diagrams</purpose>
+        <usage>create mermaid diagrams for system architecture</usage>
+        <output>saves to docs/diagrams/</output>
+      </command>
+      <command name="brand">
+        <purpose>establish brand identity and voice</purpose>
+        <usage>generate brand guidelines and visual direction</usage>
+      </command>
+      <command name="vision">
+        <purpose>define strategic vision and roadmap</purpose>
+        <usage>create mission statements and goals</usage>
+      </command>
+      <command name="design">
+        <purpose>document design system patterns</purpose>
+        <usage>capture ui/ux decisions and components</usage>
+      </command>
+    </available_commands>
+    <diagram_generation>
+      <auto_generate>true</auto_generate>
+      <types>
+        <type>system architecture overview</type>
+        <type>data flow diagrams</type>
+        <type>component hierarchy</type>
+        <type>deployment architecture</type>
+        <type>entity relationships</type>
+      </types>
+      <format>mermaid</format>
+      <save_location>docs/diagrams/</save_location>
+    </diagram_generation>
+    <goal>create documentation that is both functional and visually clear</goal>
+  </halo_integration>
+</documentation>
