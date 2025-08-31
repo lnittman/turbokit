@@ -42,8 +42,10 @@ export const sendPasswordResetEmail = action({
     // Check rate limit
     await checkRateLimit(ctx, "emailSend", userId);
     
-    // Generate reset link
-    const resetLink = `${process.env.APP_URL}/auth/reset-password?token=${resetToken}`;
+    // Generate reset link with sensible defaults for local dev
+    const appUrl =
+      process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const resetLink = `${appUrl}/auth/reset-password?token=${resetToken}`;
     
     // Prepare email content
     const html = `<h1>Reset Your Password</h1><p>Hi ${name},</p><p><a href="${resetLink}">Click here to reset your password</a></p>`;

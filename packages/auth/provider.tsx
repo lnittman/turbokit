@@ -1,6 +1,6 @@
 'use client';
 
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
@@ -52,6 +52,20 @@ export const AuthProvider = (
     colorInputText: '#ffffff',
     colorTextOnPrimaryBackground: '#000000',
   };
+
+  // Check if Clerk is configured
+  const isClerkConfigured = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  
+  // If Clerk is not configured, render children without authentication
+  if (!isClerkConfigured) {
+    const key = '__TK_LOGGED_CLERK_MISSING__';
+    const scope: any = typeof window === 'undefined' ? globalThis : (window as any);
+    if (!scope[key]) {
+      console.warn('Clerk authentication disabled: Missing configuration');
+      scope[key] = true;
+    }
+    return <>{properties.children}</>;
+  }
 
   return (
     <ClerkProvider

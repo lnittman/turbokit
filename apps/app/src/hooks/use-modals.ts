@@ -9,7 +9,7 @@ import {
   commandHoverAtom,
 } from '@/atoms/layout';
 
-type ItemType = 'chat' | 'project';
+export type ItemType = 'chat' | 'project';
 
 export function useModals() {
   const [deleteModal, setDeleteModal] = useAtom(deleteModalAtom);
@@ -74,10 +74,10 @@ export function useModals() {
     openDetailModal: (title: string, sections: { label: string; content: any; maxHeight?: string }[]) => 
       setDetailModal({ open: true, title, sections }),
     
-    closeDetailModal: () => 
+    closeDetailModal: () =>
       setDetailModal(prev => {
         if (!prev.open) return prev;
-        return { open: false, toolName: '', toolArgs: {}, toolResult: undefined };
+        return { open: false, title: '', sections: [] };
       }),
       
     // Command modal

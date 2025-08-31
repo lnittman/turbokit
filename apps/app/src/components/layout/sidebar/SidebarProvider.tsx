@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { useMediaQuery } from "@repo/design/hooks/use-media-query";
 import { useEffect, useState } from "react";
-import { sidebarOpenAtom } from "@/src/store/ui/layout";
+import { sidebarOpenAtom } from "@/atoms/layout";
 
 // Simple utility functions to use the sidebar state
 export function useSidebar() {

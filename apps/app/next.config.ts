@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 import { config, withAnalyzer } from '@repo/next-config';
+import { printEnvBanner } from '@repo/next-config/diagnostics';
 
 import { env } from './env';
 
@@ -11,5 +12,8 @@ if (env.ANALYZE === 'true') {
 }
 
 nextConfig.devIndicators = false;
+
+// Print clear env guidance during dev and build
+printEnvBanner('app');
 
 export default nextConfig;

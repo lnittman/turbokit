@@ -1,0 +1,80 @@
+# TurboKit Ruler Configuration
+# Centralized AI agent instructions for the Convex-native template
+
+# Default agents to apply rules to
+# User's actual tools: Claude (primary), OpenCode, Amp, Cursor-agent, Gemini, Codex
+default_agents = ["claude", "cursor", "copilot", "gemini-cli", "amp", "codex"]
+
+# Enable nested rule loading for package-specific rules
+nested = true
+
+# --- Agent Specific Configurations ---
+
+# Primary agent - Claude Code CLI
+[agents.claude]
+enabled = true
+output_path = "CLAUDE.md"
+
+# Cursor (via cursor-agent CLI)
+[agents.cursor]
+enabled = true
+output_path = ".cursor/rules/turbokit.md"
+
+# GitHub Copilot (VS Code & Zed IDE)
+[agents.copilot]
+enabled = true
+output_path = ".github/copilot-instructions.md"
+
+# Gemini CLI
+[agents.gemini-cli]
+enabled = true
+output_path = "GEMINI.md"
+
+# Amp
+[agents.amp]
+enabled = true
+output_path = "AMP.md"
+
+# Codex
+[agents.codex]
+enabled = true
+output_path = "CODEX.md"
+
+# OpenCode (if it becomes supported by Ruler)
+# [agents.opencode]
+# enabled = true
+# output_path = "OPENCODE.md"
+
+# --- MCP Servers ---
+# Model Context Protocol servers for enhanced AI capabilities
+
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
+
+[mcp_servers.git]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-git", "--repository", "."]
+
+[mcp_servers.memory]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-memory"]
+
+# Convex MCP for database and function access
+[mcp_servers.convex]
+command = "npx"
+args = ["-y", "@convex-dev/mcp-server"]
+env = { CONVEX_DEPLOYMENT = "${CONVEX_DEPLOYMENT:-development}" }
+
+# Vercel MCP for deployment management
+[mcp_servers.vercel]
+command = "npx"
+args = ["-y", "@vercel/mcp-server"]
+
+# Halo integration - Custom prompt system
+# This connects to the user's ~/.halo/ directory for
+# commands, components, roles, and rules
+[mcp_servers.halo]
+command = "node"
+args = ["cli/src/halo-mcp-bridge.js"]
+env = { HALO_PATH = "~/.halo" }

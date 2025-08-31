@@ -4,10 +4,21 @@ import { PostHog } from 'posthog-node';
 
 import { keys } from '../keys';
 
-export const analytics = new PostHog(keys().NEXT_PUBLIC_POSTHOG_KEY, {
-  host: keys().NEXT_PUBLIC_POSTHOG_HOST,
+// Gracefully disable analytics when not configured
+const phKey = keys().NEXT_PUBLIC_POSTHOG_KEY;
+const phHost = keys().NEXT_PUBLIC_POSTHOG_HOST;
 
-  // Don't batch events and flush immediately - we're running in a serverless environment
-  flushAt: 1,
-  flushInterval: 0,
-});
+export const analytics: Pick<PostHog, 'capture' | 'shutdown' | 'flush'> =
+  phKey && phHost
+    ? new PostHog(phKey, {
+        host: phHost,
+        // Don't batch events and flush immediately - we're running in a serverless environment
+        flushAt: 1,
+        flushInterval: 0,
+      })
+    : {
+        // No-op implementations when PostHog isn't configured
+        capture: () => undefined as any,
+        shutdown: async () => {},
+        flush: async () => {},
+      } as any;

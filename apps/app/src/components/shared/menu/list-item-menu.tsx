@@ -12,13 +12,13 @@ import {
   UserPlus 
 } from "@phosphor-icons/react";
 
-import { useModals } from "@/hooks/use-modals";
+import { useModals, type ItemType } from "@/hooks/use-modals";
 
 import { Menu, MenuGroup } from ".";
 
 interface ListItemMenuProps {
   itemId: string;
-  itemType?: string;
+  itemType?: ItemType;
   showAddToCollection?: boolean;
   showShare?: boolean;
   showRename?: boolean;
@@ -29,7 +29,7 @@ interface ListItemMenuProps {
 
 export function ListItemMenu({ 
   itemId, 
-  itemType = 'item',
+  itemType = 'project',
   showAddToCollection = true,
   showShare = true,
   showRename = true,
