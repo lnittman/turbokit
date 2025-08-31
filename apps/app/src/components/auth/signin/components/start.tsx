@@ -5,7 +5,7 @@ import React from 'react';
 import * as Clerk from '@clerk/elements/common';
 import * as ClerkSignIn from '@clerk/elements/sign-in';
 import { useAtomValue } from 'jotai';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 
 import { appNameAtom } from '@/atoms/auth';
 

@@ -4,7 +4,7 @@ import React from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import * as Clerk from '@clerk/elements/common';
 import * as ClerkSignUp from '@clerk/elements/sign-up';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 import { Eye, EyeSlash } from '@phosphor-icons/react';
 
 import { 

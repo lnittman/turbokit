@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { ViewTransitions } from "next-view-transitions"
 
 import { DesignSystemProvider } from '@repo/design';
 
@@ -19,9 +18,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background" suppressHydrationWarning>
         <DesignSystemProvider>
-          <ViewTransitions>
-            {children}
-          </ViewTransitions>
+          {children}
         </DesignSystemProvider>
       </body>
     </html>

@@ -3,7 +3,7 @@
 import { Plus } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { useMediaQuery } from '@repo/design/hooks/use-media-query';
