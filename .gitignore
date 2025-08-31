@@ -1,0 +1,48 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Monorepo outputs
+.turbo/
+.turbo/**
+dist/
+build/
+coverage/
+
+# Next.js
+.next/
+.next/**
+out/
+
+# Env and local
+.env.local
+.env*.local
+.vercel
+.DS_Store
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Misc caches
+.cache/
+**/.cache/
+
+# Generated lockfiles in nested templates (keep root lock)
+apps/**/package-lock.json
+packages/**/package-lock.json
+apps/**/yarn.lock
+packages/**/yarn.lock
+
+# Email app (if scaffolded separately)
+apps/email/.react-email/
+
