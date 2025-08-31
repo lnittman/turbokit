@@ -18,7 +18,23 @@ export const IconNames = {
   User: "user",
   Settings: "settings",
   FileText: "file-text",
+  // Extended set for marketing/docs and utilities
+  Github: "github",
+  Twitter: "twitter",
+  Sparkles: "sparkles",
+  Zap: "zap",
+  Code: "code",
+  Users: "users",
+  Globe: "globe",
+  Database: "database",
+  Workflow: "workflow",
+  Bot: "bot",
+  CheckCircle: "check-circle",
+  Package: "package",
+  Book: "book",
+  Upload: "upload",
+  Image: "image",
+  File: "file",
 } as const;
 
 export type IconName = typeof IconNames[keyof typeof IconNames];
-
