@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
-import { Icon } from "@repo/design/icons"
+import { Icon, IconNames } from "@repo/design/icons"
 
 import { cn } from "@repo/design/lib/utils"
 
@@ -69,7 +69,7 @@ function InputOTPSlot({
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
     <div data-slot="input-otp-separator" role="separator" {...props}>
-      <Icon name="minus" />
+      <Icon name={IconNames.Minus} />
     </div>
   )
 }

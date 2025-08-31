@@ -2,10 +2,12 @@
 
 import React from "react";
 import { useIconSettings, IconProvider } from "./context";
-import { PhosphorIcon, type IconName } from "./packs/phosphor";
+import { PhosphorIcon } from "./packs/phosphor";
 import { StreamlinePlumpIcon } from "./packs/streamline-plump";
+import { IconNames, type IconName } from "./names";
 
-export type { IconName } from "./packs/phosphor";
+export { IconNames } from "./names";
+export type { IconName } from "./names";
 export { IconProvider } from "./context";
 
 export function Icon({ name, className }: { name: IconName; className?: string }) {
@@ -15,4 +17,3 @@ export function Icon({ name, className }: { name: IconName; className?: string }
   }
   return <PhosphorIcon name={name} className={className} weight={weight} />;
 }
-

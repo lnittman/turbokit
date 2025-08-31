@@ -4,7 +4,7 @@ import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { Icon } from "@repo/design/icons"
+import { Icon, IconNames } from "@repo/design/icons"
 
 import { cn } from "@repo/design/lib/utils"
 import { Button } from "@repo/design/components/ui/button"
@@ -195,7 +195,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-          <Icon name="arrow-left" />
+          <Icon name={IconNames.ArrowLeft} />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -225,7 +225,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-          <Icon name="arrow-right" />
+          <Icon name={IconNames.ArrowRight} />
       <span className="sr-only">Next slide</span>
     </Button>
   )

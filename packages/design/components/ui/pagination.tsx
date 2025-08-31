@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Icon } from "@repo/design/icons"
+import { Icon, IconNames } from "@repo/design/icons"
 
 import { cn } from "@repo/design/lib/utils"
 import { Button, buttonVariants } from "@repo/design/components/ui/button"
@@ -72,7 +72,7 @@ function PaginationPrevious({
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
-      <Icon name="chevron-left" />
+      <Icon name={IconNames.ChevronLeft} />
       <span className="hidden sm:block">Previous</span>
     </PaginationLink>
   )
@@ -90,7 +90,7 @@ function PaginationNext({
       {...props}
     >
       <span className="hidden sm:block">Next</span>
-      <Icon name="chevron-right" />
+      <Icon name={IconNames.ChevronRight} />
     </PaginationLink>
   )
 }
@@ -106,7 +106,7 @@ function PaginationEllipsis({
       className={cn("flex size-9 items-center justify-center", className)}
       {...props}
     >
-      <Icon name="more-horizontal" className="size-4" />
+      <Icon name={IconNames.MoreHorizontal} className="size-4" />
       <span className="sr-only">More pages</span>
     </span>
   )

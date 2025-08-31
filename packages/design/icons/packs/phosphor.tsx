@@ -23,27 +23,7 @@ import {
   FileText as PhFileText,
 } from "@phosphor-icons/react";
 import type { IconWeight } from "../context";
-
-export type IconName =
-  | "x"
-  | "check"
-  | "circle"
-  | "chevron-left"
-  | "chevron-right"
-  | "chevron-down"
-  | "chevron-up"
-  | "panel-left"
-  | "grip-vertical"
-  | "search"
-  | "more-horizontal"
-  | "minus"
-  | "arrow-left"
-  | "arrow-right"
-  | "caret-right"
-  | "bell"
-  | "user"
-  | "settings"
-  | "file-text";
+import type { IconName } from "../names";
 
 export function PhosphorIcon({ name, className, weight = "duotone" }: { name: IconName; className?: string; weight?: IconWeight }) {
   const common = { className, weight } as any;
@@ -90,4 +70,3 @@ export function PhosphorIcon({ name, className, weight = "duotone" }: { name: Ic
       return null;
   }
 }
-

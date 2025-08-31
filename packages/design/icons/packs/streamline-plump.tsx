@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { IconName } from "./phosphor";
+import type { IconName } from "../names";
 
 function Svg({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
@@ -148,4 +148,3 @@ export function StreamlinePlumpIcon({ name, className }: { name: IconName; class
       return null;
   }
 }
-

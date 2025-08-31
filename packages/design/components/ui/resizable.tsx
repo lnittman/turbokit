@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Icon } from "@repo/design/icons"
+import { Icon, IconNames } from "@repo/design/icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
 import { cn } from "@repo/design/lib/utils"
@@ -46,7 +46,7 @@ function ResizableHandle({
     >
       {withHandle && (
         <div className="bg-border z-10 flex h-4 w-3 items-center justify-center rounded-xs border">
-          <Icon name="grip-vertical" className="size-2.5" />
+          <Icon name={IconNames.GripVertical} className="size-2.5" />
         </div>
       )}
     </ResizablePrimitive.PanelResizeHandle>
