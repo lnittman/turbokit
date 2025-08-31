@@ -1,5 +1,12 @@
-import React from "react";
+'use client';
+
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
-  return <div>hello world</div>;
+  useEffect(() => {
+    redirect('/dashboard');
+  }, []);
+  
+  return null;
 }

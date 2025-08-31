@@ -1,0 +1,65 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "getting-started",
+    "---",
+    {
+      "title": "Convex",
+      "pages": [
+        "convex/index",
+        "convex/schema",
+        "convex/functions",
+        "convex/subscriptions",
+        "convex/workflows",
+        "convex/file-storage"
+      ]
+    },
+    {
+      "title": "Frontend",
+      "pages": [
+        "frontend/index",
+        "frontend/routing",
+        "frontend/components",
+        "frontend/state-management",
+        "frontend/styling"
+      ]
+    },
+    {
+      "title": "ACP & AI",
+      "pages": [
+        "acp/index",
+        "acp/setup",
+        "acp/gemini",
+        "acp/claude",
+        "acp/custom-agents"
+      ]
+    },
+    {
+      "title": "Components",
+      "pages": [
+        "components/index",
+        "components/shadcn",
+        "components/motion",
+        "components/kibo"
+      ]
+    },
+    "---",
+    {
+      "title": "Deployment",
+      "pages": [
+        "deployment/vercel",
+        "deployment/convex",
+        "deployment/environment"
+      ]
+    },
+    {
+      "title": "Reference",
+      "pages": [
+        "reference/cli",
+        "reference/configuration",
+        "reference/troubleshooting"
+      ]
+    }
+  ]
+}

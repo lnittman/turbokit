@@ -1,0 +1,289 @@
+---
+title: Getting Started
+description: Get up and running with TurboKit in under 5 minutes
+category: guides
+difficulty: beginner
+---
+
+# Getting Started
+
+This guide will help you set up TurboKit and create your first real-time application with Convex.
+
+## Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- **Node.js 18+** - [Download](https://nodejs.org)
+- **pnpm** - Install with `npm install -g pnpm`
+- **Git** - [Download](https://git-scm.com)
+
+You'll also need accounts for:
+- [Convex](https://convex.dev) - Real-time backend
+- [Clerk](https://clerk.com) - Authentication (optional)
+- [Vercel](https://vercel.com) - Deployment (optional)
+
+## Installation
+
+### 1. Clone the Template
+
+```bash
+git clone https://github.com/turbokit/template my-app
+cd my-app
+```
+
+### 2. Initialize TurboKit
+
+Run the interactive initialization:
+
+```bash
+npx turbokit init
+```
+
+This will:
+- Ask about your project (what you're building)
+- Let you select features (auth, payments, AI, etc.)
+- Configure your AI assistant preference
+- Set up the `.turbokit` configuration directory
+
+### 3. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 4. Set Up Convex
+
+Initialize your Convex project:
+
+```bash
+npx convex init
+```
+
+This will:
+- Create a new Convex project
+- Generate API keys
+- Set up your `.env.local` file
+
+### 5. Configure Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Convex (automatically added by convex init)
+CONVEX_DEPLOYMENT=...
+NEXT_PUBLIC_CONVEX_URL=...
+
+# Clerk (optional)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=...
+CLERK_SECRET_KEY=...
+
+# Other services (optional)
+NEXT_PUBLIC_POSTHOG_KEY=...
+NEXT_PUBLIC_SENTRY_DSN=...
+```
+
+## Development
+
+Start the development servers:
+
+```bash
+# In one terminal - start Convex
+npx convex dev
+
+# In another terminal - start Next.js
+pnpm dev
+```
+
+Your apps will be available at:
+- **Main App**: [http://localhost:3000](http://localhost:3000)
+- **Marketing Site**: [http://localhost:3001](http://localhost:3001)
+- **Documentation**: [http://localhost:3002](http://localhost:3002)
+
+## Project Structure
+
+```
+my-app/
+├── apps/
+│   ├── app/           # Main client application
+│   └── web/           # Marketing website
+├── packages/
+│   ├── backend/       # Convex backend
+│   │   └── convex/
+│   │       ├── schema.ts      # Database schema
+│   │       ├── functions/     # Queries, mutations, actions
+│   │       └── http.ts        # HTTP routes
+│   ├── design/        # Shared design system
+│   ├── auth/          # Authentication logic
+│   └── ...            # Other shared packages
+├── docs/              # Documentation site
+└── .turbokit/         # TurboKit configuration
+    ├── config/        # Project settings
+    ├── status/        # Progress tracking
+    └── docs/          # Internal documentation
+```
+
+## Your First Feature
+
+Let's create a simple real-time counter to understand how TurboKit works.
+
+### 1. Define the Schema
+
+In `packages/backend/convex/schema.ts`:
+
+```typescript
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+  counter: defineTable({
+    value: v.number(),
+    updatedAt: v.number(),
+  }),
+});
+```
+
+### 2. Create Functions
+
+In `packages/backend/convex/functions/queries/counter.ts`:
+
+```typescript
+import { query } from "../../_generated/server";
+
+export const get = query({
+  args: {},
+  handler: async (ctx) => {
+    const counter = await ctx.db.query("counter").first();
+    return counter?.value ?? 0;
+  },
+});
+```
+
+In `packages/backend/convex/functions/mutations/counter.ts`:
+
+```typescript
+import { mutation } from "../../_generated/server";
+import { v } from "convex/values";
+
+export const increment = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const counter = await ctx.db.query("counter").first();
+    
+    if (counter) {
+      await ctx.db.patch(counter._id, {
+        value: counter.value + 1,
+        updatedAt: Date.now(),
+      });
+    } else {
+      await ctx.db.insert("counter", {
+        value: 1,
+        updatedAt: Date.now(),
+      });
+    }
+  },
+});
+```
+
+### 3. Use in React
+
+In `apps/app/src/app/(authenticated)/dashboard/page.tsx`:
+
+```typescript
+'use client';
+
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@repo/backend/convex/_generated/api";
+import { Button } from "@repo/design/components/ui/button";
+
+export function Counter() {
+  const count = useQuery(api.functions.queries.counter.get);
+  const increment = useMutation(api.functions.mutations.counter.increment);
+  
+  return (
+    <div className="flex items-center gap-4">
+      <span className="text-2xl font-bold">Count: {count ?? 0}</span>
+      <Button onClick={() => increment()}>
+        Increment
+      </Button>
+    </div>
+  );
+}
+```
+
+The counter will automatically sync in real-time across all connected clients!
+
+## AI Assistance
+
+TurboKit includes an ACP server for AI-powered development:
+
+### Start the ACP Server
+
+```bash
+turbokit acp
+```
+
+### Connect Your AI Assistant
+
+Currently supported:
+- **Gemini CLI**: `gemini --experimental-acp`
+
+Coming soon:
+- Claude
+- Cursor
+- Other ACP-compatible clients
+
+The AI assistant will have full context about your TurboKit project and can help with:
+- Writing Convex functions
+- Creating React components
+- Debugging real-time subscriptions
+- Suggesting best practices
+
+## Next Steps
+
+<Cards>
+  <Card title="Learn Convex" href="/docs/convex">
+    Deep dive into Convex's real-time database and functions
+  </Card>
+  <Card title="Explore Components" href="/docs/components">
+    Browse pre-built components from our design system
+  </Card>
+  <Card title="Deploy to Production" href="/docs/deployment/vercel">
+    Deploy your app to Vercel with Convex
+  </Card>
+  <Card title="Add Authentication" href="/docs/frontend/auth">
+    Set up Clerk authentication with Convex
+  </Card>
+</Cards>
+
+## Troubleshooting
+
+### Common Issues
+
+<Accordion>
+  <AccordionItem value="convex-errors">
+    <AccordionTrigger>Convex connection errors</AccordionTrigger>
+    <AccordionContent>
+      Make sure you're running `npx convex dev` in a separate terminal and that your `.env.local` file contains the correct Convex URLs.
+    </AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem value="type-errors">
+    <AccordionTrigger>TypeScript errors with Convex API</AccordionTrigger>
+    <AccordionContent>
+      Run `npx convex dev` to regenerate the API types. The types are automatically generated from your schema and functions.
+    </AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem value="acp-connection">
+    <AccordionTrigger>AI assistant can't connect</AccordionTrigger>
+    <AccordionContent>
+      Ensure the ACP server is running (`turbokit acp`) and that you're using a compatible AI client with ACP support.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+## Get Help
+
+- **Discord**: [Join our community](https://discord.gg/turbokit)
+- **GitHub**: [Report issues](https://github.com/turbokit/turbokit/issues)
+- **Twitter**: [@turbokit](https://twitter.com/turbokit)

@@ -1,0 +1,106 @@
+---
+title: Introduction
+description: Welcome to TurboKit - the Convex-native development platform
+---
+
+# Welcome to TurboKit
+
+TurboKit is a modern, Convex-native development platform that combines real-time data synchronization, AI-powered development tools, and enterprise-ready components into one powerful stack.
+
+## What is TurboKit?
+
+TurboKit provides everything you need to build production-ready real-time applications:
+
+- **Convex-Native Backend**: Real-time database with subscriptions, functions, and file storage
+- **AI Development Tools**: ACP server for AI-assisted development with Gemini, Claude, and more
+- **Modern Frontend**: Next.js 15 with React 19, Server Components, and App Router
+- **Design System**: Pre-built components from shadcn/ui, Motion Primitives, and Kibo UI
+- **Type Safety**: End-to-end TypeScript from database schema to React components
+- **Enterprise Ready**: Authentication, payments, observability, and deployment configurations
+
+## Why TurboKit?
+
+### 🚀 Real-time by Default
+
+Unlike traditional architectures that bolt on WebSockets as an afterthought, TurboKit is built on Convex - where real-time subscriptions are the default. Your data automatically syncs across all clients without any configuration.
+
+### 🤖 AI-Powered Development
+
+TurboKit includes an ACP (Agent Client Protocol) server that lets AI assistants like Gemini CLI understand your entire project context. Get intelligent code suggestions, automated scaffolding, and context-aware assistance.
+
+### 📦 Batteries Included
+
+Start with a complete setup including:
+- Authentication (Clerk)
+- Payments (Polar)
+- Email (Resend)
+- Analytics (PostHog)
+- Monitoring (Sentry)
+- File Storage (Convex)
+
+### 🎨 Beautiful by Default
+
+Our design system combines the best component libraries:
+- **shadcn/ui**: Accessible, customizable base components
+- **Motion Primitives**: Smooth animations and interactions
+- **Kibo UI**: Advanced components like Gantt charts and color pickers
+
+## Quick Start
+
+Get started with TurboKit in under 5 minutes:
+
+```bash
+# Clone the template
+git clone https://github.com/turbokit/template my-app
+cd my-app
+
+# Initialize TurboKit
+npx turbokit init
+
+# Install dependencies
+pnpm install
+
+# Start development
+pnpm dev
+```
+
+## Architecture Overview
+
+```
+my-app/
+├── apps/
+│   ├── app/        # Main client application
+│   └── web/        # Marketing website
+├── packages/
+│   ├── backend/    # Convex functions and schema
+│   ├── design/     # Shared design system
+│   ├── auth/       # Authentication logic
+│   └── ...         # Other shared packages
+└── .turbokit/      # Configuration and context
+```
+
+## Core Technologies
+
+- **Backend**: [Convex](https://convex.dev) - Real-time database platform
+- **Frontend**: [Next.js 15](https://nextjs.org) - React framework
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) - Utility-first CSS
+- **Auth**: [Clerk](https://clerk.com) - Authentication and user management
+- **AI**: [Convex Agent](https://docs.convex.dev/agent) - AI integration
+- **Monorepo**: [Turborepo](https://turbo.build) - High-performance build system
+
+## Next Steps
+
+<Cards>
+  <Card title="Getting Started" href="/docs/getting-started">
+    Set up your development environment and create your first TurboKit project
+  </Card>
+  <Card title="Convex Basics" href="/docs/convex">
+    Learn the fundamentals of Convex's real-time database and functions
+  </Card>
+  <Card title="Components" href="/docs/components">
+    Explore the pre-built components and design system
+  </Card>
+  <Card title="ACP Setup" href="/docs/acp">
+    Configure AI assistance for your development workflow
+  </Card>
+</Cards>

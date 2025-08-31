@@ -1,321 +1,734 @@
-# TurboKit - Convex Native Template
 
-TurboKit is a modern, Convex-native turborepo template that demonstrates the power of Convex as a complete backend solution. It features real-time subscriptions, durable workflows, AI agents, and integrated email - all in a single backend package.
+
+<!-- Source: AGENTS.md -->
+
+# TurboKit Design System Architecture Guide for AI Agents
+
+This document provides comprehensive instructions for AI agents (Claude, GPT, etc.) to understand and modify the TurboKit design system. It serves as the authoritative source for design token manipulation, component styling, and theme variations.
+
+## Table of Contents
+1. [Core Design Philosophy](#core-design-philosophy)
+2. [Architecture Overview](#architecture-overview)
+3. [Design Token System](#design-token-system)
+4. [Component Organization](#component-organization)
+5. [Styling Paradigms](#styling-paradigms)
+6. [Modification Patterns](#modification-patterns)
+7. [Integration Points](#integration-points)
+8. [Common Tasks](#common-tasks)
+
+---
+
+## Core Design Philosophy
+
+TurboKit's design system is built on **compositional flexibility** - the ability to shift between design languages (brutalist, minimalist, corporate, playful) through systematic token manipulation rather than component replacement.
+
+### Key Principles
+1. **Token-First Design**: All visual properties flow from CSS custom properties
+2. **OKLCH Color Space**: Perceptually uniform color manipulation
+3. **Component Agnosticism**: Components adapt to token changes
+4. **Progressive Enhancement**: Base styles → Theme → Component → Instance
+
+---
 
 ## Architecture Overview
 
-TurboKit uses Convex as the single source of truth for all backend operations:
-- **Single Backend Package**: All server logic in `packages/backend/convex`
-- **Real-time by Default**: WebSocket subscriptions for live updates
-- **AI Agents**: Built-in AI SDK v5 integration via Convex Agent component
-- **Email System**: Resend component with tracking and webhooks
-- **Durable Workflows**: Long-running processes with automatic retries
-- **Type Safety**: End-to-end TypeScript with generated types
-
-## Project Structure
-
 ```
-turbokit/
-├── apps/
-│   ├── app/                    # Next.js 15 client application
-│   └── docs/                   # Documentation (optional)
-│
-├── packages/
-│   ├── backend/                # 🔥 Convex backend (all server logic)
-│   │   ├── convex/
-│   │   │   ├── _generated/     # Auto-generated types
-│   │   │   ├── agents/         # AI agents
-│   │   │   ├── components/     # Shared utilities
-│   │   │   ├── emails/         # Email templates (React Email)
-│   │   │   ├── functions/      # Convex functions
-│   │   │   │   ├── actions/    # External API calls (incl. email sending)
-│   │   │   │   ├── mutations/  # Database writes
-│   │   │   │   ├── queries/    # Database reads
-│   │   │   │   └── internal/   # Internal functions (incl. webhooks)
-│   │   │   ├── workflows/      # Durable workflows
-│   │   │   ├── http.ts         # HTTP routes & webhooks
-│   │   │   └── schema.ts       # Database schema
-│   │   └── convex.config.ts    # Component configuration
-│   │
-│   ├── auth/                   # Client auth utilities
-│   ├── design/                 # UI component library
-│   └── analytics/              # Analytics utilities
-│
-├── turbo.json                  # Turborepo config
-├── package.json                # Root package
-└── CLAUDE.md                   # This file
+packages/design/
+├── components/
+│   ├── shadcn/              # shadcn/ui components (rename from ui/)
+│   ├── motion/              # motion-primitives components
+│   ├── kibo/                # kibo-ui components
+│   └── apps/                # components shared between 2+ apps
+├── styles/
+│   ├── globals.css          # CSS variables & global styles
+│   ├── themes/              # Theme variations
+│   │   ├── brutalist.css    # Bauhaus/industrial theme
+│   │   ├── minimal.css      # Vercel-like clean theme
+│   │   └── playful.css      # Colorful/fun theme
+│   └── cmdk.css             # Command palette styles
+├── tokens/
+│   ├── colors.ts            # Color token definitions
+│   ├── typography.ts        # Font tokens
+│   ├── spacing.ts           # Spacing scale
+│   └── motion.ts            # Animation tokens
+├── lib/
+│   ├── utils.ts             # cn() and utilities
+│   └── fonts.ts             # Font loading/config
+└── providers/
+    └── theme.tsx            # Theme provider wrapper
 ```
 
-## Key Features
+---
 
-### 1. Convex Backend
-- **Database**: Relational tables with indexes and vector search
-- **Real-time**: WebSocket subscriptions for live data
-- **Functions**: Type-safe queries, mutations, and actions
-- **HTTP Routes**: Built-in webhook handling
-- **File Storage**: Native file upload/download support
+## Design Token System
 
-### 2. AI Integration
-- **Convex Agent Component**: AI SDK v5 integration
-- **Multiple Providers**: OpenAI, Anthropic, Google
-- **Vector Search**: Built-in embeddings support
-- **Conversation Memory**: Thread-based chat history
-- **Custom Tools**: Extensible agent capabilities
+### Color Tokens (CSS Custom Properties)
 
-### 3. Email System
-- **Convex Resend Component**: Durable email sending
-- **React Email Templates**: Component-based emails
-- **Webhook Events**: Delivery tracking and bounces
-- **Rate Limiting**: Built-in spam protection
+#### Location: `packages/design/styles/globals.css`
 
-### 4. Durable Workflows
-- **Long-Running Processes**: Survive server restarts
-- **Automatic Retries**: Configurable retry policies
-- **Step Functions**: Sequential and parallel execution
-- **Delays**: Built-in sleep and scheduling
-
-## Development Guide
-
-### Quick Start
-
-```bash
-# Install dependencies
-pnpm install
-
-# Set up environment variables
-cp .env.example .env.local
-
-# Start development
-pnpm dev
-```
-
-### Environment Variables
-
-```bash
-# packages/backend/.env.local
-CONVEX_DEPLOYMENT=development
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-RESEND_API_KEY=re_...
-RESEND_WEBHOOK_SECRET=whsec_...
-CLERK_WEBHOOK_SECRET=whsec_...
-APP_URL=http://localhost:3000
-
-# apps/app/.env.local
-NEXT_PUBLIC_CONVEX_URL=https://...convex.cloud
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-```
-
-## Working with Convex
-
-### Adding a New Feature
-
-#### 1. Define Database Schema
-```typescript
-// packages/backend/convex/schema.ts
-export default defineSchema({
-  posts: defineTable({
-    title: v.string(),
-    content: v.string(),
-    authorId: v.id("users"),
-    published: v.boolean(),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  })
-    .index("by_author", ["authorId"])
-    .index("by_published", ["published"]),
-});
-```
-
-#### 2. Create Query Function
-```typescript
-// packages/backend/convex/functions/queries/posts.ts
-import { query } from "../../_generated/server";
-import { v } from "convex/values";
-
-export const getPosts = query({
-  args: {
-    limit: v.optional(v.number()),
-  },
-  handler: async (ctx, { limit = 10 }) => {
-    const { user } = await requireAuth(ctx);
-    return await ctx.db
-      .query("posts")
-      .withIndex("by_author", (q) => q.eq("authorId", user._id))
-      .order("desc")
-      .take(limit);
-  },
-});
-```
-
-#### 3. Create Mutation Function
-```typescript
-// packages/backend/convex/functions/mutations/posts.ts
-import { mutation } from "../../_generated/server";
-import { v } from "convex/values";
-
-export const createPost = mutation({
-  args: {
-    title: v.string(),
-    content: v.string(),
-    published: v.optional(v.boolean()),
-  },
-  handler: async (ctx, args) => {
-    const { user } = await requireAuth(ctx);
-    return await ctx.db.insert("posts", {
-      ...args,
-      authorId: user._id,
-      published: args.published ?? false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
-  },
-});
-```
-
-#### 4. Use in Client
-```typescript
-// apps/app/src/hooks/use-posts.ts
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@repo/backend/api";
-
-export function usePosts(limit?: number) {
-  const posts = useQuery(api.functions.queries.posts.getPosts, { limit });
-  const createPost = useMutation(api.functions.mutations.posts.createPost);
+```css
+:root {
+  /* Core Palette */
+  --background: oklch(L C H);      /* Page background */
+  --foreground: oklch(L C H);      /* Default text */
+  --card: oklch(L C H);             /* Card backgrounds */
+  --card-foreground: oklch(L C H);  /* Card text */
   
-  return { posts, createPost };
+  /* Interactive States */
+  --primary: oklch(L C H);          /* Primary actions */
+  --primary-foreground: oklch(L C H);
+  --secondary: oklch(L C H);        /* Secondary actions */
+  --secondary-foreground: oklch(L C H);
+  
+  /* Semantic Colors */
+  --destructive: oklch(L C H);      /* Errors/danger */
+  --success: oklch(L C H);          /* Success states */
+  --warning: oklch(L C H);          /* Warnings */
+  --info: oklch(L C H);             /* Information */
+  
+  /* UI Elements */
+  --border: oklch(L C H);           /* Borders */
+  --input: oklch(L C H);            /* Input borders */
+  --ring: oklch(L C H);             /* Focus rings */
+  
+  /* Surfaces */
+  --muted: oklch(L C H);            /* Muted backgrounds */
+  --muted-foreground: oklch(L C H); /* Muted text */
+  --accent: oklch(L C H);           /* Accent surfaces */
+  --accent-foreground: oklch(L C H);
+  
+  /* Layout */
+  --radius: 0.5rem;                 /* Border radius */
+  --sidebar: oklch(L C H);          /* Sidebar background */
+  --sidebar-foreground: oklch(L C H);
 }
 ```
 
-### Working with AI Agents
+### OKLCH Color Space Guide
+
+OKLCH format: `oklch(Lightness Chroma Hue)`
+- **L (Lightness)**: 0-1 or 0%-100% (0 = black, 1 = white)
+- **C (Chroma)**: 0-0.4 (0 = grayscale, higher = more saturated)
+- **H (Hue)**: 0-360 (color wheel degrees)
+
+#### Quick Reference:
+- **Grayscale**: Set C to 0 (e.g., `oklch(0.5 0 0)`)
+- **Warm tones**: H around 60-90
+- **Cool tones**: H around 200-240
+- **Vibrant**: C > 0.15
+- **Muted**: C < 0.05
+
+---
+
+## Component Organization
+
+### Directory Structure Strategy
+
+**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps (e.g., `apps/web` marketing site and `apps/app` main client) belong in the design package.
 
 ```typescript
-// packages/backend/convex/agents/my-agent.ts
-import { Agent } from "@convex-dev/agent";
-import { components } from "../_generated/api";
+// packages/design/components/index.ts
+// Central export point for all components
 
-export const myAgent = new Agent(components.agent, {
-  name: "my-agent",
-  instructions: "You are a helpful assistant...",
-  model: getChatModel(),
-  tools: {
-    // Add custom tools
+// shadcn components (base primitives)
+export * from './shadcn';
+
+// Motion components (animations)
+export * from './motion';
+
+// Kibo components (advanced UI)
+export * from './kibo';
+
+// Shared app components (used by 2+ apps)
+export * from './apps';
+```
+
+### Adding Component Libraries
+
+#### 1. Create dedicated directory:
+```bash
+mkdir packages/design/components/[library-name]
+```
+
+#### 2. Add components with consistent exports:
+```typescript
+// packages/design/components/kibo/index.ts
+export { default as KiboCard } from './card';
+export { default as KiboStack } from './stack';
+```
+
+### Shared App Components
+
+When components are needed by multiple apps:
+
+```typescript
+// packages/design/components/apps/header.tsx
+// Shared header used by both marketing and main app
+export function SharedHeader({ variant = 'default' }) {
+  // Component that adapts to context
+}
+
+// packages/design/components/apps/footer.tsx
+// Shared footer component
+export function SharedFooter({ links }) {
+  // Reusable across apps
+}
+```
+
+#### 3. Update main export:
+```typescript
+// packages/design/index.tsx
+export * from './components/kibo';
+```
+
+---
+
+## Styling Paradigms
+
+### 1. Brutalist/Bauhaus (arbor-xyz style)
+
+**Characteristics:**
+- Warm, paper-like backgrounds
+- Minimal color saturation
+- Strong typography (Highway Gothic)
+- Industrial spacing
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(0.98 0.005 85);  /* Warm off-white */
+  --foreground: oklch(0.2 0.01 85);    /* Warm black */
+  --primary: oklch(0.22 0.01 85);      /* Near black */
+  --radius: 0.125rem;                  /* Sharp corners */
+  --font-display: "HighwayGothic", sans-serif;
+  --font-mono: "IosevkaTerm-Regular", monospace;
+}
+```
+
+### 2. Minimal/Corporate (webs-xyz style)
+
+**Characteristics:**
+- Pure grayscale
+- Clean lines
+- System fonts (Geist)
+- Generous whitespace
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(1 0 0);       /* Pure white */
+  --foreground: oklch(0.145 0 0);   /* Pure black */
+  --primary: oklch(0.205 0 0);      /* Dark gray */
+  --radius: 0.625rem;               /* Soft corners */
+  --font-sans: "Geist", system-ui;
+  --font-mono: "Geist Mono", monospace;
+}
+```
+
+### 3. Playful/Modern
+
+**Characteristics:**
+- Vibrant colors
+- Gradient accents
+- Rounded corners
+- Dynamic animations
+
+**Token Modifications:**
+```css
+:root {
+  --background: oklch(0.98 0.02 270);   /* Slight purple tint */
+  --foreground: oklch(0.2 0.03 270);    /* Purple-black */
+  --primary: oklch(0.7 0.25 270);       /* Vibrant purple */
+  --radius: 1rem;                       /* Rounded */
+  --animation-duration: 300ms;          /* Smooth animations */
+}
+```
+
+---
+
+## Modification Patterns
+
+### Task: Change Overall Aesthetic
+
+#### Files to modify:
+1. `packages/design/styles/globals.css` - Color tokens
+2. `packages/design/lib/fonts.ts` - Font configuration
+3. `packages/design/tailwind.config.ts` - Tailwind theme extension
+
+#### Example: Brutalist → Minimal
+```css
+/* packages/design/styles/globals.css */
+/* Change from warm brutalist to clean minimal */
+:root {
+  /* From */
+  --background: oklch(0.98 0.005 85);
+  /* To */
+  --background: oklch(1 0 0);
+  
+  /* Adjust all color tokens to grayscale */
+  /* Set all Chroma values to 0 */
+}
+```
+
+### Task: Add Custom Font
+
+#### Steps:
+1. Add font files to `packages/design/fonts/`
+2. Update font face declarations:
+```css
+/* packages/design/styles/globals.css */
+@font-face {
+  font-family: "CustomFont";
+  src: url("../fonts/custom.woff2") format("woff2");
+  font-display: swap;
+}
+```
+3. Update CSS variable:
+```css
+:root {
+  --font-custom: "CustomFont", sans-serif;
+}
+```
+4. Update Tailwind config:
+```typescript
+// packages/design/tailwind.config.ts
+fontFamily: {
+  custom: ["var(--font-custom)"],
+}
+```
+
+### Task: Integrate New Component Library (e.g., Motion Primitives)
+
+#### Steps:
+1. Install library:
+```bash
+cd packages/design
+pnpm add @motion-primitives/react
+```
+
+2. Create component wrapper:
+```typescript
+// packages/design/components/motion/drawer.tsx
+'use client';
+
+import { Drawer as MotionDrawer } from '@motion-primitives/react';
+import { cn } from '../../lib/utils';
+
+export function Drawer({ className, ...props }) {
+  return (
+    <MotionDrawer 
+      className={cn(
+        "bg-card text-card-foreground",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+```
+
+3. Export from index:
+```typescript
+// packages/design/components/motion/index.ts
+export { Drawer } from './drawer';
+```
+
+---
+
+## Integration Points
+
+### Apps Using Design System
+
+#### 1. Main App (`apps/app`)
+```typescript
+// apps/app/src/app/layout.tsx
+import '@repo/design/styles/globals.css';
+import { ThemeProvider } from '@repo/design/providers/theme';
+```
+
+#### 2. Docs App (`apps/docs`)
+```typescript
+// apps/docs/src/app/layout.tsx
+import '@repo/design/styles/globals.css';
+// Docs app inherits same design tokens
+```
+
+### Tailwind v4 Configuration
+
+```typescript
+// packages/design/tailwind.config.ts
+export default {
+  content: [
+    "./components/**/*.{ts,tsx}",
+    // Include app sources for purging
+    "../../apps/*/src/**/*.{ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Map CSS variables to Tailwind
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+      },
+      borderRadius: {
+        DEFAULT: "var(--radius)",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
+      },
+    },
   },
-});
-
-// Use in an action
-export const chat = action({
-  args: { prompt: v.string() },
-  handler: async (ctx, { prompt }) => {
-    const { thread } = await myAgent.continueThread(ctx, { threadId });
-    const result = await thread.generateText(prompt);
-    return result.text;
-  },
-});
+};
 ```
 
-### Working with Workflows
+---
+
+## Common Tasks
+
+### 1. Dark Mode Support
+
+```css
+/* packages/design/styles/globals.css */
+.dark {
+  /* Invert lightness, maintain character */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  /* Continue for all tokens */
+}
+```
+
+### 2. Responsive Typography Scale
+
+```css
+/* packages/design/styles/globals.css */
+:root {
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+```
+
+### 3. Animation Tokens
+
+```css
+/* packages/design/styles/globals.css */
+:root {
+  --animation-fast: 150ms;
+  --animation-base: 250ms;
+  --animation-slow: 500ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+```
+
+### 4. Component Variant Through Tokens
 
 ```typescript
-// packages/backend/convex/workflows/my-workflow.ts
-import { workflow } from "./manager";
+// Instead of creating new components, modify tokens
+// Example: Alert component that adapts to theme
 
-export const myWorkflow = workflow.define({
-  args: { userId: v.id("users") },
-  handler: async (step, { userId }) => {
-    // Step 1: Do something
-    const result = await step.runMutation(
-      api.functions.mutations.doSomething,
-      { userId }
-    );
-    
-    // Step 2: Wait
-    await step.sleep(5000);
-    
-    // Step 3: Send email
-    await step.runAction(
-      api.emails.sendEmails.sendNotification,
-      { userId, result }
-    );
-  },
-});
+// Brutalist theme
+.brutalist .alert {
+  --alert-border-width: 2px;
+  --alert-bg: var(--background);
+  --alert-shadow: 4px 4px 0 var(--foreground);
+}
+
+// Minimal theme
+.minimal .alert {
+  --alert-border-width: 1px;
+  --alert-bg: var(--muted);
+  --alert-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 ```
 
-## Common Patterns
+---
 
-### Authentication
-- All auth flows through Clerk
-- User sync via webhooks
-- Auth utilities in `packages/backend/convex/components/auth.ts`
+## AI Agent Instructions
 
-### Real-time Updates
-- Queries automatically subscribe to changes
-- No need for manual polling or refresh
-- Updates propagate instantly to all clients
+When modifying the design system:
 
-### Error Handling
-- Use `ConvexError` for user-facing errors
-- Convex handles retries for transient failures
-- Workflows provide durable execution
+1. **Always start with tokens**, not components
+2. **Use OKLCH** for predictable color manipulation
+3. **Test in both light and dark modes**
+4. **Maintain semantic meaning** (primary = action, destructive = danger)
+5. **Document changes** in this file
+6. **Preserve accessibility** (WCAG AA contrast ratios)
 
-### Rate Limiting
-```typescript
-await checkRateLimit(ctx, "apiCall", userId);
-```
-
-### Email Sending
-```typescript
-// In an action (packages/backend/convex/functions/actions/emails.ts)
-import { render } from "@react-email/render";
-import WelcomeEmail from "../../emails/welcome";
-
-await resend.sendEmail(ctx, {
-  from: "noreply@app.com",
-  to: user.email,
-  subject: "Welcome!",
-  html: await render(<WelcomeEmail name={userName} />),
-});
-```
-
-## Deployment
+### Quick Commands for Agents
 
 ```bash
-# Deploy backend
-cd packages/backend
-npx convex deploy --prod
+# Change to brutalist theme
+sed -i '' 's/oklch([0-9.]+ 0 [0-9]+)/oklch(\1 0.005 85)/g' packages/design/styles/globals.css
 
-# Deploy frontend
-cd apps/app
-vercel --prod
+# Change to minimal theme  
+sed -i '' 's/oklch([0-9.]+ [0-9.]+ [0-9]+)/oklch(\1 0 0)/g' packages/design/styles/globals.css
+
+# Increase border radius (softer)
+sed -i '' 's/--radius: [0-9.]+rem/--radius: 1rem/g' packages/design/styles/globals.css
+
+# Decrease border radius (sharper)
+sed -i '' 's/--radius: [0-9.]+rem/--radius: 0.125rem/g' packages/design/styles/globals.css
 ```
 
-## Best Practices
+---
 
-1. **Keep functions small**: Break complex logic into multiple functions
-2. **Use indexes**: Always index fields you query by
-3. **Leverage workflows**: For multi-step processes
-4. **Type everything**: Convex generates types automatically
-5. **Use components**: For reusable functionality
+## Theme Preset Templates
 
-## Migration from Multi-Service Architecture
+### Copy-Paste Presets
 
-This template replaces:
-- `apps/api` → Convex functions
-- `apps/ai` → Convex Agent component
-- `apps/email` → Convex Resend component
-- `packages/database` → Convex database
-- `packages/api` → Convex functions
-- `packages/webhooks` → Convex HTTP routes
+#### IBM Design Language
+```css
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.11 0 0);
+  --primary: oklch(0.37 0.18 248);      /* IBM Blue */
+  --secondary: oklch(0.18 0 0);
+  --destructive: oklch(0.53 0.24 27);   /* IBM Red */
+  --radius: 0;                          /* No radius */
+}
+```
 
-All backend logic now lives in `packages/backend/convex` with superior:
-- Type safety
-- Real-time capabilities
-- Durability
-- Simplicity
+#### Apple Human Interface
+```css
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --primary: oklch(0.52 0.24 252);      /* Apple Blue */
+  --secondary: oklch(0.96 0 0);
+  --destructive: oklch(0.61 0.24 25);   /* Apple Red */
+  --radius: 0.75rem;                    /* Apple standard */
+}
+```
 
-## Support
+#### Material Design 3
+```css
+:root {
+  --background: oklch(0.99 0.005 277);
+  --foreground: oklch(0.13 0.02 277);
+  --primary: oklch(0.45 0.16 277);      /* Material Purple */
+  --secondary: oklch(0.89 0.05 277);
+  --radius: 1rem;                       /* Material large */
+}
+```
 
-For questions or issues, refer to:
-- [Convex Documentation](https://docs.convex.dev)
-- [TurboKit GitHub](https://github.com/your-org/turbokit)
-- [Discord Community](https://convex.dev/community)
+---
+
+## Troubleshooting
+
+### Issue: Components not reflecting token changes
+**Solution**: Clear Next.js cache
+```bash
+rm -rf apps/app/.next
+pnpm dev
+```
+
+### Issue: Dark mode not working
+**Solution**: Ensure theme provider wraps app
+```typescript
+// apps/app/src/app/layout.tsx
+<ThemeProvider attribute="class" defaultTheme="system">
+  {children}
+</ThemeProvider>
+```
+
+### Issue: Tailwind not picking up custom colors
+**Solution**: Use CSS variables in Tailwind config
+```typescript
+// Don't use direct OKLCH in Tailwind
+// Use CSS custom properties instead
+colors: {
+  primary: "oklch(var(--primary) / <alpha-value>)"
+}
+```
+
+---
+
+## Version History
+
+- v1.0.0: Initial design system architecture
+- v1.1.0: Added OKLCH color system
+- v1.2.0: Integrated motion primitives
+- v1.3.0: Added theme presets
+
+---
+
+*This document should be updated whenever the design system architecture changes.*
+
+
+
+<!-- Source: .ruler/AGENTS.md -->
+
+# AGENTS.md
+
+Centralised AI agent instructions. Add coding guidelines, style guides, and project context here.
+
+Ruler concatenates all .md files in this directory (and subdirectories), starting with AGENTS.md (if present), then remaining files in sorted order.
+
+
+
+<!-- Source: .ruler/01-turbokit-overview.md -->
+
+# TurboKit - Convex Native Template
+
+## Overview
+TurboKit is a modern, Convex-native turborepo template that uses Convex as a complete backend solution with real-time subscriptions, durable workflows, AI agents, and integrated email.
+
+## Architecture Philosophy
+- **Single Backend Package**: All server logic in `packages/backend/convex`
+- **Real-time by Default**: WebSocket subscriptions for live updates
+- **Type Safety**: End-to-end TypeScript with generated types
+- **Component-Based**: Leverage Convex components for common functionality
+
+## Key Technologies
+- **Backend**: Convex (database, functions, workflows, file storage)
+- **Frontend**: Next.js 15, React 19, Tailwind CSS v4
+- **Auth**: Clerk with Convex integration
+- **AI**: Convex Agent component (AI SDK v5)
+- **Email**: Convex Resend component
+- **Payments**: Convex Polar component
+
+## Development Workflow
+1. Define schema in `packages/backend/convex/schema.ts`
+2. Create functions in `packages/backend/convex/functions/`
+3. Use generated API in client with `useQuery` and `useMutation`
+4. Real-time updates happen automatically
+
+
+
+<!-- Source: .ruler/02-convex-patterns.md -->
+
+# Convex Development Patterns
+
+## Function Types
+- **Queries**: Read-only database operations (automatically reactive)
+- **Mutations**: Database writes (transactional)
+- **Actions**: External API calls, file operations, AI calls
+- **Internal Functions**: Called from other functions, not exposed to client
+
+## Database Schema
+- Define tables in `packages/backend/convex/schema.ts`
+- Always add indexes for fields you query by
+- Use `v.id("tableName")` for foreign keys
+- Include `createdAt` and `updatedAt` timestamps
+
+## Authentication Pattern
+```typescript
+import { requireAuth } from "../components/auth";
+
+export const myFunction = mutation({
+  args: { /* ... */ },
+  handler: async (ctx, args) => {
+    const { user } = await requireAuth(ctx);
+    // Function logic with authenticated user
+  },
+});
+```
+
+## Error Handling
+- Use `ConvexError` for user-facing errors
+- Include error codes for client handling
+- Let Convex handle retries for transient failures
+
+## Real-time Subscriptions
+- Queries automatically subscribe to changes
+- No need for manual polling or WebSocket management
+- Updates propagate instantly to all clients
+
+## File Storage
+- Use Convex's built-in file storage
+- Upload files in actions, store URLs in database
+- Automatic CDN distribution
+
+
+
+<!-- Source: .ruler/03-ai-and-components.md -->
+
+# AI and Components
+
+## AI Integration (Convex Agent Component)
+- Use `@convex-dev/agent` for AI capabilities
+- Configure models in environment variables
+- Create agents in `packages/backend/convex/agents/`
+- Use threads for conversation memory
+- Implement custom tools as Convex functions
+
+## Email System (Convex Resend Component)
+- Use `@convex-dev/resend` for email sending
+- Create React Email templates in `packages/backend/convex/emails/`
+- Send emails only from actions (not mutations)
+- Handle webhooks for delivery tracking
+
+## Payments (Convex Polar Component)
+- Use `@convex-dev/polar` for subscriptions
+- Configure products in Polar dashboard
+- Handle webhooks in `packages/backend/convex/http.ts`
+- Use React components for checkout flow
+
+## Workflows (Durable Execution)
+- Use `@convex-dev/workflow` for multi-step processes
+- Define workflows in `packages/backend/convex/workflows/`
+- Use steps for sequential/parallel execution
+- Handle failures with automatic retries
+
+## Other Essential Components
+- **Migrations**: `@convex-dev/migrations` for schema changes
+- **Aggregate**: `@convex-dev/aggregate` for analytics
+- **Action Retrier**: `@convex-dev/action-retrier` for resilient API calls
+- **Crons**: `@convex-dev/crons` for scheduled jobs
+
+
+
+<!-- Source: .ruler/04-coding-standards.md -->
+
+# Coding Standards
+
+## TypeScript Requirements
+- Strict mode enabled
+- No `any` types (use `unknown` if needed)
+- Explicit return types for functions
+- Use `z` schemas for runtime validation
+
+## File Organization
+```
+packages/backend/convex/
+├── functions/
+│   ├── queries/     # Read operations
+│   ├── mutations/   # Write operations
+│   ├── actions/     # External calls
+│   └── internal/    # Internal functions
+├── agents/          # AI agents
+├── workflows/       # Durable workflows
+├── emails/          # Email templates
+├── components/      # Shared utilities
+├── schema.ts        # Database schema
+└── http.ts          # HTTP routes & webhooks
+```
+
+## Naming Conventions
+- Tables: plural, lowercase (e.g., `users`, `posts`)
+- Functions: camelCase verbs (e.g., `createPost`, `getUser`)
+- Components: PascalCase (e.g., `UserProfile`)
+- Constants: UPPER_SNAKE_CASE
+- Files: kebab-case for components, camelCase for functions
+
+## Performance Best Practices
+- Use indexes for all query fields
+- Paginate large result sets
+- Cache expensive computations
+- Use `ctx.scheduler` for background jobs
+- Batch database operations when possible
+
+## Security
+- Always validate inputs with schemas
+- Sanitize user-generated content
+- Use environment variables for secrets
+- Implement rate limiting for public endpoints
+- Never expose internal functions to client

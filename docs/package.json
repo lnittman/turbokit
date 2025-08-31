@@ -1,0 +1,38 @@
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start",
+    "postinstall": "fumadocs-mdx"
+  },
+  "dependencies": {
+    "@repo/design": "workspace:*",
+    "@repo/analytics": "workspace:*",
+    "@vercel/analytics": "^1.5.0",
+    "fumadocs-core": "15.4.0",
+    "fumadocs-docgen": "^2.0.0",
+    "fumadocs-mdx": "11.6.6",
+    "fumadocs-ui": "15.4.0",
+    "lucide-react": "^0.469.0",
+    "mermaid": "^11.6.0",
+    "next": "15.3.1",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "framer-motion": "^11.18.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,156 @@
+/* Import TurboKit Design System */
+@import '@repo/design/styles/globals.css';
+
+/* Fumadocs-specific overrides aligned with TurboKit branding */
+:root {
+  /* Override Fumadocs defaults with TurboKit colors */
+  --fd-background: var(--background);
+  --fd-foreground: var(--foreground);
+  --fd-muted: var(--muted);
+  --fd-muted-foreground: var(--muted-foreground);
+  --fd-popover: var(--popover);
+  --fd-popover-foreground: var(--popover-foreground);
+  --fd-card: var(--card);
+  --fd-card-foreground: var(--card-foreground);
+  --fd-border: var(--border);
+  --fd-input: var(--input);
+  --fd-primary: var(--primary);
+  --fd-primary-foreground: var(--primary-foreground);
+  --fd-secondary: var(--secondary);
+  --fd-secondary-foreground: var(--secondary-foreground);
+  --fd-accent: var(--accent);
+  --fd-accent-foreground: var(--accent-foreground);
+  --fd-destructive: var(--destructive);
+  --fd-destructive-foreground: var(--destructive-foreground);
+  --fd-ring: var(--ring);
+  --fd-radius: var(--radius);
+}
+
+/* Documentation-specific styles */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--primary);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--muted-foreground);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--muted-foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--muted);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+
+/* Code block styling aligned with TurboKit */
+pre[data-language] {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Syntax highlighting theme */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--muted-foreground);
+}
+
+.token.punctuation {
+  color: var(--foreground);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: var(--primary);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: oklch(0.7 0.15 150); /* Green */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: oklch(0.7 0.15 50); /* Yellow */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: oklch(0.7 0.15 270); /* Purple */
+}
+
+.token.function,
+.token.class-name {
+  color: oklch(0.7 0.15 200); /* Blue */
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: oklch(0.7 0.15 30); /* Orange */
+}
+
+/* Navigation styling */
+nav[data-orientation="vertical"] {
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+}
+
+/* Search styling */
+[data-search] {
+  background: var(--background);
+  border: 1px solid var(--border);
+}
+
+/* Badge styling for categories */
+.badge-convex {
+  background: oklch(0.9 0.1 270);
+  color: oklch(0.3 0.1 270);
+}
+
+.badge-acp {
+  background: oklch(0.9 0.1 200);
+  color: oklch(0.3 0.1 200);
+}
+
+.badge-components {
+  background: oklch(0.9 0.1 150);
+  color: oklch(0.3 0.1 150);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}

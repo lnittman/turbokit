@@ -33,6 +33,15 @@ logs/
 .vscode/
 *.swp
 
+# Local AI/dev tool configs (do not track)
+.cursor/
+.windsurf/
+.ruler/
+.turbokit/
+.aider.conf.yml
+.clinerules
+.mcp.json*
+
 # Misc caches
 .cache/
 **/.cache/
@@ -45,4 +54,3 @@ packages/**/yarn.lock
 
 # Email app (if scaffolded separately)
 apps/email/.react-email/
-

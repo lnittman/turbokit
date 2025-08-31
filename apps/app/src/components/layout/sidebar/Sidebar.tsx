@@ -15,7 +15,6 @@ import { SidebarHeader } from './components/sidebar-header';
 import { SidebarContent } from './components/sidebar-content';
 import { UserMenu } from './components/user-menu';
 import { CommandMenuModal } from '../modal/command/menu';
-import { CommandOverlay } from '../modal/command/overlay';
 
 export function Sidebar() {
   const isMobile = useIsMobile();
@@ -68,8 +67,8 @@ export function Sidebar() {
         />
       )}
 
-      {/* Command menu/overlay based on device */}
-      {isMobile ? <CommandMenuModal /> : <CommandOverlay />}
+      {/* Command menu (domain-agnostic) */}
+      <CommandMenuModal />
 
       {/* Sidebar toggle button */}
       <SidebarToggle />
