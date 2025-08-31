@@ -1,8 +1,18 @@
 {
   "name": "turbokit",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "ACP-native development platform for Convex applications",
+  "bin": {
+    "turbokit": "dist/scripts/turbokit-cli.js"
+  },
+  "files": [
+    "dist",
+    "scripts"
+  ],
+  "type": "module",
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build && tsup",
+    "build:cli": "tsup",
     "dev": "turbo dev",
     "lint": "ultracite lint",
     "format": "ultracite format",
@@ -11,16 +21,35 @@
     "boundaries": "turbo boundaries",
     "bump-deps": "npx npm-check-updates --deep -u -x react-day-picker && pnpm install",
     "bump-ui": "npx shadcn@latest add --all --overwrite -c packages/design",
-    "migrate": "cd packages/database && npx prisma format && npx prisma generate && npx prisma db push",
-    "clean": "git clean -xdf node_modules"
+    "clean": "git clean -xdf node_modules",
+    "publish:cli": "tsx scripts/publish.ts",
+    "publish:cli:dry": "tsx scripts/publish.ts --dry-run"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "@zed-industries/agent-client-protocol": "^0.1.1",
+    "commander": "^12.0.0",
+    "fast-xml-parser": "^4.3.0",
+    
+    "uuid": "^11.0.3",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@auto-it/first-time-contributor": "^11.3.0",
     "@biomejs/biome": "1.9.4",
     "@repo/typescript-config": "workspace:*",
     "@turbo/gen": "^2.5.2",
+    "@types/node": "^20.0.0",
+    "@types/uuid": "^10.0.0",
+    "picocolors": "^1.1.1",
+    "tsup": "^8.0.0",
+    "tsx": "^4.19.2",
     "turbo": "^2.5.2",
+    "typescript": "^5.7.2",
     "ultracite": "^4.2.1"
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.10.0",
+  "engines": {
+    "node": ">=20"
+  }
 }
