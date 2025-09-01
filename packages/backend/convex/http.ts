@@ -2,7 +2,6 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { resend } from "./components/email";
 import { api } from "./_generated/api";
-import { polar } from "./components/polar";
 
 const http = httpRouter();
 
@@ -89,8 +88,6 @@ http.route({
   }),
 });
 
-// Polar webhook endpoint (register default routes)
-polar.registerRoutes(http);
 
 // Generic webhook endpoint for other services
 http.route({
