@@ -62,10 +62,10 @@ export function printEnvBanner(appName: string) {
       howToEnable: 'Set POLAR_ORGANIZATION_TOKEN (optional: POLAR_WEBHOOK_SECRET, POLAR_SERVER)',
     },
     {
-      label: 'AI Providers',
-      enabled: bool('OPENAI_API_KEY') || bool('ANTHROPIC_API_KEY') || bool('GOOGLE_GENERATIVE_AI_API_KEY'),
-      details: 'Model-backed features and workflows',
-      howToEnable: 'Set one of OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY',
+      label: 'AI (OpenRouter)',
+      enabled: bool('OPENROUTER_API_KEY'),
+      details: 'Model-backed features via OpenRouter (multi-model gateway)',
+      howToEnable: 'Set OPENROUTER_API_KEY (optional: OPENROUTER_BASE_URL, OPENROUTER_MODEL)',
     },
     {
       label: 'Backend (Convex)',
