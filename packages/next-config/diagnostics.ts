@@ -56,10 +56,10 @@ export function printEnvBanner(appName: string) {
       howToEnable: 'Set NEXT_PUBLIC_SENTRY_DSN (optional: SENTRY_ORG, SENTRY_PROJECT)',
     },
     {
-      label: 'Payments (Stripe)',
-      enabled: bool('STRIPE_SECRET_KEY'),
-      details: 'Stripe server SDK + agent toolkit',
-      howToEnable: 'Set STRIPE_SECRET_KEY (optional: STRIPE_WEBHOOK_SECRET)',
+      label: 'Payments (Polar)',
+      enabled: bool('POLAR_ORGANIZATION_TOKEN'),
+      details: 'Subscriptions & billing via Convex Polar component',
+      howToEnable: 'Set POLAR_ORGANIZATION_TOKEN (optional: POLAR_WEBHOOK_SECRET, POLAR_SERVER)',
     },
     {
       label: 'AI Providers',
