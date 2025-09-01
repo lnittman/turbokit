@@ -12,8 +12,6 @@
     "./types": "./convex/_generated/dataModel.d.ts"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^2.0.9",
-    "@ai-sdk/google": "^2.0.11",
     "@ai-sdk/openai": "^2.0.23",
     "@convex-dev/action-retrier": "^0.2.1",
     "@convex-dev/agent": "^0.2.5",
