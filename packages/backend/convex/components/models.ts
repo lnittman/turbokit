@@ -29,7 +29,7 @@ export function getAdvancedModel(): LanguageModel {
 }
 
 export function getVisionModel(): LanguageModel {
-  // Vision-capable default; override with OPENROUTER_VISION_MODEL if desired
-  const model = process.env.OPENROUTER_VISION_MODEL || "openai/gpt-4o";
+  // GPT-5 is vision-capable; default to unified chat model unless overridden
+  const model = process.env.OPENROUTER_VISION_MODEL || process.env.OPENROUTER_MODEL || "openai/gpt-5";
   return openrouter(model);
 }
