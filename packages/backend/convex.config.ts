@@ -8,6 +8,7 @@ import aggregate from "@convex-dev/aggregate/convex.config";
 import actionRetrier from "@convex-dev/action-retrier/convex.config";
 import crons from "@convex-dev/crons/convex.config";
 import rag from "@convex-dev/rag/convex.config";
+import polar from "@convex-dev/polar/convex.config";
 
 const app = defineApp();
 
@@ -25,5 +26,6 @@ app.use(rag);           // Semantic search and RAG
 
 // Integrations
 app.use(resend);         // Email sending
+app.use(polar);          // Subscriptions & billing (Polar)
 
 export default app;

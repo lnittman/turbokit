@@ -2,6 +2,7 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { resend } from "./components/email";
 import { api } from "./_generated/api";
+import { polar } from "./components/polar";
 
 const http = httpRouter();
 
@@ -88,40 +89,8 @@ http.route({
   }),
 });
 
-// Stripe webhook endpoint (example)
-http.route({
-  path: "/webhooks/stripe",
-  method: "POST",
-  handler: httpAction(async (ctx, req) => {
-    const signature = req.headers.get("stripe-signature");
-    
-    if (!signature) {
-      return new Response("Missing stripe signature", { status: 401 });
-    }
-    
-    const body = await req.text();
-    
-    // TODO: Verify signature with Stripe webhook secret
-    // const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    
-    // For now, parse the event
-    const event = JSON.parse(body);
-    
-    switch (event.type) {
-      case "payment_intent.succeeded":
-        // Handle successful payment
-        break;
-      case "customer.subscription.created":
-        // Handle new subscription
-        break;
-      case "customer.subscription.deleted":
-        // Handle cancelled subscription
-        break;
-    }
-    
-    return new Response("OK", { status: 200 });
-  }),
-});
+// Polar webhook endpoint (register default routes)
+polar.registerRoutes(http);
 
 // Generic webhook endpoint for other services
 http.route({
