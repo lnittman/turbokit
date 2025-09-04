@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 // Extend frontmatter schema for TurboKit-specific fields
 const extendedFrontmatterSchema = frontmatterSchema.extend({
-  category: z.enum(['convex', 'acp', 'components', 'guides', 'reference']).optional(),
+  category: z.enum(['convex', 'ai', 'components', 'guides', 'reference']).optional(),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
   featured: z.boolean().optional(),
 });

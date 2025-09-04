@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | TurboKit Docs',
   },
   description: 'Build real-time Convex applications with AI-powered development tools',
-  keywords: ['turbokit', 'convex', 'nextjs', 'real-time', 'acp', 'ai development'],
+  keywords: ['turbokit', 'convex', 'nextjs', 'real-time', 'ai', 'development'],
   authors: [{ name: 'TurboKit Team' }],
   creator: 'TurboKit',
   openGraph: {

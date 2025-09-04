@@ -81,7 +81,7 @@ function runAsCLI() {
       console.log(`\nNext steps:\n  cd ${dir}\n  pnpm install   # if you skipped\n  npx convex init\n  pnpm dev\n`);
     });
 
-  // Init command - can also be invoked via ACP
+  // Init command
   program
     .command('init [name]')
     .description('[Deprecated] Initialize in an existing TurboKit template directory')
@@ -98,7 +98,7 @@ function runAsCLI() {
     .command('connect')
     .description('Connect your preferred AI agent to the project')
     .option('--agent <agent>', 'Agent to connect (claude, cursor, copilot, etc.)')
-    .option('--port <port>', 'ACP server port (default: 3456)')
+    .option('--port <port>', 'Server port (default: 3456)')
     .action(connect);
 
   // Deploy command

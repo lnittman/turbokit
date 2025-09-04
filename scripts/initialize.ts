@@ -29,7 +29,7 @@ interface TurboKitConfig {
   projectName: string;
   created: string;
   specification?: any;
-  acpClient?: 'gemini' | 'claude' | 'cursor' | 'none';
+  aiClient?: 'gemini' | 'claude' | 'cursor' | 'none';
 }
 
 /**
@@ -150,7 +150,7 @@ export async function initialize(options: InitOptions) {
       features: projectSpec.features.map((f: any) => f.name),
       convexComponents: projectSpec.convexComponents,
       agentPreference: projectSpec.agentConfiguration.primaryAgent,
-      nextSteps: 'Configure ACP client for AI assistance',
+      nextSteps: 'Configure AI assistant if needed',
     });
     
     s.stop('Configuration saved!');
@@ -172,7 +172,7 @@ export async function initialize(options: InitOptions) {
     updateStatus(turbokitDir, 'Initialized', 'Ready for development', 'Complete', {
       projectName: projectSpec.name,
       initialized: new Date().toISOString(),
-      acpClient: 'none',
+      aiClient: 'none',
       nextSteps: 'Install dependencies: pnpm install',
     });
     

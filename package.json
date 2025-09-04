@@ -1,7 +1,7 @@
 {
   "name": "turbokit",
   "version": "1.0.0",
-  "description": "ACP-native development platform for Convex applications",
+  "description": "A modern, real-time application template powered by Convex",
   "type": "module",
   "private": true,
   "scripts": {

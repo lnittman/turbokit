@@ -26,13 +26,13 @@
       ]
     },
     {
-      "title": "ACP & AI",
+      "title": "AI & Agents",
       "pages": [
-        "acp/index",
-        "acp/setup",
-        "acp/gemini",
-        "acp/claude",
-        "acp/custom-agents"
+        "ai/index",
+        "ai/agents",
+        "ai/convex-agent",
+        "ai/tools",
+        "ai/workflows"
       ]
     },
     {

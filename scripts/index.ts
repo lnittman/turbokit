@@ -7,7 +7,7 @@ import { deploy } from './deploy.js';
 
 program
   .name('turbokit')
-  .description('ACP-native development platform for Convex applications')
+  .description('A modern, real-time application template powered by Convex')
   .version('1.0.0');
 
 program
@@ -22,7 +22,7 @@ program
   .command('connect')
   .description('Connect your preferred AI agent to the project')
   .option('--agent <agent>', 'Agent to connect (claude, cursor, copilot, etc.)')
-  .option('--port <port>', 'ACP server port (default: 3456)')
+  .option('--port <port>', 'Server port (default: 3456)')
   .action(connect);
 
 program

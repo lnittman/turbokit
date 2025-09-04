@@ -1,6 +1,6 @@
 # TurboKit
 
-An ACP-native development platform for Convex applications.
+A modern, real-time application template powered by Convex.
 
 ## What's inside
 

@@ -116,8 +116,8 @@ export default function HomePage() {
           <FeatureCard
             icon={IconNames.Bot}
             title="AI Integration"
-            description="Set up ACP server and connect AI assistants"
-            href="/docs/acp"
+            description="Build AI agents with Convex Agent component"
+            href="/docs/ai"
           />
           <FeatureCard
             icon={IconNames.Code}
@@ -165,9 +165,9 @@ export default function HomePage() {
             <h3 className="text-2xl font-bold mb-6">Advanced Topics</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/docs/acp/setup" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/docs/ai/agents" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                   <ArrowRight className="h-4 w-4" />
-                  ACP Server Setup
+                  AI Agents & Tools
                 </Link>
               </li>
               <li>
