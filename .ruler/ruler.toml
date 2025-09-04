@@ -48,18 +48,6 @@ output_path = "CODEX.md"
 # --- MCP Servers ---
 # Model Context Protocol servers for enhanced AI capabilities
 
-[mcp_servers.filesystem]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
-
-[mcp_servers.git]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-git", "--repository", "."]
-
-[mcp_servers.memory]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-memory"]
-
 # Convex MCP for database and function access
 [mcp_servers.convex]
 command = "npx"
@@ -70,11 +58,3 @@ env = { CONVEX_DEPLOYMENT = "${CONVEX_DEPLOYMENT:-development}" }
 [mcp_servers.vercel]
 command = "npx"
 args = ["-y", "@vercel/mcp-server"]
-
-# Halo integration - Custom prompt system
-# This connects to the user's ~/.halo/ directory for
-# commands, components, roles, and rules
-[mcp_servers.halo]
-command = "node"
-args = ["cli/src/halo-mcp-bridge.js"]
-env = { HALO_PATH = "~/.halo" }
