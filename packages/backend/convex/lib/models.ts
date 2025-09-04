@@ -33,3 +33,4 @@ export function getVisionModel(): LanguageModel {
   const model = process.env.OPENROUTER_VISION_MODEL || process.env.OPENROUTER_MODEL || "openai/gpt-5";
   return openrouter(model);
 }
+

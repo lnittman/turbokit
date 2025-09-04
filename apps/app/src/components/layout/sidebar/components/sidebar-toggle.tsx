@@ -6,13 +6,14 @@ import {
   Sidebar as SidebarIcon
 } from '@phosphor-icons/react';
 import { useAtom } from 'jotai';
+import type React from 'react';
 
 import { Button } from '@repo/design/components/ui/button';
 import { cn } from '@repo/design/lib/utils';
 
 import { sidebarOpenAtom } from '@/atoms/layout';
 
-export function SidebarToggle() {
+export function SidebarToggle(): React.ReactElement {
   const [isOpen, setIsOpen] = useAtom(sidebarOpenAtom);
   
   const toggle = () => setIsOpen(!isOpen);

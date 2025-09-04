@@ -1,6 +1,6 @@
 import { query } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireAuth } from "../../components/auth";
+import { requireAuth } from "../../lib/auth";
 
 export const getMe = query({
   args: {},

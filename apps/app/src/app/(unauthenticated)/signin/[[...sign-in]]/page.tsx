@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
+import type React from 'react';
 
 import { useAuth } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
@@ -9,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 import { SignIn as CustomSignInComponent } from '@/components/auth/signin';
 
-export default function SignInPage() {
+export default function SignInPage(): React.ReactElement {
   const router = useRouter();
   const { isSignedIn } = useAuth();
 

@@ -17,7 +17,10 @@ import { cn } from "@repo/design/lib/utils";
 import { themeAtom } from "@/atoms/theme";
 import { sidebarOpenAtom } from "@/atoms/layout";
 
-export function UserMenu() {
+export function UserMenu(): React.ReactElement | null {
+  const isClerkConfigured = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  if (!isClerkConfigured) return null;
+
   const { isLoaded } = useAuth();
   const { setTheme: setNextTheme } = useTheme();
   const { user } = useUser();

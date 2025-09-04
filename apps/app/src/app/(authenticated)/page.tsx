@@ -3,7 +3,9 @@
 import { redirect } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function Home() {
+import type React from 'react';
+
+export default function Home(): React.ReactElement | null {
   useEffect(() => {
     redirect('/dashboard');
   }, []);

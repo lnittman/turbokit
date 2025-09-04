@@ -9,6 +9,9 @@ export * from './motion';
 
 // Kibo UI (Advanced components)
 export * from './kibo';
+// App-level reusable components
+export * from './search';
+export * from './navigation/tab-underline';
 
 // Re-export specific UI components for convenience
 export {

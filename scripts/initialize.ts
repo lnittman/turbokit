@@ -117,20 +117,15 @@ export async function initialize(options: InitOptions) {
       turboKitVersion: '1.0.0',
     });
     
-    // Run adaptive onboarding
+    // Minimal non-AI onboarding: infer name from directory or argument
     console.log('');
     note(
-      'I\'ll guide you through setting up your TurboKit project.\n\n' +
-      'TurboKit creates:\n' +
-      '• Convex-native backend with real-time subscriptions\n' +
-      '• Next.js 15 + React 19 frontend\n' +
-      '• Type-safe end-to-end architecture\n' +
-      '• AI-agent friendly documentation',
-      'Welcome to TurboKit'
+      'Initializing TurboKit project metadata (no AI involved).',
+      'TurboKit'
     );
     
-    const onboarding = new AdaptiveOnboarding(cwd);
-    const projectSpec = await onboarding.run();
+    const inferredName = options.name || cwd.split('/').pop() || 'turbokit-app';
+    const projectSpec = { name: inferredName, domain: 'app', features: [], convexComponents: [], agentConfiguration: { primaryAgent: 'none' } } as any;
     
     const s = spinner();
     s.start('Saving project configuration...');
@@ -160,76 +155,7 @@ export async function initialize(options: InitOptions) {
     
     s.stop('Configuration saved!');
     
-    // Check for ACP clients (currently only Gemini)
-    s.start('Checking for AI assistants...');
-    
-    let geminiAvailable = false;
-    try {
-      await exec('which gemini');
-      geminiAvailable = true;
-    } catch {}
-    
-    s.stop('AI assistant check complete');
-    
-    // Configure ACP if available
-    if (geminiAvailable) {
-      const useGemini = await confirm({
-        message: 'Gemini CLI detected. Configure it for AI assistance?',
-        initialValue: true,
-      });
-      
-      if (!isCancel(useGemini) && useGemini) {
-        const acpConfig = {
-          client: 'gemini',
-          serverCommand: 'turbokit acp',
-          serverPort: 3456,
-          instructions: [
-            '1. Terminal 1: turbokit acp',
-            '2. Terminal 2: gemini --experimental-acp',
-            '3. Gemini will connect to TurboKit for Convex expertise',
-          ],
-          contextFiles: [
-            '.turbokit/config/project.json',
-            '.turbokit/status/CURRENT.md',
-            '.turbokit/context/',
-            '.turbokit/docs/',
-          ],
-        };
-        
-        await writeFile(
-          join(turbokitDir, 'config', 'acp.json'),
-          JSON.stringify(acpConfig, null, 2)
-        );
-        
-        config.acpClient = 'gemini';
-        
-        // Update config with ACP client
-        await writeFile(
-          join(turbokitDir, 'config', 'project.json'),
-          JSON.stringify(config, null, 2)
-        );
-        
-        updateStatus(turbokitDir, 'ACP Setup', 'Gemini CLI configured', 'Ready', {
-          acpClient: 'Gemini CLI',
-          serverCommand: 'turbokit acp',
-          serverPort: 3456,
-          connectionStatus: 'Not connected',
-          nextSteps: 'Start ACP server with: turbokit acp',
-        });
-      }
-    } else {
-      console.log('');
-      note(
-        'For AI assistance, install Gemini CLI:\n\n' +
-        colors.cyan('npm install -g @google/gemini-cli@latest\n') +
-        '\nThen run ' + colors.cyan('turbokit init') + ' again to configure.\n\n' +
-        'Future support planned for:\n' +
-        '• Claude (via ACP)\n' +
-        '• Cursor Agent\n' +
-        '• Other ACP-compatible clients',
-        'AI Integration'
-      );
-    }
+    // No AI configuration in CLI; coding agent usage is documented in AGENTS.md
     
     // Final summary
     console.log('');
@@ -246,10 +172,8 @@ export async function initialize(options: InitOptions) {
     updateStatus(turbokitDir, 'Initialized', 'Ready for development', 'Complete', {
       projectName: projectSpec.name,
       initialized: new Date().toISOString(),
-      acpClient: config.acpClient || 'none',
-      nextSteps: config.acpClient === 'gemini' 
-        ? 'Start ACP server: turbokit acp' 
-        : 'Install dependencies: pnpm install',
+      acpClient: 'none',
+      nextSteps: 'Install dependencies: pnpm install',
     });
     
     outro(colors.green('✓ TurboKit initialized successfully!'));
@@ -258,25 +182,14 @@ export async function initialize(options: InitOptions) {
     console.log(colors.bold('Next steps:'));
     console.log('');
     
-    if (config.acpClient === 'gemini') {
-      console.log('  1. Start the TurboKit ACP server:');
-      console.log(colors.cyan('     turbokit acp'));
-      console.log('');
-      console.log('  2. In another terminal, connect Gemini:');
-      console.log(colors.cyan('     gemini --experimental-acp'));
-      console.log('');
-      console.log('  3. Gemini now has full context about your project!');
-      console.log('     Ask it to help you build features.');
-    } else {
-      console.log('  1. Install dependencies:');
-      console.log(colors.cyan('     pnpm install'));
-      console.log('');
-      console.log('  2. Initialize Convex:');
-      console.log(colors.cyan('     npx convex init'));
-      console.log('');
-      console.log('  3. Start development:');
-      console.log(colors.cyan('     pnpm dev'));
-    }
+    console.log('  1. Install dependencies:');
+    console.log(colors.cyan('     pnpm install'));
+    console.log('');
+    console.log('  2. Initialize Convex:');
+    console.log(colors.cyan('     npx convex init'));
+    console.log('');
+    console.log('  3. Start development:');
+    console.log(colors.cyan('     pnpm dev'));
     
     console.log('');
     console.log(colors.dim('Configuration saved to .turbokit/'));

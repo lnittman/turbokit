@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "ACP-native development platform for Convex applications",
   "bin": {
-    "turbokit": "dist/scripts/turbokit-cli.js"
+    "turbokit": "dist/scripts/turbokit-cli.cjs"
   },
   "files": [
     "dist",
@@ -13,10 +13,19 @@
   "scripts": {
     "build": "turbo build && tsup",
     "build:cli": "tsup",
-    "dev": "turbo dev",
+    "dev": "turbo run dev --filter=!@repo/backend",
+    "dev:all": "turbo run dev",
+    "dev:backend": "pnpm -C packages/backend dev",
     "lint": "ultracite lint",
     "format": "ultracite format",
     "test": "turbo test",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:all": "pnpm test:unit && pnpm test:e2e",
     "analyze": "turbo analyze",
     "boundaries": "turbo boundaries",
     "bump-deps": "npx npm-check-updates --deep -u -x react-day-picker && pnpm install",

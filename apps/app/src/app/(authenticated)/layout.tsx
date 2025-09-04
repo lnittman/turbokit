@@ -16,7 +16,7 @@ interface AuthenticatedLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps): React.ReactElement | null {
   const { isMobile, ready } = useIsMobile();
 
   const [isOpen] = useAtom(sidebarOpenAtom);

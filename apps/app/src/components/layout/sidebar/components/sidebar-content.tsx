@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
+import type React from 'react';
 
 import { sidebarOpenAtom } from '@/atoms/layout';
 
-export function SidebarContent() {
+export function SidebarContent(): React.ReactElement {
   const [isOpen] = useAtom(sidebarOpenAtom);
   
   return (

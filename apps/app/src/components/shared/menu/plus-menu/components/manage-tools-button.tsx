@@ -5,7 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 import { cn } from "@repo/design/lib/utils";
 
-export function ManageToolsButton() {
+export function ManageToolsButton(): React.ReactElement {
   return (
     <DropdownMenuPrimitive.Item 
       className={cn(

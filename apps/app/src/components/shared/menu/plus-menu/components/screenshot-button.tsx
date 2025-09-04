@@ -5,7 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 import { cn } from "@repo/design/lib/utils";
 
-export function ScreenshotButton() {
+export function ScreenshotButton(): React.ReactElement {
   return (
     <DropdownMenuPrimitive.Item 
       className={cn(

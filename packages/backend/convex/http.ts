@@ -1,7 +1,8 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { resend } from "./components/email";
-import { api } from "./_generated/api";
+import { polar } from "./components/polar";
+import { api, internal } from "./_generated/api";
 
 const http = httpRouter();
 
@@ -32,6 +33,49 @@ http.route({
     // Let the Resend component handle the webhook
     return await resend.handleResendWebhook(ctx, req);
   }),
+});
+
+// Polar webhook registration with optional callbacks
+polar.registerRoutes(http as any, {
+  // Default path is "/polar/events", but can be customized
+  path: "/webhooks/polar",
+  
+  // Optional callbacks for specific events
+  onSubscriptionCreated: async (ctx, event) => {
+    // Log new subscription
+    console.log("New subscription created:", event.data);
+    // You can add custom logic here, e.g., send welcome email
+    try {
+      await ctx.runMutation(internal.functions.internal.users.logActivity, {
+        userId: event.data.customerId as any,
+        action: "subscription.created",
+        resourceType: "subscription",
+        resourceId: event.data.id,
+        metadata: {
+          productId: event.data.productId,
+          status: event.data.status,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to log subscription creation:", error);
+    }
+  },
+  
+  onSubscriptionUpdated: async (ctx, event) => {
+    // Handle subscription updates (including cancellations)
+    console.log("Subscription updated:", event.data);
+    if (event.data.customerCancellationReason) {
+      console.log("Cancellation reason:", event.data.customerCancellationReason);
+    }
+  },
+  
+  onProductCreated: async (ctx, event) => {
+    console.log("New product created:", event.data);
+  },
+  
+  onProductUpdated: async (ctx, event) => {
+    console.log("Product updated:", event.data);
+  },
 });
 
 // Clerk webhook endpoint

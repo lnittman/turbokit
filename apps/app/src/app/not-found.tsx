@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
-
 import { ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 
 import { Button } from "@repo/design/components/ui/button";
 
-export default function NotFound() {
+import type React from 'react';
+
+export default function NotFound(): React.ReactElement {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-4 py-8">
       <div className="max-w-md w-full text-center space-y-8">

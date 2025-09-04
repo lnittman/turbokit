@@ -79,7 +79,7 @@ const defaultCommands: CommandItem[] = [
   }
 ];
 
-export function CommandMenuModal() {
+export function CommandMenuModal(): React.ReactElement {
   const [isOpen, setIsOpen] = useAtom(commandMenuOpenAtom);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);

@@ -1,6 +1,6 @@
 import { action } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireAuthAction } from "../../components/auth";
+import { requireAuthAction } from "../../lib/auth";
 import { checkAiTokenLimit } from "../../components/rate-limiter";
 import { sendMessage } from "../../agents/assistant";
 import { generateCode } from "../../agents/code-generator";

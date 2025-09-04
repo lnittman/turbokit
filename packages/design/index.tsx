@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { ThemeProviderProps } from 'next-themes';
 
 import { AuthProvider } from '@repo/auth/provider';
@@ -8,10 +9,13 @@ import { ThemeProvider } from './providers/theme';
 
 type DesignSystemProviderProperties = ThemeProviderProps;
 
-export const DesignSystemProvider = ({
+export const DesignSystemProvider: ({
   children,
   ...properties
-}: DesignSystemProviderProperties) => (
+}: DesignSystemProviderProperties) => React.ReactElement = ({
+  children,
+  ...properties
+}: DesignSystemProviderProperties): React.ReactElement => (
   <ThemeProvider {...properties}>
     <AuthProvider>
       <TooltipProvider>{children}</TooltipProvider>

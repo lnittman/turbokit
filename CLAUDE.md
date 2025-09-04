@@ -124,7 +124,7 @@ OKLCH format: `oklch(Lightness Chroma Hue)`
 
 ### Directory Structure Strategy
 
-**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps (e.g., `apps/web` marketing site and `apps/app` main client) belong in the design package.
+**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps belong in the design package.
 
 ```typescript
 // packages/design/components/index.ts

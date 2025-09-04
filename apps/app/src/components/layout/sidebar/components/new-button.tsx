@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from '@phosphor-icons/react';
+import type React from 'react';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
@@ -11,7 +12,7 @@ import { cn } from '@repo/design/lib/utils';
 
 import { sidebarOpenAtom } from '@/atoms/layout';
 
-export function NewButton() {
+export function NewButton(): React.ReactElement {
   const [isOpen, setIsOpen] = useAtom(sidebarOpenAtom);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 

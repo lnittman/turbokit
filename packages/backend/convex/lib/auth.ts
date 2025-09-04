@@ -47,7 +47,7 @@ export async function requireAuth<Ctx extends QueryCtx | MutationCtx>(
     ...ctx,
     user,
     userId: user._id,
-  };
+  } as any;
 }
 
 export async function requireAuthAction(
@@ -72,7 +72,7 @@ export async function requireAuthAction(
     ...ctx,
     user,
     userId: user._id,
-  };
+  } as any;
 }
 
 export function requireRole(user: Doc<"users">, role: "admin"): void {
@@ -80,3 +80,4 @@ export function requireRole(user: Doc<"users">, role: "admin"): void {
     throw new ConvexError("Insufficient permissions");
   }
 }
+

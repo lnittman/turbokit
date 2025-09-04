@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { ClerkProvider } from '@clerk/nextjs';
@@ -7,7 +8,9 @@ import { dark } from '@clerk/themes';
 import type { Theme } from '@clerk/types';
 import { useTheme } from 'next-themes';
 
-export const AuthProvider = (
+export const AuthProvider: (
+  properties: ComponentProps<typeof ClerkProvider>
+) => React.ReactElement = (
   properties: ComponentProps<typeof ClerkProvider>
 ) => {
   const { resolvedTheme } = useTheme();

@@ -1,6 +1,6 @@
 import { mutation } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireAuth } from "../../components/auth";
+import { requireAuth } from "../../lib/auth";
 import { checkApiRateLimit } from "../../components/rate-limiter";
 import { createThread } from "../../agents/assistant";
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type React from 'react';
 import { useQuery } from 'convex/react';
 import { 
   Card, 
@@ -121,7 +122,7 @@ function ActivityItem({
   );
 }
 
-export default function DashboardPage() {
+export default function DashboardPage(): React.ReactElement {
   // Mock data - replace with Convex queries
   const stats = {
     totalUsers: '2,350',

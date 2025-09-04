@@ -5,6 +5,34 @@
 
 # TurboKit Design System Architecture Guide for AI Agents
 
+Note: The TurboKit CLI is intentionally AI-free and only scaffolds projects. After `npx turbokit create <dir>`, agents should follow this guide to extend the template safely.
+
+## Agent Handoff After Scaffold (Important)
+
+- What you get out of the box:
+  - `apps/app`: Next.js 15 + React 19 app shell
+  - `packages/backend/convex`: Convex schema, functions, HTTP routes
+  - `packages/design`: Design system (tokens, components, themes)
+  - `docs/`: Documentation starter
+  - `.turbokit/`: Project config, status, and internal docs
+
+- First actions:
+  - Install deps: `pnpm install`
+  - Initialize Convex: `npx convex init`
+  - Start: `pnpm dev`
+
+- Where to edit (mold the clay):
+  - Backend: `packages/backend/convex/{schema.ts,functions/,workflows/,http.ts}`
+  - Frontend: `apps/app/src/app/*` and shared UI in `packages/design/components/`
+  - Design: tokens/themes in `packages/design/styles/*`
+  - Env: `.env.local` per docs/getting-started
+
+- Principles:
+  - Token-first UI; prefer tokens over forking components
+  - Typed Convex code; organize by function type
+  - Preserve accessibility and keyboard navigation
+  - Document architectural changes here
+
 This document provides comprehensive instructions for AI agents (Claude, GPT, etc.) to understand and modify the TurboKit design system. It serves as the authoritative source for design token manipulation, component styling, and theme variations.
 
 ## Table of Contents
@@ -125,7 +153,7 @@ OKLCH format: `oklch(Lightness Chroma Hue)`
 
 ### Directory Structure Strategy
 
-**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps (e.g., `apps/web` marketing site and `apps/app` main client) belong in the design package.
+**Important**: Components specific to a single app should live in that app's codebase. Only components shared between 2+ apps belong in the design package.
 
 ```typescript
 // packages/design/components/index.ts

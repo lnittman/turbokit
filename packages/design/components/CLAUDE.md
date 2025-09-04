@@ -159,15 +159,6 @@ import {
 } from '@repo/design/components';
 ```
 
-### In apps/web (Marketing Site)
-```tsx
-import {
-  // Motion for animations
-  InfiniteSlider, TextShimmer,
-  // Basic UI
-  Button, Badge
-} from '@repo/design/components';
-```
 
 ## Component Documentation Structure
 

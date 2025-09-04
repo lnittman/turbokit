@@ -3,11 +3,12 @@
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
+import type React from 'react';
 
 import { commandMenuOpenAtom } from '@/atoms/layout';
 import { sidebarOpenAtom } from '@/atoms/layout';
 
-export function SidebarHeader() {
+export function SidebarHeader(): React.ReactElement {
   const [isOpen] = useAtom(sidebarOpenAtom);
   const [, setCommandMenuOpen] = useAtom(commandMenuOpenAtom);
 

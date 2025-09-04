@@ -1,6 +1,6 @@
 /**
- * TurboKit CLI - ACP-native scaffolding tool
- * Can be run directly with npx or as an ACP server
+ * TurboKit CLI
+ * Purpose: fast, deterministic scaffolding (no AI usage).
  */
 
 import { program } from 'commander';
@@ -11,34 +11,15 @@ import { AdaptiveOnboarding } from './onboarding.js';
 import { initialize } from './initialize.js';
 import { connect } from './connect.js';
 import { deploy } from './deploy.js';
+import { existsSync } from 'fs';
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
+
+const exec = promisify(execCb);
 
 // Get the directory of this script
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// Check if running in ACP mode
-const isACPMode = process.argv.includes('--acp');
-
-/**
- * Run TurboKit as an ACP server
- */
-function runAsACPServer() {
-  // Spawn the dedicated ACP server script
-  const acpServerPath = join(__dirname, 'turbokit-acp-server.js');
-  const acpProcess = spawn('node', [acpServerPath], {
-    stdio: 'inherit',
-    env: process.env,
-  });
-  
-  acpProcess.on('error', (err) => {
-    console.error('Failed to start ACP server:', err);
-    process.exit(1);
-  });
-  
-  acpProcess.on('exit', (code) => {
-    process.exit(code || 0);
-  });
-}
 
 /**
  * Run TurboKit as a traditional CLI
@@ -46,30 +27,70 @@ function runAsACPServer() {
 function runAsCLI() {
   program
     .name('turbokit')
-    .description('ACP-native development platform for Convex applications')
+    .description('TurboKit scaffolding and project utilities (no AI usage)')
     .version('1.0.0');
+
+  // Create command - scaffold new project from template
+  program
+    .command('create <dir>')
+    .description('Create a new TurboKit project in <dir> by copying the template')
+    .option('--template <repo>', 'Git repo (https:// or owner/name) to clone', 'turbokit/template')
+    .option('--skip-install', 'Skip dependency installation')
+    .option('--no-git', 'Do not initialize a new git repo after scaffold')
+    .action(async (dir: string, opts: { template: string; skipInstall?: boolean; git?: boolean }) => {
+      const targetDir = join(process.cwd(), dir);
+      if (existsSync(targetDir)) {
+        console.error(`Error: target directory already exists: ${dir}`);
+        process.exit(1);
+      }
+
+      // Resolve template URL
+      const repo = opts.template.includes('://') ? opts.template : `https://github.com/${opts.template}`;
+      const useGit = true; // Prefer git clone when available
+
+      try {
+        console.log(`> Cloning template from ${repo} ...`);
+        await exec(`git clone --depth=1 ${repo} ${JSON.stringify(dir)}`);
+      } catch (e) {
+        console.warn('git clone failed, attempting degit...');
+        await exec(`npx -y degit ${opts.template} ${JSON.stringify(dir)}`);
+      }
+
+      try {
+        // Remove original git history if present
+        await exec(`rm -rf ${JSON.stringify(join(dir, '.git'))}`);
+      } catch {}
+
+      // Initialize git unless --no-git
+      if (opts.git !== false) {
+        try {
+          await exec(`cd ${JSON.stringify(dir)} && git init && git add -A && git commit -m "chore: scaffold with turbokit"`);
+        } catch {}
+      }
+
+      if (!opts.skipInstall) {
+        console.log('> Installing dependencies (pnpm)...');
+        try {
+          await exec(`cd ${JSON.stringify(dir)} && pnpm install`);
+        } catch {
+          console.warn('pnpm install failed, you can run it manually.');
+        }
+      }
+
+      console.log('\n✓ TurboKit project created.');
+      console.log(`\nNext steps:\n  cd ${dir}\n  pnpm install   # if you skipped\n  npx convex init\n  pnpm dev\n`);
+    });
 
   // Init command - can also be invoked via ACP
   program
     .command('init [name]')
-    .description('Initialize a new TurboKit project with adaptive onboarding')
+    .description('[Deprecated] Initialize in an existing TurboKit template directory')
     .option('--skip-install', 'Skip dependency installation')
     .option('--no-git', 'Disable git initialization')
     .option('--from <path>', 'Bootstrap from existing components directory')
     .action(async (name, options) => {
-      // Special handling for npx turbokit init
-      if (!name) {
-        // Interactive mode
-        const onboarding = new AdaptiveOnboarding(process.cwd());
-        const projectSpec = await onboarding.run();
-        await initialize({
-          name: projectSpec.name,
-          ...options,
-          projectSpec,
-        });
-      } else {
-        await initialize({ name, ...options });
-      }
+      console.log('Note: turbokit init is deprecated. Use `turbokit create <dir>` to scaffold a new project.');
+      await initialize({ name, ...options });
     });
 
   // Connect command
@@ -88,14 +109,6 @@ function runAsCLI() {
     .option('--preview', 'Create preview deployment')
     .action(deploy);
 
-  // ACP server command (for manual testing)
-  program
-    .command('acp')
-    .description('Run TurboKit as an ACP server for AI agents')
-    .action(() => {
-      runAsACPServer();
-    });
-
   program.parse(process.argv);
   
   // If no command specified, show help
@@ -104,9 +117,5 @@ function runAsCLI() {
   }
 }
 
-// Main entry point - check for ACP mode immediately
-if (isACPMode) {
-  runAsACPServer();
-} else {
-  runAsCLI();
-}
+// Main entry point
+runAsCLI();

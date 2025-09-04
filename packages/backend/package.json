@@ -7,9 +7,13 @@
     "deploy": "convex deploy",
     "typecheck": "tsc --noEmit"
   },
+  "main": "./types.ts",
   "exports": {
+    ".": "./types.ts",
+    "./types": "./types.ts",
     "./api": "./convex/_generated/api.js",
-    "./types": "./convex/_generated/dataModel.d.ts"
+    "./schema": "./convex/schema.ts",
+    "./dataModel": "./convex/_generated/dataModel.d.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.23",
@@ -18,6 +22,7 @@
     "@convex-dev/aggregate": "^0.1.23",
     "@convex-dev/crons": "^0.1.9",
     "@convex-dev/migrations": "^0.2.9",
+    "@convex-dev/polar": "^0.6.4",
     "@convex-dev/rag": "^0.5.2",
     "@convex-dev/rate-limiter": "^0.2.12",
     "@convex-dev/resend": "^0.1.10",

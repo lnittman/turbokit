@@ -24,26 +24,22 @@ You'll also need accounts for:
 
 ## Installation
 
-### 1. Clone the Template
+### 1. Create from Template
+
+Use the CLI to scaffold a fresh project (no AI, fully deterministic):
 
 ```bash
-git clone https://github.com/turbokit/template my-app
+npx turbokit create my-app
 cd my-app
 ```
 
-### 2. Initialize TurboKit
-
-Run the interactive initialization:
+Alternatively:
 
 ```bash
-npx turbokit init
+npx degit turbokit/template my-app
+cd my-app
+npx turbokit init  # optional metadata init
 ```
-
-This will:
-- Ask about your project (what you're building)
-- Let you select features (auth, payments, AI, etc.)
-- Configure your AI assistant preference
-- Set up the `.turbokit` configuration directory
 
 ### 3. Install Dependencies
 
@@ -64,7 +60,7 @@ This will:
 - Generate API keys
 - Set up your `.env.local` file
 
-### 5. Configure Environment Variables
+### 4. Configure Environment Variables
 
 Create a `.env.local` file in the root directory:
 
@@ -76,6 +72,10 @@ NEXT_PUBLIC_CONVEX_URL=...
 # Clerk (optional)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=...
 CLERK_SECRET_KEY=...
+
+# Polar Billing (optional)
+POLAR_ORGANIZATION_TOKEN=...
+POLAR_WEBHOOK_SECRET=...
 
 # Other services (optional)
 NEXT_PUBLIC_POSTHOG_KEY=...
@@ -96,7 +96,6 @@ pnpm dev
 
 Your apps will be available at:
 - **Main App**: [http://localhost:3000](http://localhost:3000)
-- **Marketing Site**: [http://localhost:3001](http://localhost:3001)
 - **Documentation**: [http://localhost:3002](http://localhost:3002)
 
 ## Project Structure
@@ -104,8 +103,7 @@ Your apps will be available at:
 ```
 my-app/
 ├── apps/
-│   ├── app/           # Main client application
-│   └── web/           # Marketing website
+│   └── app/           # Main client application
 ├── packages/
 │   ├── backend/       # Convex backend
 │   │   └── convex/
@@ -212,31 +210,49 @@ export function Counter() {
 
 The counter will automatically sync in real-time across all connected clients!
 
-## AI Assistance
+## Adding Subscription Billing
 
-TurboKit includes an ACP server for AI-powered development:
+TurboKit includes the Convex Polar component for subscription billing. To set it up:
 
-### Start the ACP Server
+### 1. Configure Polar
+
+1. Create an account at [Polar](https://polar.sh)
+2. Create your subscription products (Starter, Pro, Enterprise, etc.)
+3. Get your API tokens from the Polar dashboard
+
+### 2. Set Environment Variables
 
 ```bash
-turbokit acp
+# Set in Convex dashboard or via CLI
+npx convex env set POLAR_ORGANIZATION_TOKEN your_token
+npx convex env set POLAR_WEBHOOK_SECRET your_webhook_secret
 ```
 
-### Connect Your AI Assistant
+### 3. Configure Webhook
 
-Currently supported:
-- **Gemini CLI**: `gemini --experimental-acp`
+In your Polar dashboard, add a webhook endpoint:
+- URL: `https://your-app.convex.site/webhooks/polar`
+- Events: Select all subscription events
 
-Coming soon:
-- Claude
-- Cursor
-- Other ACP-compatible clients
+### 4. Use in Your App
 
-The AI assistant will have full context about your TurboKit project and can help with:
-- Writing Convex functions
-- Creating React components
-- Debugging real-time subscriptions
-- Suggesting best practices
+```tsx
+import { useQuery } from "convex/react";
+import { api } from "@repo/backend/convex/_generated/api";
+
+function PricingPage() {
+  const subscription = useQuery(api.functions.queries.subscriptions.getCurrentSubscription);
+  const products = useQuery(api.functions.queries.subscriptions.listAllProducts);
+  
+  // Display pricing and manage subscriptions
+}
+```
+
+See `packages/backend/convex/components/POLAR_SETUP.md` for detailed integration guide.
+
+## Working With Coding Agents
+
+TurboKit’s CLI is AI-free by design. If you use a coding agent (Claude, Gemini, Cursor, etc.), follow AGENTS.md in the repo root for step‑by‑step guidance on where to edit, what boilerplate exists, and how to extend the template safely.
 
 ## Next Steps
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import type React from 'react';
 
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
@@ -16,7 +17,7 @@ import { SidebarContent } from './components/sidebar-content';
 import { UserMenu } from './components/user-menu';
 import { CommandMenuModal } from '../modal/command/menu';
 
-export function Sidebar() {
+export function Sidebar(): React.ReactElement {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useAtom(sidebarOpenAtom);
 
