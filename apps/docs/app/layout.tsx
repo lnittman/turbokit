@@ -1,6 +1,5 @@
 import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
-import { DesignSystemProvider } from '@repo/design';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
@@ -38,16 +37,14 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
-        <DesignSystemProvider>
-          <RootProvider
-            theme={{
-              enabled: true,
-              defaultTheme: 'system',
-            }}
-          >
-            {children}
-          </RootProvider>
-        </DesignSystemProvider>
+        <RootProvider
+          theme={{
+            enabled: true,
+            defaultTheme: 'system',
+          }}
+        >
+          {children}
+        </RootProvider>
         <VercelAnalytics />
       </body>
     </html>
