@@ -1,4 +1,5 @@
 import { source } from '@/lib/source';
+import type { ReactElement } from 'react';
 import {
   DocsPage,
   DocsBody,
@@ -8,7 +9,7 @@ import {
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 
-export default async function Page(props: any) {
+export default async function Page(props: any): Promise<ReactElement> {
   const { params } = props;
   const page = source.getPage(params.slug);
   if (!page) notFound();
