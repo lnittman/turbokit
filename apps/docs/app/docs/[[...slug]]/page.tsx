@@ -9,11 +9,8 @@ import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { Badge } from '@repo/design/components/ui/badge';
 
-export default async function Page({
-  params,
-}: {
-  params: { slug?: string[] };
-}) {
+export default async function Page(props: any) {
+  const { params } = props;
   const page = source.getPage(params.slug);
   if (!page) notFound();
 

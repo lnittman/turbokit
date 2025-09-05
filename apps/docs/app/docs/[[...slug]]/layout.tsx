@@ -1,12 +1,7 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import type { ReactNode } from 'react';
-import { docsOptions } from '../layout.config';
-import { source } from '@/lib/source';
+import { layoutConfig } from '../layout.config';
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return (
-    <DocsLayout tree={source.pageTree} {...docsOptions}>
-      {children}
-    </DocsLayout>
-  );
+  return <DocsLayout {...layoutConfig}>{children}</DocsLayout>;
 }
