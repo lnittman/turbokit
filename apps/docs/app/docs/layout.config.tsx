@@ -1,4 +1,4 @@
-import { pageTree } from '@/app/source';
+import { pageTree } from '@/lib/source';
 import type { DocsLayoutProps } from 'fumadocs-ui/layout';
 import { BookOpen, Code, Database, Package, Rocket } from 'lucide-react';
 

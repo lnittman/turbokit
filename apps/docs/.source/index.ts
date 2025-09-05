@@ -1,0 +1,11 @@
+// @ts-nocheck -- skip type checking
+import * as docs_6 from "../content/docs/ai/workflows.mdx?collection=docs&hash=1756966171465"
+import * as docs_5 from "../content/docs/ai/tools.mdx?collection=docs&hash=1756966171465"
+import * as docs_4 from "../content/docs/ai/index.mdx?collection=docs&hash=1756966171465"
+import * as docs_3 from "../content/docs/ai/convex-agent.mdx?collection=docs&hash=1756966171465"
+import * as docs_2 from "../content/docs/ai/agents.mdx?collection=docs&hash=1756966171465"
+import * as docs_1 from "../content/docs/index.mdx?collection=docs&hash=1756966171465"
+import * as docs_0 from "../content/docs/getting-started.mdx?collection=docs&hash=1756966171465"
+import { _runtime } from "fumadocs-mdx"
+import * as _source from "../source.config"
+export const docs = _runtime.docs<typeof _source.docs>([{ info: {"path":"getting-started.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/getting-started.mdx"}, data: docs_0 }, { info: {"path":"index.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/index.mdx"}, data: docs_1 }, { info: {"path":"ai/agents.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/ai/agents.mdx"}, data: docs_2 }, { info: {"path":"ai/convex-agent.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/ai/convex-agent.mdx"}, data: docs_3 }, { info: {"path":"ai/index.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/ai/index.mdx"}, data: docs_4 }, { info: {"path":"ai/tools.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/ai/tools.mdx"}, data: docs_5 }, { info: {"path":"ai/workflows.mdx","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/ai/workflows.mdx"}, data: docs_6 }], [{"info":{"path":"meta.json","absolutePath":"/Users/nit/Developer/turbokit/apps/docs/content/docs/meta.json"},"data":{"title":"Documentation","pages":["index","getting-started","---","ai/index","ai/agents","ai/convex-agent","ai/tools","ai/workflows"]}}])

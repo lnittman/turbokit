@@ -4,62 +4,10 @@
     "index",
     "getting-started",
     "---",
-    {
-      "title": "Convex",
-      "pages": [
-        "convex/index",
-        "convex/schema",
-        "convex/functions",
-        "convex/subscriptions",
-        "convex/workflows",
-        "convex/file-storage"
-      ]
-    },
-    {
-      "title": "Frontend",
-      "pages": [
-        "frontend/index",
-        "frontend/routing",
-        "frontend/components",
-        "frontend/state-management",
-        "frontend/styling"
-      ]
-    },
-    {
-      "title": "AI & Agents",
-      "pages": [
-        "ai/index",
-        "ai/agents",
-        "ai/convex-agent",
-        "ai/tools",
-        "ai/workflows"
-      ]
-    },
-    {
-      "title": "Components",
-      "pages": [
-        "components/index",
-        "components/shadcn",
-        "components/motion",
-        "components/kibo"
-      ]
-    },
-    "---",
-    {
-      "title": "Deployment",
-      "pages": [
-        "deployment/vercel",
-        "deployment/convex",
-        "deployment/environment"
-      ]
-    },
-    {
-      "title": "Reference",
-      "pages": [
-        "reference/cli",
-        "reference/configuration",
-        "reference/troubleshooting"
-      ]
-    }
+    "ai/index",
+    "ai/agents",
+    "ai/convex-agent",
+    "ai/tools",
+    "ai/workflows"
   ]
 }
