@@ -10,6 +10,8 @@
     "dev:all": "turbo run dev",
     "dev:docs": "turbo run dev --filter=@repo/docs",
     "dev:backend": "pnpm -C packages/backend dev",
+    "docs:dev": "pnpm -C docs dev",
+    "docs:build": "pnpm -C docs build",
     "lint": "ultracite lint",
     "format": "ultracite format",
     "test": "turbo test",
