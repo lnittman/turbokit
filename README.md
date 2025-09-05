@@ -6,7 +6,6 @@ A modern, real-time application template powered by Convex.
 
 ### Apps
 - **`apps/app`** — Main Next.js application with Clerk auth, real-time Convex queries, and a full design system
-- **`docs`** — Documentation site built with Fumadocs for project guides and API docs
 
 ### Packages
 - **`packages/backend`** — Complete Convex backend with database schema, functions, AI agents, workflows, and email templates
@@ -16,6 +15,12 @@ A modern, real-time application template powered by Convex.
 - **`packages/typescript-config`** — Shared TypeScript configurations for different project types
 - **`packages/analytics`** — PostHog integration for user analytics and feature tracking
 - **`packages/observability`** — Monitoring setup with Sentry integration and status components
+
+### Documentation
+- **`docs/`** — Agent-oriented documentation structure with role-based metaprompts for generating world-class documentation
+  - `vision/` — Strategic vision and manifesto templates
+  - `development/` — Architecture, design, product, and intelligence documentation templates
+  - Each directory contains `AGENTS.md` with XML-formatted prompts for that domain
 
 ## Stack
 
@@ -34,4 +39,4 @@ pnpm install
 pnpm dev
 ```
 
-The main app runs at `localhost:3000`, docs at `localhost:3002`.
+The main app runs at `localhost:3000`.
