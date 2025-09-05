@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { Icon as DocIcon, IconNames, type IconName } from '@repo/design/icons';
 import { Button } from '@repo/design/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/design/components/ui/card';
