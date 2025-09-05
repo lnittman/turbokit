@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Zap, Database, Bot } from 'lucide-react';
 
-export function HomeHero() {
+import type { ReactElement } from 'react';
+
+export function HomeHero(): ReactElement {
   return (
     <section className="relative overflow-hidden py-24 md:py-32">
       <div className="container mx-auto px-6">
