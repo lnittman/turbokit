@@ -18,8 +18,8 @@ A modern, real-time application template powered by Convex.
 
 ### Documentation
 - **`docs/`** — Agent-oriented documentation structure with role-based metaprompts for generating world-class documentation
-  - `vision/` — Strategic vision and manifesto templates
-  - `development/` — Architecture, design, product, and intelligence documentation templates
+  - `vision/` — Strategic vision and manifesto templates 
+  - `development/` — Architecture, design, product, and intelligence (AI) documentation templates
   - Each directory contains `AGENTS.md` with XML-formatted prompts for that domain
 
 ## Stack
