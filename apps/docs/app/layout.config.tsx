@@ -1,5 +1,6 @@
 import { type HomeLayoutProps } from 'fumadocs-ui/layouts/home';
 import { type DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
+import { pageTree } from '@/lib/source';
 import { Icon as DocIcon, IconNames } from '@repo/design/icons';
 
 // Navigation configuration for the documentation site
@@ -34,9 +35,7 @@ export const baseOptions: HomeLayoutProps = {
 
 export const docsOptions: DocsLayoutProps = {
   ...baseOptions,
-  tree: {
-    // This will be populated from the MDX files
-  },
+  tree: pageTree,
   sidebar: {
     defaultOpenLevel: 2,
     banner: (
