@@ -1,0 +1,51 @@
+import { pageTree } from '@/app/source';
+import type { DocsLayoutProps } from 'fumadocs-ui/layout';
+import { BookOpen, Code, Database, Package, Rocket } from 'lucide-react';
+
+export const layoutConfig: DocsLayoutProps = {
+  tree: pageTree,
+  nav: {
+    title: 'TurboKit',
+    transparentMode: 'top',
+    githubUrl: 'https://github.com/turbokit/turbokit',
+    links: [
+      {
+        text: 'Documentation',
+        url: '/docs',
+        active: 'nested-url',
+      },
+      {
+        text: 'Examples',
+        url: '/examples',
+      },
+      {
+        text: 'GitHub',
+        url: 'https://github.com/turbokit/turbokit',
+        external: true,
+      },
+    ],
+  },
+  sidebar: {
+    defaultOpenLevel: 1,
+    banner: (
+      <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg mb-4">
+        <Rocket className="h-4 w-4 text-primary" />
+        <span className="text-sm font-medium">v1.0.0 - Production Ready</span>
+      </div>
+    ),
+    tabs: [
+      {
+        id: 'docs',
+        title: 'Documentation',
+        icon: <BookOpen className="h-4 w-4" />,
+      },
+      {
+        id: 'api',
+        title: 'API Reference',
+        icon: <Code className="h-4 w-4" />,
+      },
+    ],
+    // Custom sidebar icons for different sections
+    collapsible: true,
+  },
+};

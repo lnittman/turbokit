@@ -8,6 +8,7 @@
     "build": "turbo build",
     "dev": "turbo run dev --filter=!@repo/backend",
     "dev:all": "turbo run dev",
+    "dev:docs": "turbo run dev --filter=@repo/docs",
     "dev:backend": "pnpm -C packages/backend dev",
     "lint": "ultracite lint",
     "format": "ultracite format",
