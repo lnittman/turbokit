@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import type { IconName } from '@repo/design/icons';
+import type { ReactElement } from 'react';
 
 function FeatureCard({ 
   title, 
@@ -31,7 +32,7 @@ function FeatureCard({
   );
 }
 
-export default function HomePage() {
+export default function HomePage(): ReactElement {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
