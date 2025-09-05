@@ -8,6 +8,7 @@ import {
 } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
+import { useMDXComponents } from '@/mdx-components';
 
 export default async function Page(props: any): Promise<ReactElement> {
   const { params } = props;
@@ -16,6 +17,8 @@ export default async function Page(props: any): Promise<ReactElement> {
 
   const data: any = page.data as any;
   const MDX = data.body;
+
+  const components = useMDXComponents(defaultMdxComponents as any);
 
   return (
     <DocsPage
@@ -35,7 +38,7 @@ export default async function Page(props: any): Promise<ReactElement> {
       {/* badges removed for compatibility */}
       
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents }} />
+        <MDX components={components} />
       </DocsBody>
     </DocsPage>
   );
