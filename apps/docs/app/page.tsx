@@ -6,12 +6,10 @@ import { ArrowRight } from 'lucide-react';
 import type { IconName } from '@repo/design/icons';
 
 function FeatureCard({ 
-  icon,
   title, 
   description, 
   href 
 }: { 
-  icon: IconName; 
   title: string; 
   description: string; 
   href: string;
@@ -24,10 +22,7 @@ function FeatureCard({
         className="h-full"
       >
         <div className="h-full rounded-lg border p-4 hover:border-primary/50 transition-colors">
-          <div className="p-2 bg-primary/10 rounded-lg inline-block mb-4">
-            {/* icon placeholder */}
-            <span className="inline-block h-6 w-6 text-primary">•</span>
-          </div>
+          <div className="p-2 bg-primary/10 rounded-lg inline-block mb-4" />
           <div className="text-lg font-semibold">{title}</div>
           <p className="text-sm text-muted-foreground mt-2">{description}</p>
         </div>
@@ -92,25 +87,21 @@ export default function HomePage() {
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <FeatureCard
-            icon={IconNames.Zap}
             title="Quick Start"
             description="Get up and running with TurboKit in under 5 minutes"
             href="/docs/getting-started"
           />
           <FeatureCard
-            icon={IconNames.Database}
             title="Convex Basics"
             description="Learn real-time database, functions, and subscriptions"
             href="/docs/convex"
           />
           <FeatureCard
-            icon={IconNames.Bot}
             title="AI Integration"
             description="Build AI agents with Convex Agent component"
             href="/docs/ai"
           />
           <FeatureCard
-            icon={IconNames.Code}
             title="Components"
             description="Explore pre-built components and design system"
             href="/docs/components"
