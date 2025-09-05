@@ -7,23 +7,23 @@ export const layoutConfig: DocsLayoutProps = {
   nav: {
     title: 'TurboKit',
     transparentMode: 'top',
-    links: [
-      {
-        text: 'Documentation',
-        url: '/docs',
-        active: 'nested-url',
-      },
-      {
-        text: 'Examples',
-        url: '/examples',
-      },
-      {
-        text: 'GitHub',
-        url: 'https://github.com/turbokit/turbokit',
-        external: true,
-      },
-    ],
   },
+  links: [
+    {
+      text: 'Documentation',
+      url: '/docs',
+      active: 'nested-url',
+    },
+    {
+      text: 'Examples',
+      url: '/examples',
+    },
+    {
+      text: 'GitHub',
+      url: 'https://github.com/turbokit/turbokit',
+      external: true,
+    },
+  ],
   sidebar: {
     defaultOpenLevel: 1,
     banner: (
