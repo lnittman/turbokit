@@ -1,10 +1,10 @@
 import type { MDXComponents } from 'mdx/types';
 import defaultComponents from 'fumadocs-ui/mdx';
-// Lightweight MDX component fallbacks used by docs content
-function Accordion(props: any) { return <div {...props} /> }
-function AccordionItem(props: any) { return <div {...props} /> }
-function AccordionTrigger(props: any) { return <h4 {...props} /> }
-function AccordionContent(props: any) { return <div {...props} /> }
+// Prefer TurboKit design primitives, with light fallbacks if needed
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/design/components/ui/accordion';
+import { Alert, AlertDescription, AlertTitle } from '@repo/design/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/design/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/design/components/ui/tabs';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -15,5 +15,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     AccordionItem,
     AccordionTrigger,
     AccordionContent,
+    Alert,
+    AlertDescription,
+    AlertTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
   };
 }

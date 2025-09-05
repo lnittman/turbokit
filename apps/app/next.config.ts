@@ -12,6 +12,12 @@ if (env.ANALYZE === 'true') {
 }
 
 nextConfig.devIndicators = false;
+// Ensure design package is transpiled and CSS exports resolve
+// @ts-ignore - field exists in Next 15
+nextConfig.transpilePackages = [
+  ...(Array.isArray((nextConfig as any).transpilePackages) ? (nextConfig as any).transpilePackages : []),
+  '@repo/design',
+];
 
 // Print clear env guidance during dev and build
 printEnvBanner('app');

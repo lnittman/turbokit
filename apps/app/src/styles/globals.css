@@ -1,2 +1,2 @@
 @import "tailwindcss";
-/* Design system globals temporarily disabled for build stability */
+@import "@repo/design/styles/globals.css";

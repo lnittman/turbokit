@@ -1,8 +1,7 @@
 // TurboKit Design System Components
 // Central export point for all component libraries
 
-// Base UI Components (shadcn/ui)
-export * from './ui';
+// Base UI Components (shadcn/ui) — re-exported individually below
 
 // Motion Primitives (Animated components)
 export * from './motion';

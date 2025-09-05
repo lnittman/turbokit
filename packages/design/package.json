@@ -2,6 +2,10 @@
   "name": "@repo/design",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "import": "./index.tsx"
@@ -12,24 +16,12 @@
     "./icons/*": {
       "import": "./icons/*"
     },
-    "./components/*": {
-      "import": "./components/*"
-    },
-    "./lib/*": {
-      "import": "./lib/*"
-    },
-    "./providers/*": {
-      "import": "./providers/*"
-    },
-    "./styles/*": {
-      "import": "./styles/*"
-    },
-    "./styles/globals.css": {
-      "import": "./styles/globals.css"
-    },
-    "./postcss.config.mjs": {
-      "import": "./postcss.config.mjs"
-    }
+    "./components/*": "./components/*",
+    "./lib/*": "./lib/*",
+    "./providers/*": "./providers/*",
+    "./styles/*": "./styles/*",
+    "./styles/globals.css": "./styles/globals.css",
+    "./postcss.config.mjs": "./postcss.config.mjs"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
