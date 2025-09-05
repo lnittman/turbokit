@@ -2,6 +2,29 @@
   "name": "@repo/design",
   "version": "0.0.0",
   "private": true,
+  "exports": {
+    ".": {
+      "import": "./index.tsx"
+    },
+    "./icons": {
+      "import": "./icons/index.tsx"
+    },
+    "./icons/*": {
+      "import": "./icons/*"
+    },
+    "./components/*": {
+      "import": "./components/*"
+    },
+    "./lib/*": {
+      "import": "./lib/*"
+    },
+    "./providers/*": {
+      "import": "./providers/*"
+    },
+    "./styles/*": {
+      "import": "./styles/*"
+    }
+  },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
