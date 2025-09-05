@@ -32,18 +32,7 @@ export const layoutConfig: DocsLayoutProps = {
         <span className="text-sm font-medium">v1.0.0 - Production Ready</span>
       </div>
     ),
-    tabs: [
-      {
-        id: 'docs',
-        title: 'Documentation',
-        icon: <BookOpen className="h-4 w-4" />,
-      },
-      {
-        id: 'api',
-        title: 'API Reference',
-        icon: <Code className="h-4 w-4" />,
-      },
-    ],
+    tabs: false,
     // Custom sidebar icons for different sections
     collapsible: true,
   },
