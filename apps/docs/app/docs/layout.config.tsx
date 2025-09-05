@@ -1,5 +1,5 @@
 import { pageTree } from '@/lib/source';
-import type { DocsLayoutProps } from 'fumadocs-ui/layout';
+import type { DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
 import { BookOpen, Code, Database, Package, Rocket } from 'lucide-react';
 
 export const layoutConfig: DocsLayoutProps = {

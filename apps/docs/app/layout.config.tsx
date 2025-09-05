@@ -1,5 +1,5 @@
-import { type HomeLayoutProps } from 'fumadocs-ui/home-layout';
-import { type DocsLayoutProps } from 'fumadocs-ui/layout';
+import { type HomeLayoutProps } from 'fumadocs-ui/layouts/home';
+import { type DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
 import { Icon as DocIcon, IconNames } from '@repo/design/icons';
 
 // Navigation configuration for the documentation site
