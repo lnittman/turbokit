@@ -4,7 +4,6 @@ import { createMDXSource } from 'fumadocs-mdx';
 
 export const source = loader({
   baseUrl: '/docs',
-  rootDir: 'docs',
   source: createMDXSource(map),
 });
 
