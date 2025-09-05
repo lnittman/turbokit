@@ -7,7 +7,6 @@ import {
 } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { Badge } from '@repo/design/components/ui/badge';
 
 export default async function Page(props: any) {
   const { params } = props;
@@ -32,19 +31,7 @@ export default async function Page(props: any) {
       <DocsTitle>{data.title}</DocsTitle>
       <DocsDescription>{data.description}</DocsDescription>
       
-      {/* Display category and difficulty badges */}
-      <div className="flex gap-2 mb-6">
-        {data.category && (
-          <Badge className={`badge-${data.category}`}>
-            {data.category}
-          </Badge>
-        )}
-        {data.difficulty && (
-          <Badge variant="outline">
-            {data.difficulty}
-          </Badge>
-        )}
-      </div>
+      {/* badges removed for compatibility */}
       
       <DocsBody>
         <MDX components={{ ...defaultMdxComponents }} />
