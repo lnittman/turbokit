@@ -52,23 +52,5 @@ export const docsOptions: DocsLayoutProps = {
       </div>
     ),
   },
-  // Enable search
-  search: {
-    enabled: true,
-    placeholder: 'Search documentation...',
-  },
-  // TOC configuration
-  toc: {
-    enabled: true,
-    footer: (
-      <div className="mt-8 border-t pt-4">
-        <p className="text-xs text-muted-foreground">
-          Need help? Join our{' '}
-          <a href="https://discord.gg/turbokit" className="text-primary hover:underline">
-            Discord
-          </a>
-        </p>
-      </div>
-    ),
-  },
+  // Additional options can be provided via layout components
 };
