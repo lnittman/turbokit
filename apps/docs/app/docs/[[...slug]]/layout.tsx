@@ -1,4 +1,4 @@
-import { DocsLayout } from 'fumadocs-ui/layout';
+import { DocsLayout } from 'fumadocs-ui';
 import type { ReactNode } from 'react';
 import { docsOptions } from '../layout.config';
 import { source } from '@/lib/source';
