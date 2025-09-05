@@ -14,13 +14,14 @@ export default async function Page(props: any) {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
-  const MDX = page.data.body;
+  const data: any = page.data as any;
+  const MDX = data.body;
 
   return (
     <DocsPage
-      toc={page.data.toc}
-      full={page.data.full}
-      lastUpdate={page.data.lastModified}
+      toc={data.toc}
+      full={data.full}
+      lastUpdate={data.lastModified}
       editOnGithub={{
         owner: 'turbokit',
         repo: 'turbokit',
@@ -28,19 +29,19 @@ export default async function Page(props: any) {
         path: `docs/content/${page.file.path}`,
       }}
     >
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsTitle>{data.title}</DocsTitle>
+      <DocsDescription>{data.description}</DocsDescription>
       
       {/* Display category and difficulty badges */}
       <div className="flex gap-2 mb-6">
-        {page.data.category && (
-          <Badge className={`badge-${page.data.category}`}>
-            {page.data.category}
+        {data.category && (
+          <Badge className={`badge-${data.category}`}>
+            {data.category}
           </Badge>
         )}
-        {page.data.difficulty && (
+        {data.difficulty && (
           <Badge variant="outline">
-            {page.data.difficulty}
+            {data.difficulty}
           </Badge>
         )}
       </div>
