@@ -1,7 +1,7 @@
 import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
-import type { ReactNode } from 'react';
+import type { ReactNode, ReactElement } from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ type LayoutProps = {
   readonly children: ReactNode;
 };
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children }: LayoutProps): ReactElement {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
