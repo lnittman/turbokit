@@ -4,7 +4,7 @@ import { createMDXSource } from 'fumadocs-mdx';
 
 export const source = loader({
   baseUrl: '/docs',
-  source: createMDXSource(map),
+  source: createMDXSource(map).toFumadocsSource(),
 });
 
 export const { getPage, getPages, pageTree, generateParams } = source;
