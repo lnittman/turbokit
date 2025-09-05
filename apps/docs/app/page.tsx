@@ -3,9 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Icon as DocIcon, IconNames, type IconName } from '@repo/design/icons';
-import { Button } from '@repo/design/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/design/components/ui/card';
+import type { IconName } from '@repo/design/icons';
 
 function FeatureCard({ 
   icon,
@@ -25,17 +23,14 @@ function FeatureCard({
         transition={{ duration: 0.2 }}
         className="h-full"
       >
-        <Card className="h-full hover:border-primary/50 transition-colors">
-          <CardHeader>
-            <div className="p-2 bg-primary/10 rounded-lg inline-block mb-4">
-              <DocIcon name={icon} className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle>{title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>{description}</CardDescription>
-          </CardContent>
-        </Card>
+        <div className="h-full rounded-lg border p-4 hover:border-primary/50 transition-colors">
+          <div className="p-2 bg-primary/10 rounded-lg inline-block mb-4">
+            {/* icon placeholder */}
+            <span className="inline-block h-6 w-6 text-primary">•</span>
+          </div>
+          <div className="text-lg font-semibold">{title}</div>
+          <p className="text-sm text-muted-foreground mt-2">{description}</p>
+        </div>
       </motion.div>
     </Link>
   );
@@ -53,8 +48,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center text-center space-y-8 max-w-[980px] mx-auto"
           >
-            <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
-              <DocIcon name={IconNames.Sparkles} className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary">
               <span className="text-sm font-medium">TurboKit Documentation</span>
             </div>
             
@@ -72,18 +66,13 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" asChild>
-                <Link href="/docs/getting-started">
-                  Get Started
-                  <DocIcon name={IconNames.ArrowRight} className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/docs/convex">
-                  <DocIcon name={IconNames.Database} className="mr-2 h-5 w-5" />
-                  Learn Convex
-                </Link>
-              </Button>
+              <Link href="/docs/getting-started" className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-11 px-5 text-base font-medium">
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <Link href="/docs/convex" className="inline-flex items-center justify-center rounded-md border h-11 px-5 text-base font-medium">
+                Learn Convex
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -203,8 +192,7 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-primary/80 p-12 md:p-16 text-primary-foreground"
         >
-          <div className="relative z-10 flex flex-col items-center text-center space-y-6 max-w-[750px] mx-auto">
-            <DocIcon name={IconNames.Workflow} className="h-12 w-12" />
+          <div className="relative z-10 flex flex-col items-center text-center space-y-6 max-w-[750px] mx-auto text-white">
             <h2 className="text-3xl md:text-4xl font-bold">
               Ready to dive deeper?
             </h2>
@@ -212,12 +200,9 @@ export default function HomePage() {
               Explore our comprehensive guides, API references, and examples to master TurboKit.
             </p>
             <div className="flex gap-4">
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="/docs">
-                  Browse Documentation
-                  <DocIcon name={IconNames.Book} className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+              <Link href="/docs" className="inline-flex items-center justify-center rounded-md bg-white/10 backdrop-blur h-11 px-5 text-base font-medium">
+                Browse Documentation
+              </Link>
             </div>
           </div>
           
