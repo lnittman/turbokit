@@ -7,4 +7,7 @@ export const source = loader({
   source: createMDXSource(collection.docs as any, collection.meta as any),
 });
 
-export const { getPage, getPages, pageTree, generateParams } = source;
+export const getPage = source.getPage as any;
+export const getPages = source.getPages as any;
+export const pageTree = source.pageTree as any;
+export const generateParams = source.generateParams as any;
