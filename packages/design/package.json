@@ -24,6 +24,9 @@
     "./styles/*": {
       "import": "./styles/*"
     },
+    "./styles/globals.css": {
+      "import": "./styles/globals.css"
+    },
     "./postcss.config.mjs": {
       "import": "./postcss.config.mjs"
     }
