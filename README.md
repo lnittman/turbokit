@@ -6,6 +6,7 @@ A modern, real-time application template powered by Convex.
 
 ### Apps
 - **`apps/app`** — Main Next.js application with Clerk auth, real-time Convex queries, and a full design system
+- **`apps/docs`** — Fumadocs-powered documentation site template for projects built with TurboKit
 
 ### Packages
 - **`packages/backend`** — Complete Convex backend with database schema, functions, AI agents, workflows, and email templates
@@ -17,10 +18,11 @@ A modern, real-time application template powered by Convex.
 - **`packages/observability`** — Monitoring setup with Sentry integration and status components
 
 ### Documentation
-- **`docs/`** — Agent-oriented documentation structure with role-based metaprompts for generating world-class documentation
+- **`apps/docs/`** — Live docs app (Fumadocs) you can customize per project
+- **`docs/`** — Agent developer docs (plain markdown) with role-based metaprompts
   - `vision/` — Strategic vision and manifesto templates 
-  - `development/` — Architecture, design, product, and intelligence (AI) documentation templates
-  - Each directory contains `AGENTS.md` with XML-formatted prompts for that domain
+  - `development/` — Architecture, design, product, and intelligence documentation templates
+  - Each directory includes `AGENTS.md` prompts for that domain
 
 ## Stack
 

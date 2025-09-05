@@ -126,10 +126,7 @@ nav[data-orientation="vertical"] {
   color: oklch(0.3 0.1 270);
 }
 
-.badge-acp {
-  background: oklch(0.9 0.1 200);
-  color: oklch(0.3 0.1 200);
-}
+/* removed legacy ACP badge; use category-specific badges instead */
 
 .badge-components {
   background: oklch(0.9 0.1 150);
