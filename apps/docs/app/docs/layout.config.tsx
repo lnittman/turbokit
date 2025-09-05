@@ -7,7 +7,6 @@ export const layoutConfig: DocsLayoutProps = {
   nav: {
     title: 'TurboKit',
     transparentMode: 'top',
-    githubUrl: 'https://github.com/turbokit/turbokit',
     links: [
       {
         text: 'Documentation',
