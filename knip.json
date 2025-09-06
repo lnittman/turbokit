@@ -2,6 +2,7 @@
   "$schema": "https://unpkg.com/knip@latest/knip.schema.json",
   "ignore": [
     "apps/docs/.source/**",
+    "apps/app/postcss.config.mjs",
     "packages/backend/convex/**",
     "packages/backend/convex/_generated/**",
     "packages/design/**",
