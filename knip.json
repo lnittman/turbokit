@@ -4,7 +4,13 @@
     "apps/docs/.source/**",
     "packages/backend/convex/**",
     "packages/backend/convex/_generated/**",
-    "packages/design/**"
+    "packages/design/**",
+    "apps/app/src/components/**",
+    "apps/app/src/lib/utils/**",
+    "apps/docs/components/**",
+    "apps/docs/app/layout.config.tsx",
+    "packages/analytics/**",
+    "scripts/**"
   ],
   "ignoreBinaries": [
     "vitest",
