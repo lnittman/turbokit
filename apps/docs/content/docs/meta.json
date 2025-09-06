@@ -1,13 +1,6 @@
 {
   "title": "Documentation",
   "pages": [
-    "index",
-    "getting-started",
-    "---",
-    "ai/index",
-    "ai/agents",
-    "ai/convex-agent",
-    "ai/tools",
-    "ai/workflows"
+    "index"
   ]
 }

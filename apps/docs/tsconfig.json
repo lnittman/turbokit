@@ -18,9 +18,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".contentlayer/generated",
-    "../../packages/design/**/*.ts",
-    "../../packages/design/**/*.tsx"
+    ".contentlayer/generated"
   ],
   "exclude": ["node_modules"]
 }

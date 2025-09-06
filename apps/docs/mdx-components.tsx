@@ -1,5 +1,7 @@
 import type { MDXComponents } from 'mdx/types';
 import defaultComponents from 'fumadocs-ui/mdx';
+// Breadcrumb for MDX snippets
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@repo/design/components/ui/breadcrumb';
 // Prefer TurboKit design primitives, with light fallbacks if needed
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/design/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@repo/design/components/ui/alert';
@@ -27,5 +29,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     TabsContent,
     TabsList,
     TabsTrigger,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
   };
 }
