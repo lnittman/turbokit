@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import type React from 'react';
 
 import { useAuth } from '@clerk/nextjs';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -36,15 +36,15 @@ export default function SignInPage(): React.ReactElement {
     router.push(path);
   };
 
-  const logoAnimation = {
+  const logoAnimation: Variants = {
     float: {
-      translateY: ["-3px", "3px", "-3px"], // Subtle up and down movement
+      y: [-3, 3, -3],
       transition: {
-        duration: 2.5, // Adjust duration for speed
-        ease: "easeInOut",
+        duration: 2.5,
+        ease: [0.42, 0, 0.58, 1],
         repeat: Infinity,
-      }
-    }
+      },
+    },
   };
 
   const renderLogo = () => (

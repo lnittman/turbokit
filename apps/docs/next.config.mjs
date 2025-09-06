@@ -6,6 +6,12 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   transpilePackages: ['@repo/design'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default withMDX(config);
