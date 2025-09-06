@@ -10,7 +10,5 @@
     "vitest",
     "playwright",
     "npm-check-updates"
-  ],
-  "isolateWorkspaces": true
+  ]
 }
-
