@@ -669,8 +669,8 @@ export const myFunction = mutation({
 ## Payments (Autumn)
 - Use `@useautumn/convex` for subscriptions/billing
 - Configure billing/products in the Autumn dashboard
-- Handle webhooks in `packages/backend/convex/http/router.ts` if needed
-- Use Autumn checkout/billing portal URLs returned from the component
+- No webhooks required for Stripe: Autumn handles them. Use `check`, `track`, `checkout` from `convex/autumn.ts`.
+- Optional frontend: wrap pages with `AutumnProvider` (see `apps/app/src/components/AutumnWrapper.tsx`).
 
 ## Workflows (Durable Execution)
 - Use `@convex-dev/workflow` for multi-step processes

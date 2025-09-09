@@ -5,6 +5,7 @@ import { checkAiTokenLimit } from "../components/rateLimiter";
 import { sendMessage as sendAssistantMessage } from "../agents/assistant";
 import { generateCode as generateCodeWithAgent } from "../agents/code-generator";
 import { api } from "../_generated/api";
+import { createThread as createAssistantThreadHelper } from "../agents/assistant";
 
 export const sendAIMessage = action({
   args: { threadId: v.string(), prompt: v.string() },
@@ -39,5 +40,21 @@ export const generateAICode = action({
       metadata: { language, promptLength: prompt.length, codeLength: result.code.length },
     });
     return result;
+  },
+});
+
+export const createAssistantThread = action({
+  args: {},
+  handler: async (ctx) => {
+    const { user } = await requireAuthAction(ctx);
+    const threadId = await createAssistantThreadHelper(ctx, user._id);
+    await ctx.runMutation(api.users.internal.logActivity, {
+      userId: user._id,
+      action: "ai.thread.created",
+      resourceType: "thread",
+      resourceId: threadId,
+      metadata: { createdAt: Date.now() },
+    });
+    return { threadId } as const;
   },
 });

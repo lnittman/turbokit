@@ -22,6 +22,26 @@ export const autumn = new Autumn(components.autumn, {
   secretKey: process.env.AUTUMN_SECRET_KEY || "",
 });
 
+// Expose the official Autumn API surface per docs
+// https://www.convex.dev/components/autumn#4-initialize-the-autumn-client
+export const {
+  track,
+  cancel,
+  query,
+  attach,
+  check,
+  checkout,
+  usage,
+  setupPayment,
+  createCustomer,
+  listProducts,
+  billingPortal,
+  createReferralCode,
+  redeemReferralCode,
+  createEntity,
+  getEntity,
+} = (autumn as any).api?.() ?? ({} as any);
+
 // Back-compat thin wrappers to ease Polar -> Autumn migration
 export const generateCheckoutLink = async (
   ctx: any,

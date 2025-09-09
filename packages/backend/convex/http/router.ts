@@ -34,30 +34,7 @@ http.route({
   }),
 });
 
-// Autumn webhook endpoint (placeholder)
-http.route({
-  path: "/webhooks/autumn",
-  method: "POST",
-  handler: httpAction(async (ctx, req) => {
-    try {
-      const body = await req.json().catch(() => ({}));
-      console.log("Autumn webhook received", body?.type || "event");
-      // If Autumn adds a Convex component webhook handler, wire it here.
-      await ctx.runMutation(api.users.internal.logActivity, {
-        userId: "system" as any,
-        action: "autumn.webhook.received",
-        resourceType: "autumn",
-        resourceId: (body && (body.id || body.type)) || "unknown",
-        metadata: { body, timestamp: Date.now() },
-      });
-    } catch (e) {
-      console.warn("Autumn webhook error", e);
-    }
-    return new Response("OK", { status: 200 });
-  }),
-});
-
-// Polar has been removed in favor of Autumn.
+// Note: Autumn + Convex does not require webhooks; Stripe webhooks are handled by Autumn.
 
 // Clerk webhook endpoint
 http.route({
