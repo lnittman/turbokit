@@ -6,6 +6,8 @@ import workflow from "@convex-dev/workflow/convex.config";
 import crons from "@convex-dev/crons/convex.config";
 import rateLimiter from "@convex-dev/rate-limiter/convex.config";
 import migrations from "@convex-dev/migrations/convex.config";
+import aggregate from "@convex-dev/aggregate/convex.config";
+import actionRetrier from "@convex-dev/action-retrier/convex.config";
 import resend from "@convex-dev/resend/convex.config";
 import rag from "@convex-dev/rag/convex.config";
 import presence from "@convex-dev/presence/convex.config";
@@ -22,6 +24,8 @@ app.use(workflow);
 app.use(crons);
 app.use(rateLimiter);
 app.use(migrations);
+app.use(aggregate);
+app.use(actionRetrier);
 
 // AI + data
 app.use(agent);

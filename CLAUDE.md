@@ -670,7 +670,7 @@ export const myFunction = mutation({
 - Use `@useautumn/convex` for subscriptions/billing
 - Configure billing/products in the Autumn dashboard
 - No webhooks required for Stripe: Autumn handles them. Use `check`, `track`, `checkout` from `convex/autumn.ts`.
-- Optional frontend: wrap pages with `AutumnProvider` (see `apps/app/src/components/AutumnWrapper.tsx`).
+- Optional frontend: if you need client-side hooks/components, see Autumn’s docs (autumn-js/react). The template ships without UI.
 
 ## Workflows (Durable Execution)
 - Use `@convex-dev/workflow` for multi-step processes
