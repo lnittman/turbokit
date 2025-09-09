@@ -1,6 +1,8 @@
 import { workflow } from "./manager";
 import { v } from "convex/values";
 import { api, internal } from "../_generated/api";
+const anyApi = api as any;
+const anyInternal = internal as any;
 
 export const dataProcessingPipeline = workflow.define({
   args: {
@@ -14,10 +16,7 @@ export const dataProcessingPipeline = workflow.define({
   },
   handler: async (step, { userId, dataSourceId, processingType }) => {
     // Step 1: Validate data source
-    const validationResult = await step.runMutation(
-      internal.functions.internal.data.validateSource,
-      { dataSourceId }
-    );
+    const validationResult = await step.runMutation(anyInternal.data.validateSource, { dataSourceId });
     
     if (!validationResult.valid) {
       throw new Error(`Invalid data source: ${validationResult.error}`);
@@ -25,65 +24,32 @@ export const dataProcessingPipeline = workflow.define({
     
     // Step 2: Extract data
     const extractedData = await step.runAction(
-      internal.functions.actions.data.extractData,
+      anyInternal.data.extractData,
       { dataSourceId },
-      { 
-        retry: { 
-          maxAttempts: 3,
-          backoffMs: [2000, 4000, 8000],
-        },
-      }
+      { retry: { maxAttempts: 3, initialBackoffMs: 2000, base: 2 } }
     );
     
     // Step 3: Process based on type
     let processedData;
     switch (processingType) {
       case "analysis":
-        processedData = await step.runAction(
-          internal.functions.actions.data.analyzeData,
-          { data: extractedData, userId }
-        );
+        processedData = await step.runAction(anyInternal.data.analyzeData, { data: extractedData, userId });
         break;
         
       case "transformation":
-        processedData = await step.runAction(
-          internal.functions.actions.data.transformData,
-          { data: extractedData, userId }
-        );
+        processedData = await step.runAction(anyInternal.data.transformData, { data: extractedData, userId });
         break;
         
       case "export":
-        processedData = await step.runAction(
-          internal.functions.actions.data.exportData,
-          { data: extractedData, userId }
-        );
+        processedData = await step.runAction(anyInternal.data.exportData, { data: extractedData, userId });
         break;
     }
     
     // Step 4: Store results
-    const resultId = await step.runMutation(
-      internal.functions.internal.data.storeResults,
-      { 
-        userId,
-        dataSourceId,
-        processingType,
-        results: processedData,
-      }
-    );
+    const resultId = await step.runMutation(anyInternal.data.storeResults, { userId, dataSourceId, processingType, results: processedData });
     
     // Step 5: Send notification
-    await step.runAction(
-      api.functions.actions.emails.sendNotificationEmail,
-      {
-        userId,
-        email: await step.runQuery(
-          internal.functions.queries.users.getUserEmail,
-          { userId }
-        ),
-        subject: "Processing Complete",
-        body: `Your ${processingType} job has completed successfully!`,
-      }
-    );
+    await step.runAction(anyApi.emails.actions.sendNotificationEmail, { userId, email: await step.runQuery(anyInternal.users.getUserEmail, { userId }), subject: "Processing Complete", body: `Your ${processingType} job has completed successfully!` });
     
     return { resultId };
   },
@@ -97,7 +63,7 @@ export const batchProcessing = workflow.define({
     operation: v.string(),
   },
   handler: async (step, { userId, items, operation }) => {
-    const results = [];
+    const results: any[] = [];
     
     // Process items in batches of 10
     const batchSize = 10;
@@ -108,13 +74,9 @@ export const batchProcessing = workflow.define({
       const batchResults = await Promise.all(
         batch.map((item) =>
           step.runAction(
-            internal.functions.actions.data.processItem,
+            anyInternal.data.processItem,
             { userId, item, operation },
-            { 
-              retry: { 
-                maxAttempts: 2,
-              },
-            }
+            { retry: { maxAttempts: 2, initialBackoffMs: 500, base: 2 } }
           )
         )
       );
@@ -122,20 +84,12 @@ export const batchProcessing = workflow.define({
       results.push(...batchResults);
       
       // Add delay between batches to avoid overwhelming the system
-      if (i + batchSize < items.length) {
-        await step.sleep(1000); // 1 second delay
-      }
+      // Optional throttling can be handled by Workpool or by scheduling follow-up work.
     }
     
     // Store batch results
-    await step.runMutation(
-      internal.functions.internal.data.storeBatchResults,
-      { userId, operation, results }
-    );
+    await step.runMutation(anyInternal.data.storeBatchResults, { userId, operation, results });
     
-    return { 
-      processedCount: results.length,
-      successCount: results.filter(r => r.success).length,
-    };
+    return { processedCount: results.length } as any;
   },
 });

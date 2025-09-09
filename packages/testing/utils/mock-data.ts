@@ -133,7 +133,7 @@ export function createMockActivity(userId: Id<"users">, overrides?: Partial<any>
 }
 
 /**
- * Generate mock subscription (Polar)
+ * Generate mock subscription (Autumn)
  */
 export function createMockSubscription(userId: Id<"users">, overrides?: Partial<any>) {
   const products = ["starter", "pro", "enterprise"];

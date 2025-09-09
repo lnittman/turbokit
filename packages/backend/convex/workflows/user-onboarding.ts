@@ -11,50 +11,42 @@ export const userOnboarding = workflow.define({
   handler: async (step, { userId, email, name }): Promise<void> => {
     // Step 1: Send welcome email
     await step.runAction(
-      api.functions.actions.emails.sendWelcomeEmail,
+      api.emails.actions.sendWelcomeEmail,
       { userId, email, name },
       { 
-        retry: { 
-          maxAttempts: 3,
-          backoffMs: [1000, 2000, 4000], // Exponential backoff
-        },
+        retry: { maxAttempts: 3, initialBackoffMs: 1000, base: 2 },
       }
     );
     
     // Step 2: Create initial project for the user
     const projectId = await step.runMutation(
-      internal.functions.internal.projects.createInitialProject,
+      internal.projects.internal.createInitialProject,
       { userId, name: `${name}'s First Project` }
     );
     
     // Step 3: Set up default preferences
     await step.runMutation(
-      internal.functions.internal.users.setupDefaultPreferences,
+      internal.users.internal.setupDefaultPreferences,
       { userId }
     );
     
-    // Step 4: Schedule follow-up email (24 hours later)
-    await step.sleep(24 * 60 * 60 * 1000); // 24 hours in milliseconds
+    // Step 4: (Optional) schedule follow-up via a separate cron or enqueue; omit sleep in step API
     
     // Step 5: Send follow-up email
     await step.runAction(
-      api.functions.actions.emails.sendNotificationEmail,
+      api.emails.actions.sendNotificationEmail,
       {
         userId,
         email,
         subject: "How's it going?",
         body: `Hi ${name}, just checking in to see how you're finding TurboKit!`,
       },
-      { 
-        retry: { 
-          maxAttempts: 2,
-        },
-      }
+      { retry: { maxAttempts: 2, initialBackoffMs: 500, base: 2 } }
     );
     
     // Step 6: Log onboarding completion
     await step.runMutation(
-      internal.functions.internal.users.logActivity,
+      internal.users.internal.logActivity,
       {
         userId,
         action: "user.onboarding.completed",
@@ -66,7 +58,4 @@ export const userOnboarding = workflow.define({
   },
 });
 
-// Function to start the onboarding workflow
-export const startOnboarding = workflow.trigger(
-  api.workflows.userOnboarding.userOnboarding
-);
+// Start function can be exposed via workflow manager or a domain action as needed.

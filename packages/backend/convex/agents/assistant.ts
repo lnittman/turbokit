@@ -4,7 +4,6 @@ import { getChatModel, getEmbeddingModel } from "../lib/models";
 
 export const assistantAgent = new Agent(components.agent, {
   name: "assistant",
-  description: "General purpose AI assistant for TurboKit applications",
   instructions: `
 You are a helpful AI assistant for the TurboKit platform.
 
@@ -21,8 +20,7 @@ Guidelines:
 - Admit when you don't know something
 - Never share sensitive user information
   `,
-  model: getChatModel(),
-  embedding: getEmbeddingModel(),
+  languageModel: getChatModel() as any,
   tools: {
     // Add custom tools here as needed
   },
@@ -37,9 +35,6 @@ export async function createThread(
   const { threadId } = await assistantAgent.createThread(ctx, {
     userId,
     title: title || "New conversation",
-    metadata: {
-      createdAt: Date.now(),
-    },
   });
   return threadId;
 }
@@ -51,18 +46,18 @@ export async function sendMessage(
   prompt: string,
   userId: string
 ) {
-  const { thread } = await assistantAgent.continueThread(ctx, { threadId });
-  
-  // Save the user message
-  const { messageId } = await thread.saveMessage({
-    role: "user",
-    content: [{ type: "text", text: prompt }],
+  // Persist the user message and stream a reply with deltas saved
+  const { saveMessage } = await import("@convex-dev/agent");
+  const { messageId } = await saveMessage(ctx, components.agent, {
+    threadId,
     userId,
+    prompt,
   });
-  
-  // Generate and stream the response
-  const result = await thread.streamText(
-    { promptMessageId: messageId },
+
+  const result = await assistantAgent.streamText(
+    ctx,
+    { threadId },
+    { prompt },
     { saveStreamDeltas: true }
   );
   

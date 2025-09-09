@@ -16,7 +16,7 @@ export function getChatModel(): LanguageModel {
   return openrouter(model);
 }
 
-export function getEmbeddingModel() {
+export function getEmbeddingModel(): any {
   // Default to OpenAI small embeddings via OpenRouter
   const model = process.env.OPENROUTER_EMBEDDING_MODEL || "openai/text-embedding-3-small";
   return openrouter.embedding(model);
@@ -33,4 +33,3 @@ export function getVisionModel(): LanguageModel {
   const model = process.env.OPENROUTER_VISION_MODEL || process.env.OPENROUTER_MODEL || "openai/gpt-5";
   return openrouter(model);
 }
-

@@ -56,10 +56,10 @@ export function printEnvBanner(appName: string) {
       howToEnable: 'Set NEXT_PUBLIC_SENTRY_DSN (optional: SENTRY_ORG, SENTRY_PROJECT)',
     },
     {
-      label: 'Payments (Polar)',
-      enabled: bool('POLAR_ORGANIZATION_TOKEN'),
-      details: 'Subscriptions & billing via Convex Polar component',
-      howToEnable: 'Set POLAR_ORGANIZATION_TOKEN (optional: POLAR_WEBHOOK_SECRET, POLAR_SERVER)',
+      label: 'Payments (Autumn)',
+      enabled: bool('AUTUMN_SECRET_KEY'),
+      details: 'Subscriptions & billing via Autumn + Convex component',
+      howToEnable: 'Set AUTUMN_SECRET_KEY (and any optional Autumn config)',
     },
     {
       label: 'AI (OpenRouter)',

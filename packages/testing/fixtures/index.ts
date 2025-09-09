@@ -132,7 +132,7 @@ export const testMessages = {
   },
 };
 
-// Subscription fixtures (Polar)
+// Subscription fixtures (Autumn)
 export const testSubscriptions = {
   starter: {
     id: "sub_starter1",

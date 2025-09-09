@@ -4,7 +4,6 @@ import { getAdvancedModel, getEmbeddingModel } from "../lib/models";
 
 export const codeGeneratorAgent = new Agent(components.agent, {
   name: "code-generator",
-  description: "AI agent specialized in generating code and technical solutions",
   instructions: `
 You are an expert code generation AI assistant.
 
@@ -30,8 +29,7 @@ When generating code:
 4. Include necessary imports and types
 5. Add error handling and validation
   `,
-  model: getAdvancedModel(), // Use more powerful model for code generation
-  embedding: getEmbeddingModel(),
+  languageModel: getAdvancedModel() as any, // Use more powerful model for code generation
   tools: {
     // Could add tools for:
     // - Searching documentation
@@ -48,13 +46,7 @@ export async function generateCode(
   context?: any
 ) {
   // Create a single-use thread for code generation
-  const { threadId } = await codeGeneratorAgent.createThread(ctx, {
-    metadata: {
-      type: "code-generation",
-      language,
-      timestamp: Date.now(),
-    },
-  });
+  const { threadId } = await codeGeneratorAgent.createThread(ctx, {});
   
   // Format the prompt with context
   const fullPrompt = `
@@ -67,8 +59,11 @@ Please generate the requested code following best practices.
   `;
   
   // Get the response
-  const { thread } = await codeGeneratorAgent.continueThread(ctx, { threadId });
-  const result = await thread.generateText(fullPrompt);
+  const result = await codeGeneratorAgent.generateText(
+    ctx,
+    { threadId },
+    { prompt: fullPrompt }
+  );
   
   return {
     code: result.text,

@@ -51,7 +51,7 @@ export type ActivityId = Id<"activities">;
 export type StorageId = Id<"_storage">;
 
 /**
- * Subscription/billing types (from Polar component)
+ * Subscription/billing types (from Autumn integration)
  * These are not Convex documents but useful to export
  */
 export type SubscriptionStatus = "active" | "trialing" | "past_due" | "cancelled" | "incomplete";
@@ -151,4 +151,4 @@ export type ConvexErrorData = {
 /**
  * Re-export component types if needed
  */
-export type { PolarSubscription } from "./convex/components/polar";
+// Autumn types are intentionally not re-exported here to avoid leaking SDK internals.

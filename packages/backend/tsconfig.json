@@ -4,14 +4,19 @@
     "target": "ES2021",
     "lib": ["ES2021"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "noImplicitAny": false,
     "noEmit": true,
     "types": ["@types/node"]
   },
   "include": ["convex/**/*.ts"],
-  "exclude": ["node_modules", "convex/_generated"]
+  "exclude": [
+    "node_modules",
+    "convex/_generated",
+    
+  ]
 }

@@ -43,11 +43,7 @@ export async function requireAuth<Ctx extends QueryCtx | MutationCtx>(
   ctx: Ctx
 ): Promise<Ctx & { user: Doc<"users">; userId: string }> {
   const user = await getAuthUser(ctx);
-  return {
-    ...ctx,
-    user,
-    userId: user._id,
-  } as any;
+  return Object.assign({}, ctx as any, { user, userId: user._id }) as any;
 }
 
 export async function requireAuthAction(
@@ -68,11 +64,7 @@ export async function requireAuthAction(
     throw new ConvexError("User not found");
   }
   
-  return {
-    ...ctx,
-    user,
-    userId: user._id,
-  } as any;
+  return Object.assign({}, ctx as any, { user, userId: user._id }) as any;
 }
 
 export function requireRole(user: Doc<"users">, role: "admin"): void {
@@ -80,4 +72,3 @@ export function requireRole(user: Doc<"users">, role: "admin"): void {
     throw new ConvexError("Insufficient permissions");
   }
 }
-

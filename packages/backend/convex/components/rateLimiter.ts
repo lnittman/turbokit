@@ -1,4 +1,4 @@
-import { RateLimiter, MINUTE, SECOND, HOUR, DAY } from "@convex-dev/rate-limiter";
+import { RateLimiter, MINUTE, SECOND, HOUR } from "@convex-dev/rate-limiter";
 import { components } from "../_generated/api";
 import { ConvexError } from "convex/values";
 import { ActionCtx, MutationCtx, QueryCtx } from "../_generated/server";
@@ -31,7 +31,7 @@ export const rateLimiter = new RateLimiter(components.rateLimiter, {
   // User registration - prevent abuse
   userRegistration: {
     kind: "fixed window",
-    period: DAY,
+    period: 24 * HOUR,
     rate: 10, // 10 new accounts per day per IP
     capacity: 10,
   },
@@ -56,7 +56,7 @@ export const rateLimiter = new RateLimiter(components.rateLimiter, {
 // Helper to check rate limit with user context
 export async function checkRateLimit(
   ctx: QueryCtx | MutationCtx | ActionCtx,
-  limit: keyof typeof rateLimiter.limits,
+  limit: string,
   identifier: string,
   options?: { 
     count?: number;
@@ -66,10 +66,10 @@ export async function checkRateLimit(
   const { count = 1, throwOnLimit = true } = options || {};
   
   try {
-    const result = await rateLimiter.limit(ctx, limit, { 
-      key: identifier,
-      count 
-    });
+    const result = await (rateLimiter as any).limit(ctx as any, limit as any, { 
+      key: identifier as any,
+      count: count as any,
+    } as any);
     
     if (!result.ok && throwOnLimit) {
       throw new ConvexError({

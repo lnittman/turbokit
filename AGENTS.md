@@ -695,11 +695,11 @@ export const myFunction = mutation({
 - Send emails only from actions (not mutations)
 - Handle webhooks for delivery tracking
 
-## Payments (Convex Polar Component)
-- Use `@convex-dev/polar` for subscriptions
-- Configure products in Polar dashboard
-- Handle webhooks in `packages/backend/convex/http.ts`
-- Use React components for checkout flow
+## Payments (Autumn)
+- Use `@useautumn/convex` for subscriptions/billing
+- Configure billing/products in the Autumn dashboard
+- Handle webhooks in `packages/backend/convex/http/router.ts` if needed
+- Use Autumn checkout/billing portal URLs returned from the component
 
 ## Workflows (Durable Execution)
 - Use `@convex-dev/workflow` for multi-step processes
