@@ -42,7 +42,7 @@ export const {
   getEntity,
 } = (autumn as any).api?.() ?? ({} as any);
 
-// Back-compat thin wrappers to ease Polar -> Autumn migration
+// Thin wrappers to ease migration between billing providers
 export const generateCheckoutLink = async (
   ctx: any,
   args: { productIds: string[]; successUrl?: string; cancelUrl?: string; metadata?: any }

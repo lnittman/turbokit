@@ -313,7 +313,7 @@ export const testWebhooks = {
       image_url: "https://example.com/avatar.jpg",
     },
   },
-  polarSubscriptionCreated: {
+  autumnSubscriptionCreated: {
     type: "subscription.created",
     data: {
       id: "sub_new",

@@ -593,11 +593,11 @@ TurboKit is a modern, Convex-native turborepo template that uses Convex as a com
 - **Auth**: Clerk with Convex integration
 - **AI**: Convex Agent component (AI SDK v5)
 - **Email**: Convex Resend component
-- **Payments**: Convex Polar component
+- **Payments**: Autumn Convex component
 
 ## Development Workflow
 1. Define schema in `packages/backend/convex/schema.ts`
-2. Create functions in `packages/backend/convex/functions/`
+2. Create domain functions under `packages/backend/convex/{billing,ai,presence,http,uploads,...}`
 3. Use generated API in client with `useQuery` and `useMutation`
 4. Real-time updates happen automatically
 
