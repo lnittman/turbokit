@@ -1,6 +1,6 @@
 import { workflow } from "./manager";
 import { v } from "convex/values";
-import { api, internal } from "../_generated/api";
+import { api, internal } from "../../_generated/api";
 const anyApi = api as any;
 const anyInternal = internal as any;
 
@@ -49,7 +49,7 @@ export const dataProcessingPipeline = workflow.define({
     const resultId = await step.runMutation(anyInternal.data.storeResults, { userId, dataSourceId, processingType, results: processedData });
     
     // Step 5: Send notification
-    await step.runAction(anyApi.emails.actions.sendNotificationEmail, { userId, email: await step.runQuery(anyInternal.users.getUserEmail, { userId }), subject: "Processing Complete", body: `Your ${processingType} job has completed successfully!` });
+    await step.runAction(anyApi.app.emails.actions.sendNotificationEmail, { userId, email: await step.runQuery(anyInternal.app.users.getUserEmail, { userId }), subject: "Processing Complete", body: `Your ${processingType} job has completed successfully!` });
     
     return { resultId };
   },

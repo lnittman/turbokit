@@ -1,6 +1,6 @@
 import { workflow } from "./manager";
 import { v } from "convex/values";
-import { api, internal } from "../_generated/api";
+import { api, internal } from "../../_generated/api";
 
 export const userOnboarding = workflow.define({
   args: {
@@ -11,7 +11,7 @@ export const userOnboarding = workflow.define({
   handler: async (step, { userId, email, name }): Promise<void> => {
     // Step 1: Send welcome email
     await step.runAction(
-      api.emails.actions.sendWelcomeEmail,
+      api.app.emails.actions.sendWelcomeEmail,
       { userId, email, name },
       { 
         retry: { maxAttempts: 3, initialBackoffMs: 1000, base: 2 },
@@ -20,13 +20,13 @@ export const userOnboarding = workflow.define({
     
     // Step 2: Create initial project for the user
     const projectId = await step.runMutation(
-      internal.projects.internal.createInitialProject,
+      internal.app.projects.internal.createInitialProject,
       { userId, name: `${name}'s First Project` }
     );
     
     // Step 3: Set up default preferences
     await step.runMutation(
-      internal.users.internal.setupDefaultPreferences,
+      internal.app.users.internal.setupDefaultPreferences,
       { userId }
     );
     
@@ -34,7 +34,7 @@ export const userOnboarding = workflow.define({
     
     // Step 5: Send follow-up email
     await step.runAction(
-      api.emails.actions.sendNotificationEmail,
+      api.app.emails.actions.sendNotificationEmail,
       {
         userId,
         email,
@@ -46,7 +46,7 @@ export const userOnboarding = workflow.define({
     
     // Step 6: Log onboarding completion
     await step.runMutation(
-      internal.users.internal.logActivity,
+      internal.app.users.internal.logActivity,
       {
         userId,
         action: "user.onboarding.completed",

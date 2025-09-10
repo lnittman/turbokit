@@ -1,6 +1,6 @@
 import { Agent } from "@convex-dev/agent";
-import { components } from "../_generated/api";
-import { getAdvancedModel, getEmbeddingModel } from "../lib/models";
+import { components } from "../../../_generated/api";
+import { getAdvancedModel, getEmbeddingModel } from "../../../lib/models";
 
 export const codeGeneratorAgent = new Agent(components.agent, {
   name: "code-generator",

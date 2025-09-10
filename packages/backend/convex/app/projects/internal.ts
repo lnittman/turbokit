@@ -1,4 +1,4 @@
-import { internalMutation } from "../_generated/server";
+import { internalMutation } from "../../_generated/server";
 import { v } from "convex/values";
 
 export const createInitialProject = internalMutation({
@@ -16,4 +16,3 @@ export const setupDefaultPreferences = internalMutation({
     await ctx.db.patch(userId, { metadata: { preferences: { theme: "light", notifications: { email: true, inApp: true }, language: "en", timezone: "UTC" }, onboardingCompleted: true }, updatedAt: Date.now() });
   },
 });
-

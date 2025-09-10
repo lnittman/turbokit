@@ -1,6 +1,6 @@
 import { Agent } from "@convex-dev/agent";
-import { components } from "../_generated/api";
-import { getChatModel, getEmbeddingModel } from "../lib/models";
+import { components } from "../../../_generated/api";
+import { getChatModel, getEmbeddingModel } from "../../../lib/models";
 
 export const assistantAgent = new Agent(components.agent, {
   name: "assistant",

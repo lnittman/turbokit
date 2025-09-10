@@ -1,6 +1,6 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { resend } from "./emails/resend";
+import { resend } from "./app/emails/resend";
 import { api } from "./_generated/api";
 
 const http = httpRouter();
@@ -26,7 +26,7 @@ http.route({
   handler: httpAction(async (ctx, req) => {
     const { service } = (req as any).params ?? { service: "unknown" };
     const body = await req.json().catch(() => ({}));
-    await ctx.runMutation(api.users.internal.logActivity, {
+    await ctx.runMutation(api.app.users.internal.logActivity, {
       userId: "system" as any,
       action: "webhook.received",
       resourceType: "webhook",

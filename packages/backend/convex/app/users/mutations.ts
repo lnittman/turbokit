@@ -1,4 +1,4 @@
-import { mutation } from "../_generated/server";
+import { mutation } from "../../_generated/server";
 import { v } from "convex/values";
 
 // Public mutation to get or create a user by Clerk data
@@ -37,4 +37,3 @@ export const getOrCreate = mutation({
     return userId;
   },
 });
-

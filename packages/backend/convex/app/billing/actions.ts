@@ -1,6 +1,6 @@
-import { action } from "../_generated/server";
+import { action } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireAuthAction } from "../lib/auth";
+import { requireAuthAction } from "../../lib/auth";
 import { autumn, generateCheckoutLink as autumnGenerateCheckoutLink, generateCustomerPortalUrl as autumnGeneratePortalUrl } from "./autumn";
 
 export const generateCheckoutLink = action({

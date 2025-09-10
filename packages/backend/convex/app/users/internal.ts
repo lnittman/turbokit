@@ -1,4 +1,4 @@
-import { internalMutation } from "../_generated/server";
+import { internalMutation } from "../../_generated/server";
 import { v } from "convex/values";
 
 export const createUser = internalMutation({
@@ -23,7 +23,7 @@ export const updateUser = internalMutation({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
       .unique();
     if (!user) {
-      return ctx.scheduler.runNow(ctx.api.users.internal.createUser, { clerkId, email, name, imageUrl });
+      return ctx.scheduler.runNow(ctx.api.app.users.internal.createUser, { clerkId, email, name, imageUrl });
     }
     await ctx.db.patch(user._id, { email, name, imageUrl, updatedAt: Date.now() });
     return user._id;
@@ -49,4 +49,3 @@ export const logActivity = internalMutation({
     await ctx.db.insert("activities", { userId: args.userId as any, action: args.action, resourceType: args.resourceType, resourceId: args.resourceId, metadata: args.metadata, timestamp: Date.now() });
   },
 });
-

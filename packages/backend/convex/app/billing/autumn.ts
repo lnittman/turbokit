@@ -1,4 +1,4 @@
-import { components } from "./_generated/api";
+import { components } from "../../_generated/api";
 import { Autumn } from "@useautumn/convex";
 
 export const autumn = new Autumn(components.autumn, {

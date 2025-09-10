@@ -1,8 +1,8 @@
 import { Resend } from "@convex-dev/resend";
-import { components, internal } from "../_generated/api";
+import { components, internal } from "../../_generated/api";
 
 export const resend = new Resend(components.resend, {
-  onEmailEvent: internal.emails.internal.handleEvent,
+  onEmailEvent: internal.app.emails.internal.handleEvent,
   testMode: process.env.NODE_ENV !== "production",
 });
 
@@ -15,4 +15,3 @@ export const EMAIL_CONFIG = {
   },
   replyTo: "support@turbokit.dev",
 } as const;
-
