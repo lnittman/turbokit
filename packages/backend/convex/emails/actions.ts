@@ -1,7 +1,7 @@
 import { action } from "../_generated/server";
 import { v } from "convex/values";
-import { resend, EMAIL_CONFIG } from "../components/email";
-import { checkRateLimit } from "../components/rateLimiter";
+import { resend, EMAIL_CONFIG } from "./resend";
+import { checkRateLimit } from "../lib/rateLimiter";
 
 export const sendWelcomeEmail = action({
   args: { userId: v.id("users"), email: v.string(), name: v.string() },

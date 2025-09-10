@@ -1,6 +1,6 @@
 import { httpAction } from "../_generated/server";
 import { api } from "../_generated/api";
-import { resend } from "../components/email";
+import { resend } from "../emails/resend";
 
 // Example: Resend webhook handler (can be routed from http/router)
 export const handleResend = httpAction(async (ctx, req) => {

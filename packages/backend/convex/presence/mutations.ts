@@ -1,6 +1,6 @@
 import { mutation } from "../_generated/server";
 import { v } from "convex/values";
-import { presence } from "../components/presence";
+import { presence } from "./presence";
 
 export const heartbeat = mutation({
   args: { roomId: v.string(), userId: v.string(), sessionId: v.string(), interval: v.number() },
@@ -11,4 +11,3 @@ export const disconnect = mutation({
   args: { sessionToken: v.string() },
   handler: async (ctx, { sessionToken }) => presence.disconnect(ctx, sessionToken),
 });
-

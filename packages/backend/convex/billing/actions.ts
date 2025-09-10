@@ -1,7 +1,7 @@
 import { action } from "../_generated/server";
 import { v } from "convex/values";
 import { requireAuthAction } from "../lib/auth";
-import { autumn, generateCheckoutLink as autumnGenerateCheckoutLink, generateCustomerPortalUrl as autumnGeneratePortalUrl } from "../components/autumn";
+import { autumn, generateCheckoutLink as autumnGenerateCheckoutLink, generateCustomerPortalUrl as autumnGeneratePortalUrl } from "../autumn";
 
 export const generateCheckoutLink = action({
   args: { productIds: v.array(v.string()), successUrl: v.optional(v.string()), cancelUrl: v.optional(v.string()), metadata: v.optional(v.any()) },

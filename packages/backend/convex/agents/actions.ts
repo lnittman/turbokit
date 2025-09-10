@@ -1,9 +1,9 @@
 import { action } from "../_generated/server";
 import { v } from "convex/values";
 import { requireAuthAction } from "../lib/auth";
-import { checkAiTokenLimit } from "../components/rateLimiter";
-import { sendMessage as sendAssistantMessage } from "../agents/assistant";
-import { generateCode as generateCodeWithAgent } from "../agents/code-generator";
+import { checkAiTokenLimit } from "../lib/rateLimiter";
+import { sendMessage as sendAssistantMessage } from "./assistant";
+import { generateCode as generateCodeWithAgent } from "./code-generator";
 import { api } from "../_generated/api";
 import { createThread as createAssistantThreadHelper } from "../agents/assistant";
 

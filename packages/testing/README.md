@@ -56,23 +56,25 @@ describe("MyComponent", () => {
 ```typescript
 import { createConvexTestContext, testMutation } from "@repo/testing";
 import schema from "@repo/backend/convex/schema";
-import { createProject } from "@repo/backend/convex/functions/mutations/projects";
+import { internal as api } from "@repo/backend/convex/_generated/api";
 
 describe("Projects", () => {
-  const ctx = createConvexTestContext(schema);
+const ctx = createConvexTestContext(schema);
   
   afterEach(async () => {
     await ctx.cleanup();
   });
   
   it("should create a project", async () => {
-    const result = await testMutation(ctx.t, createProject, {
-      name: "Test Project",
-      description: "Test Description",
-    }, {
-      authenticated: true,
-      userId: "test_user",
-    });
+    const result = await testMutation(
+      ctx.t,
+      api.projects.internal.createInitialProject,
+      { name: "Test Project", userId: "test_user" as any },
+      {
+        authenticated: true,
+        userId: "test_user",
+      }
+    );
     
     expect(result).toBeDefined();
     expect(result.name).toBe("Test Project");

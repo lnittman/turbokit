@@ -1,6 +1,6 @@
 import { mutation } from "../_generated/server";
 import { requireAuth } from "../lib/auth";
-import { r2 } from "../components/r2";
+import { r2 } from "./r2";
 
 export const generateUploadUrl = mutation({
   args: {},
@@ -10,4 +10,3 @@ export const generateUploadUrl = mutation({
     return r2.generateUploadUrl(key);
   },
 });
-

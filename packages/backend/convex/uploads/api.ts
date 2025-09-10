@@ -1,2 +1,1 @@
-export { generateUploadUrl, syncMetadata } from "../components/r2";
-
+export { generateUploadUrl, syncMetadata } from "./r2";
