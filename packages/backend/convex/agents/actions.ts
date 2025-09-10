@@ -2,10 +2,10 @@ import { action } from "../_generated/server";
 import { v } from "convex/values";
 import { requireAuthAction } from "../lib/auth";
 import { checkAiTokenLimit } from "../lib/rateLimiter";
-import { sendMessage as sendAssistantMessage } from "./assistant";
-import { generateCode as generateCodeWithAgent } from "./code-generator";
+import { sendMessage as sendAssistantMessage } from "./definitions/assistant";
+import { generateCode as generateCodeWithAgent } from "./definitions/code-generator";
 import { api } from "../_generated/api";
-import { createThread as createAssistantThreadHelper } from "../agents/assistant";
+import { createThread as createAssistantThreadHelper } from "./definitions/assistant";
 
 export const sendAIMessage = action({
   args: { threadId: v.string(), prompt: v.string() },
