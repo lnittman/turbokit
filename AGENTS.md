@@ -677,6 +677,115 @@ Guidelines:
 - Keep crons short; real logic lives in domain helpers
 - Prefer a single `crons.ts` file exporting `default crons`
 
+### Client Integration (Convex + Auth)
+
+- Frontend provider
+  - Use `ConvexProviderWithClerk(useAuth)` (or your auth provider’s recommended wrapper) at the app root.
+  - Prefer `useQuery`/`useAction` (client) or `fetchQuery`/`preloadQuery` (server) according to page needs.
+- Public surface minimization
+  - Keep as few public functions as possible; prefer a single mutation entrypoint for multi‑step flows.
+  - Hide external calls in `internalAction`s; never expose secrets to clients.
+
+### Orchestration Pattern: “Mutation schedules internalAction”
+
+Recommended flow for operations that touch external services (billing, AI jobs, media processing):
+
+1) Public mutation writes intent + schedules internalAction immediately
+
+```ts
+// File: convex/app/<domain>/mutations.ts (docs-only example)
+import { mutation, internalAction } from "../../_generated/server";
+import { v } from "convex/values";
+import { internal } from "../../_generated/api";
+
+export const startProcessing = mutation({
+  args: { itemId: v.id("items"), correlationId: v.optional(v.string()) },
+  handler: async (ctx, { itemId, correlationId }) => {
+    // Idempotency: check for in‑flight job for this item
+    const existing = await ctx.db
+      .query("processingJobs")
+      .withIndex("by_item", (q) => q.eq("itemId", itemId))
+      .order("desc")
+      .take(1);
+    const latest = existing[0];
+    if (latest && ["queued", "processing"].includes(latest.status)) {
+      return { jobId: latest._id, status: latest.status };
+    }
+
+    const jobId = await ctx.db.insert("processingJobs", {
+      itemId,
+      status: "queued",
+      attempts: 0,
+      correlationId: correlationId ?? crypto.randomUUID(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    // Schedule the internal action right away
+    await ctx.scheduler.runAfter(0, internal.app.<domain>.internal.processItemInternal, { jobId });
+    return { jobId, status: "queued" } as const;
+  },
+});
+
+export const processItemInternal = internalAction({
+  args: { jobId: v.id("processingJobs") },
+  handler: async (ctx, { jobId }) => {
+    const job = await ctx.db.get(jobId);
+    if (!job || job.status === "completed") return;
+    await ctx.db.patch(jobId, { status: "processing", attempts: job.attempts + 1, updatedAt: Date.now() });
+
+    try {
+      // Call external service(s) here
+      // ...
+      await ctx.db.patch(jobId, { status: "completed", updatedAt: Date.now() });
+    } catch (e) {
+      // Retry (scheduler or Workflow/Workpool can coordinate rate limits)
+      const backoffMs = Math.min(60_000, 2 ** job.attempts * 1000);
+      await ctx.scheduler.runAfter(backoffMs, internal.app.<domain>.internal.processItemInternal, { jobId });
+      await ctx.db.patch(jobId, { status: "queued", updatedAt: Date.now() });
+    }
+  },
+});
+```
+
+Benefits:
+- Single round‑trip from client; robust to navigation/reload
+- Idempotency and retries are server‑controlled
+- Clear separation: public mutation writes state; internalAction hits the network
+
+### Idempotency & De‑duplication
+
+- Maintain a `processingJobs` table keyed by domain entity (e.g., `itemId`) with a status field.
+- On `startProcessing`, if a job exists in `{queued, processing}`, return that record and avoid scheduling another.
+- Store `correlationId` for end‑to‑end tracing across logs and external service callbacks.
+
+### Observability & Logging
+
+- Use a centralized activity log (e.g., `app/users/internal.logActivity`) for cross‑cutting auditing.
+- Add consistent tags (e.g., `[BILLING]`, `[UPLOADS]`, `[AGENTS]`) and include `correlationId` in metadata.
+
+### Environment Variables
+
+- Keep secrets in the Convex dashboard env.
+- Read `process.env` once at module scope in actions/internalAction files.
+- Avoid env reads in queries/mutations unless required.
+
+### HTTP Webhook Hygiene
+
+- Define inbound routes in `http.ts` via `httpAction`, respond with explicit JSON, and handle CORS for browser‑origin callbacks.
+- Verify signatures when provided; adopt replay‑prevention if the provider specifies it.
+
+### Rate Limiting & Concurrency
+
+- Use `lib/rateLimiter.ts` limits for API/token quotas.
+- Consider `@convex-dev/workpool` to cap concurrent internalActions for heavy jobs.
+
+### Uploads (R2) – Client Robustness
+
+- Generate signed URL server‑side; client issues a PUT with minimal headers.
+- Optionally verify with a HEAD request; handle non‑2xx and surface a toast.
+- Store metadata via `syncMetadata` or a follow‑up mutation.
+
 
 
 
