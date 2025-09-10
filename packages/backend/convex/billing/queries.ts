@@ -1,7 +1,7 @@
 import { query } from "../_generated/server";
 import { v } from "convex/values";
 import { requireAuth } from "../lib/auth";
-import { getCurrentSubscription as autumnGetCurrentSubscription, listUserSubscriptions as autumnListUserSubs, getConfiguredProducts as autumnGetConfiguredProducts, listAllProducts as autumnListAllProducts } from "../autumn";
+import { getCurrentSubscription as autumnGetCurrentSubscription, listUserSubscriptions as autumnListUserSubs, getConfiguredProducts as autumnGetConfiguredProducts, listAllProducts as autumnListAllProducts } from "./autumn";
 
 export const getCurrentSubscription = query({
   handler: async (ctx) => {
