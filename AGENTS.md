@@ -591,6 +591,93 @@ colors: {
 
 *This document should be updated whenever the design system architecture changes.*
 
+---
+
+## Convex Backend Layout (TurboKit)
+
+Use a domain‑first structure with a clean convex/ root. Only keep canonical config/routing files at the top level; colocate integrations with their domain.
+
+Top‑level files
+
+- convex.config.ts — registers Convex components via `app.use(...)`
+- schema.ts — canonical DB schema (required for codegen)
+- http.ts — HTTP router (`httpRouter`) and public endpoints
+- webhooks.ts — optional shared handlers (imported/used by `http.ts`)
+- crons.ts — defines scheduled jobs (exports `default crons`)
+
+Directories
+
+- lib/ — cross‑cutting helpers (e.g., `auth.ts`, `models.ts`, `rateLimiter.ts`, `actionCache.ts`)
+- providers/ — model providers (e.g., `openai.ts`, `openrouter.ts`, `fal.ts`)
+- agents/
+  - definitions/ — Agent instances (e.g., `assistant.ts`, `code-generator.ts`)
+  - actions.ts — entrypoints operating on agents (send messages, generate code, create threads)
+- billing/
+  - autumn.ts — Autumn component client + `api()` exports
+  - actions.ts, queries.ts — billing operations
+- emails/
+  - resend.ts — Resend component client + config
+  - actions.ts — email sending
+- presence/
+  - presence.ts — Presence component client
+  - queries.ts, mutations.ts
+- uploads/
+  - r2.ts — R2 component client + clientApi
+  - actions.ts, api.ts
+- users/ — internal.ts, queries.ts, mutations.ts
+- projects/ — internal.ts
+- workflows/ — manager.ts and workflow files
+
+Component integration
+
+- Install the component package
+- Import its convex.config and `app.use` it in `convex.config.ts`
+- Add a small client file colocated with the domain (e.g., `emails/resend.ts`, `uploads/r2.ts`, `presence/presence.ts`, `billing/autumn.ts`)
+- Expose thin API wrappers (queries/mutations/actions) that call helpers
+
+Function organization (best practice)
+
+- Keep `query/mutation/action/internalQuery/internalMutation/internalAction` wrappers thin; put core logic in helper functions inside the same domain folder
+- Only call `internal.*` from `ctx.run*` and `crons` (avoid using `api.*` internally)
+- Prefer indexes + pagination over `.filter().collect()`
+- Validate all arguments and return values
+
+### Cron Scheduling Example (docs-only)
+
+```ts
+// File: convex/crons.ts
+// NOTE: This is a docs-only example. Do not paste live without adapting
+import { cronJobs } from "convex/server";
+import { internal } from "./_generated/api";
+
+const crons = cronJobs();
+
+// Every 2 hours: run an internal mutation
+crons.interval(
+  "cleanup.inactive-users",
+  { hours: 2 },
+  internal.users.internal.cleanupInactive,
+  {}
+);
+
+// Daily at 05:30 UTC: run an internal action
+crons.cron(
+  "daily.billing-renewal",
+  { hourUTC: 5, minuteUTC: 30 },
+  internal.billing.internal.processRenewals,
+  {}
+);
+
+export default crons;
+```
+
+Guidelines:
+
+- Only schedule internal functions (`internal.*`) from crons
+- Keep crons short; real logic lives in domain helpers
+- Prefer a single `crons.ts` file exporting `default crons`
+
+
 
 
 <!-- Source: .ruler/AGENTS.md -->
