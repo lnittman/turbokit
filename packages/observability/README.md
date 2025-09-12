@@ -5,7 +5,6 @@ Project-agnostic observability package for Sentry and logging integration.
 ## Features
 
 - **Sentry Integration**: Error tracking, performance monitoring, session replay
-- **Logtail Support**: Structured logging for Better Stack
 - **Type-safe Configuration**: Environment variables with Zod validation
 - **Next.js Optimized**: Automatic source maps, tunneling, Vercel monitoring
 
@@ -42,10 +41,6 @@ export default withSentry({
 NEXT_PUBLIC_SENTRY_DSN=https://...@sentry.io/...
 SENTRY_ORG=your-org
 SENTRY_PROJECT=your-project
-
-# Optional: Better Stack
-BETTERSTACK_API_KEY=...
-BETTERSTACK_URL=...
 ```
 
 ### Backend (Convex)
@@ -106,8 +101,7 @@ Backend (Convex)
     └── Sentry Backend SDK
 
 Observability Services
-├── Sentry.io (errors, performance)
-└── Better Stack (logs, uptime)
+└── Sentry.io (errors, performance)
 ```
 
 ## Best Practices
