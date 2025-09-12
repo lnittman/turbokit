@@ -7,7 +7,8 @@ import { env } from './env';
 
 let nextConfig: NextConfig = config;
 
-if (env.ANALYZE === 'true') {
+// Use process.env directly for build-time analysis
+if (process.env.ANALYZE === 'true') {
   nextConfig = withAnalyzer(nextConfig);
 }
 

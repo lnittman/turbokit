@@ -55,10 +55,10 @@ export const test = base.extend<TestFixtures>({
   // API context for making direct API calls
   apiContext: async ({ playwright }, use) => {
     const context = await playwright.request.newContext({
-      baseURL: process.env.API_URL || "http://localhost:3000/api",
+      baseURL: "http://localhost:3000/api",
       extraHTTPHeaders: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.TEST_API_KEY || "test_api_key"}`,
+        // Auth will be handled by Clerk test tokens if needed
       },
     });
     
