@@ -2,6 +2,7 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { resend } from "./app/emails/resend";
 import { api } from "./_generated/api";
+import { clerkWebhook } from "./http/webhooks/clerk";
 
 const http = httpRouter();
 
@@ -10,6 +11,13 @@ http.route({
   path: "/health",
   method: "GET",
   handler: httpAction(async () => new Response(JSON.stringify({ status: "ok", ts: Date.now() }), { status: 200, headers: { "Content-Type": "application/json" } })),
+});
+
+// Clerk webhooks for user sync
+http.route({
+  path: "/clerk/webhook",
+  method: "POST",
+  handler: clerkWebhook,
 });
 
 // Resend webhooks
