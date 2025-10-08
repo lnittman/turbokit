@@ -15,20 +15,20 @@
     "fumadocs-docgen": "^3.0.0",
     "fumadocs-mdx": "11.8.3",
     "fumadocs-ui": "^15.7.9",
-    "zod": "^4.1.5",
-    "lucide-react": "^0.542.0",
+    "zod": "^4.1.12",
+    "lucide-react": "^0.545.0",
     "next": "15.5.2",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "framer-motion": "^12.23.12"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.13",
-    "@types/node": "^24.3.1",
-    "@types/react": "^19.1.12",
-    "@types/react-dom": "^19.1.9",
-    "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.2"
+    "@types/node": "24.7.0",
+    "@types/react": "19.2.1",
+    "@types/react-dom": "19.2.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
   }
 }
