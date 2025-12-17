@@ -1,13 +1,16 @@
 "use client";
 
-import { ArrowUp, CircleNotch, MapPin, Star } from "@phosphor-icons/react";
+import { ArrowUp, CircleNotch } from "@phosphor-icons/react";
 import { Button } from "@spots/design/components/ui/button";
 import { Textarea } from "@spots/design/components/ui/textarea";
 import { cn } from "@spots/design/lib/utils";
 import { api } from "@spots/backend/api";
-import { useAction } from "convex/react";
+import type { Id } from "@spots/backend/dataModel";
+import { useAction, useMutation, useQuery } from "convex/react";
 import type React from "react";
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { SpotCard } from "@/components/spots/spot-card";
+import type { Spot } from "@/lib/types";
 
 interface SpotResult {
   _id: string;
@@ -37,6 +40,29 @@ interface PromptBarProps {
   onResults?: (results: SearchResponse) => void;
 }
 
+/**
+ * Convert API SpotResult to UI Spot type
+ */
+function spotResultToSpot(result: SpotResult): Spot {
+  return {
+    id: result._id,
+    name: result.name,
+    description: result.description || "",
+    type: "location",
+    address: "",
+    neighborhood: result.city,
+    city: result.city,
+    coordinates: [0, 0],
+    interests: [],
+    priceRange: 2,
+    rating: result.rating ?? 0,
+    reviewCount: 0,
+    imageUrl: result.imageUrl,
+    tags: [],
+    emoji: "📍",
+  };
+}
+
 export function PromptBar({ onResults }: PromptBarProps): React.ReactElement {
   const [input, setInput] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -44,9 +70,11 @@ export function PromptBar({ onResults }: PromptBarProps): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<SearchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [savedSpots, setSavedSpots] = useState<Set<string>>(new Set());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const search = useAction(api.app.recommendations.actions.searchByNaturalLanguage);
+  const toggleFavorite = useMutation(api.app.spots.mutations.toggleFavorite);
 
   // Auto-resize textarea based on content
   useEffect(() => {
@@ -86,6 +114,25 @@ export function PromptBar({ onResults }: PromptBarProps): React.ReactElement {
     if ((e.metaKey || e.ctrlKey || e.shiftKey) && e.key === "Enter") {
       e.preventDefault();
       handleSubmit();
+    }
+  };
+
+  const handleSave = async (spotId: string) => {
+    try {
+      const result = await toggleFavorite({
+        spotId: spotId as Id<"spots">,
+      });
+      setSavedSpots((prev) => {
+        const next = new Set(prev);
+        if (result.favorited) {
+          next.add(spotId);
+        } else {
+          next.delete(spotId);
+        }
+        return next;
+      });
+    } catch (err) {
+      console.error("[SAVE] Failed to toggle favorite:", err);
     }
   };
 
@@ -168,34 +215,15 @@ export function PromptBar({ onResults }: PromptBarProps): React.ReactElement {
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {results.spots.map((spot) => (
-              <div
-                key={spot._id}
-                className="group rounded-sm border bg-card p-4 transition-colors hover:border-primary/50"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-medium leading-tight">{spot.name}</h3>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                      <MapPin className="h-3 w-3 flex-shrink-0" />
-                      <span className="truncate">{spot.city}</span>
-                      {spot.rating && (
-                        <>
-                          <span className="text-border">|</span>
-                          <Star className="h-3 w-3 flex-shrink-0 text-amber-500" weight="fill" />
-                          <span>{spot.rating.toFixed(1)}</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {spot.description && (
-                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                    {spot.description}
-                  </p>
-                )}
-                <p className="mt-2 text-xs text-primary/80">{spot.matchReason}</p>
-              </div>
+            {results.spots.map((spotResult) => (
+              <SpotCard
+                key={spotResult._id}
+                spot={spotResultToSpot(spotResult)}
+                variant="horizontal"
+                tooltip={spotResult.matchReason}
+                saved={savedSpots.has(spotResult._id)}
+                onSave={() => handleSave(spotResult._id)}
+              />
             ))}
           </div>
         </div>

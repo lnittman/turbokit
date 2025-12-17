@@ -5,6 +5,7 @@
  */
 
 import { v } from "convex/values";
+import type { Id } from "../../_generated/dataModel";
 import { internalMutation, internalQuery } from "../../_generated/server";
 
 // ==================== INTERNAL QUERIES ====================
@@ -80,7 +81,23 @@ export const getUserInterests = internalQuery({
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
-    const results = [];
+    const results: Array<{
+      _id: Id<"interests">;
+      _creationTime: number;
+      name: string;
+      description?: string;
+      category?: string;
+      iconName?: string;
+      imageUrl?: string;
+      trending: boolean;
+      trendScore: number;
+      isSeasonal: boolean;
+      createdAt: number;
+      updatedAt: number;
+      strength: number;
+      source?: "onboarding" | "explicit" | "inferred";
+    }> = [];
+
     for (const ui of userInterests) {
       const interest = await ctx.db.get(ui.interestId);
       if (interest) {
