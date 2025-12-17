@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
+import { Label as LabelPrimitive } from "radix-ui"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function Label({
   className,

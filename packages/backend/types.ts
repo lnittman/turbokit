@@ -1,27 +1,24 @@
 /**
  * Type exports for the backend package
- * 
+ *
  * This file re-exports generated Convex types and provides convenience aliases
  * to avoid brittle imports from _generated paths in consuming applications.
  */
 
-// Core Convex types
-export type { 
-  Doc, 
-  Id, 
-  DataModel 
-} from "./convex/_generated/dataModel";
-
 // Re-export API for clean imports
-export type { 
-  api 
-} from "./convex/_generated/api";
+export type { api } from "./convex/_generated/api";
+// Core Convex types
+export type {
+  DataModel,
+  Doc,
+  Id,
+} from "./convex/_generated/dataModel";
 
 // Re-export function types
 export type {
-  QueryCtx,
-  MutationCtx,
   ActionCtx,
+  MutationCtx,
+  QueryCtx,
 } from "./convex/_generated/server";
 
 /**
@@ -54,7 +51,12 @@ export type StorageId = Id<"_storage">;
  * Subscription/billing types (from Autumn integration)
  * These are not Convex documents but useful to export
  */
-export type SubscriptionStatus = "active" | "trialing" | "past_due" | "cancelled" | "incomplete";
+export type SubscriptionStatus =
+  | "active"
+  | "trialing"
+  | "past_due"
+  | "cancelled"
+  | "incomplete";
 export type SubscriptionTier = "free" | "starter" | "pro" | "enterprise";
 
 /**
@@ -78,7 +80,8 @@ export type DateRange = {
 export type WithoutSystemFields<T> = Omit<T, "_id" | "_creationTime">;
 
 // Make certain fields optional (useful for updates)
-export type PartialFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type PartialFields<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 // Add timestamps to a type
 export type WithTimestamps<T> = T & {
@@ -91,7 +94,7 @@ export type WithTimestamps<T> = T & {
  */
 export type UserRole = "user" | "admin";
 
-export type Permission = 
+export type Permission =
   | "projects.create"
   | "projects.read"
   | "projects.update"

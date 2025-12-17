@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useSetAtom } from 'jotai';
-import * as ClerkSignIn from '@clerk/elements/sign-in';
+import * as ClerkSignIn from "@clerk/elements/sign-in";
+import { useSetAtom } from "jotai";
+import type React from "react";
+import { useEffect } from "react";
 
-import { authErrorAtom, authDebugInfoAtom } from '@/atoms/auth';
-
-import { SignInStartStep } from './components/start';
-import { SignInSsoCallbackStep } from './components/sso-callback';
-import { SignInVerificationsStep } from './components/verifications';
-import { SignInForgotPasswordStep } from './components/forgot-password';
-import { SignInResetPasswordStep } from './components/reset-password';
+import { authDebugInfoAtom, authErrorAtom } from "@/atoms/auth";
+import { SignInForgotPasswordStep } from "./components/forgot-password";
+import { SignInResetPasswordStep } from "./components/reset-password";
+import { SignInSsoCallbackStep } from "./components/sso-callback";
+import { SignInStartStep } from "./components/start";
+import { SignInVerificationsStep } from "./components/verifications";
 
 interface SignInProps {
   onSignInComplete?: () => void;
@@ -18,26 +18,26 @@ interface SignInProps {
   renderLogo?: () => React.ReactNode;
 }
 
-export const SignIn = ({ 
+export const SignIn = ({
   onRedirect,
   onSignInComplete,
-  renderLogo
+  renderLogo,
 }: SignInProps) => {
   const setError = useSetAtom(authErrorAtom);
   const setDebugInfo = useSetAtom(authDebugInfoAtom);
-  
+
   useEffect(() => {
     const handleClerkEvents = () => {
       const cb = () => {
         if (onSignInComplete) {
           onSignInComplete();
         } else if (onRedirect) {
-          onRedirect('/');
+          onRedirect("/");
         }
       };
-      document.addEventListener('clerk:sign-in:complete', cb);
+      document.addEventListener("clerk:sign-in:complete", cb);
       return () => {
-        document.removeEventListener('clerk:sign-in:complete', cb);
+        document.removeEventListener("clerk:sign-in:complete", cb);
       };
     };
     const cleanup = handleClerkEvents();
@@ -50,26 +50,20 @@ export const SignIn = ({
       if (onSignInComplete) {
         onSignInComplete();
       } else if (onRedirect) {
-        onRedirect('/');
+        onRedirect("/");
       }
     } catch (err: any) {
       console.error("Error during manual navigation:", err);
-      setError(`Manual navigation error: ${err?.message || 'Unknown error'}`);
+      setError(`Manual navigation error: ${err?.message || "Unknown error"}`);
     }
   };
-  
+
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-sm">
+    <div className="flex w-full max-w-sm flex-col items-center justify-center">
       <div className="w-full p-6">
-        <ClerkSignIn.Root
-          routing="path"
-          path="/signin"
-        >
+        <ClerkSignIn.Root path="/signin" routing="path">
           <SignInStartStep renderLogo={renderLogo} />
-          <SignInSsoCallbackStep 
-            renderLogo={renderLogo} 
-            goToHome={goToHome} 
-          />
+          <SignInSsoCallbackStep goToHome={goToHome} renderLogo={renderLogo} />
           <SignInVerificationsStep />
           <SignInForgotPasswordStep />
           <SignInResetPasswordStep />
@@ -77,4 +71,4 @@ export const SignIn = ({
       </div>
     </div>
   );
-} 
+};

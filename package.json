@@ -1,17 +1,14 @@
 {
-  "name": "turbokit",
-  "version": "1.0.0",
-  "description": "A modern, real-time application template powered by Convex",
+  "name": "@spots/root",
+  "version": "0.1.0",
+  "description": "Spots - AI-powered location discovery platform",
   "type": "module",
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo run dev --filter=!@repo/backend",
+    "dev": "turbo run dev --filter=!@spots/backend",
     "dev:all": "turbo run dev",
-    "dev:docs": "turbo run dev --filter=@repo/docs",
     "dev:backend": "pnpm -C packages/backend dev",
-    "docs:dev": "pnpm -C docs dev",
-    "docs:build": "pnpm -C docs build",
     "lint": "ultracite check",
     "format": "ultracite fix",
     "doctor": "ultracite doctor",
@@ -31,12 +28,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    
     "@biomejs/biome": "2.2.3",
-    "@repo/typescript-config": "workspace:*",
-    
+    "@spots/typescript-config": "workspace:*",
+
     "@types/node": "^24.3.1",
-    
+
     "turbo": "^2.5.6",
     "typescript": "^5.9.2",
     "ultracite": "^5.3.4"

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import type { ThemeProviderProps } from "next-themes";
 
-import { ThemeProvider as NextThemeProvider } from 'next-themes';
-import type { ThemeProviderProps } from 'next-themes';
+import { ThemeProvider as NextThemeProvider } from "next-themes";
+import { useEffect, useState } from "react";
 
 export const ThemeProvider = ({
   children,
@@ -11,32 +11,36 @@ export const ThemeProvider = ({
 }: ThemeProviderProps) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  
+
   useEffect(() => {
     setIsMounted(true);
-    
+
     // Check if the device is mobile using userAgent or width
     const checkMobile = () => {
-      if (typeof window === 'undefined') return false;
-      
-      return window.innerWidth <= 768 || 
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (typeof window === "undefined") return false;
+
+      return (
+        window.innerWidth <= 768 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      );
     };
-    
+
     setIsMobile(checkMobile());
-    
+
     // Handle resize events
     const handleResize = () => {
       setIsMobile(checkMobile());
     };
-    
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", handleResize);
     }
-    
+
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', handleResize);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleResize);
       }
     };
   }, []);
@@ -47,8 +51,8 @@ export const ThemeProvider = ({
       <NextThemeProvider
         attribute="class"
         defaultTheme="dark"
-        enableSystem={false}
         disableTransitionOnChange
+        enableSystem={false}
         forcedTheme="dark" // Force dark theme during SSR
         {...properties}
       >
@@ -61,11 +65,11 @@ export const ThemeProvider = ({
     <NextThemeProvider
       attribute="class"
       defaultTheme={isMobile ? "system" : "dark"}
-      enableSystem={isMobile}
       disableTransitionOnChange
+      enableSystem={isMobile}
       {...properties}
     >
       {children}
     </NextThemeProvider>
   );
-}
+};

@@ -1,23 +1,23 @@
-import merge from 'lodash.merge';
-import type { Metadata } from 'next';
+import merge from "lodash.merge";
+import type { Metadata } from "next";
 
-type MetadataGenerator = Omit<Metadata, 'description' | 'title'> & {
+type MetadataGenerator = Omit<Metadata, "description" | "title"> & {
   title: string;
   description: string;
   image?: string;
 };
 
-const applicationName = 'arbor';
+const applicationName = "arbor";
 
-const author: Metadata['authors'] = {
-  name: 'Luke Nittmann',
-  url: 'https://luke-nittman.vercel.app/',
+const author: Metadata["authors"] = {
+  name: "Luke Nittmann",
+  url: "https://luke-nittman.vercel.app/",
 };
 
-const publisher = 'Luke Nittman';
-const twitterHandle = '@lukenittman';
+const publisher = "Luke Nittman";
+const twitterHandle = "@lukenittman";
 
-const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
 const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 
 export const createMetadata = ({
@@ -41,19 +41,19 @@ export const createMetadata = ({
     },
     appleWebApp: {
       capable: true,
-      statusBarStyle: 'default',
+      statusBarStyle: "default",
       title: parsedTitle,
     },
     openGraph: {
       title: parsedTitle,
       description,
-      type: 'website',
+      type: "website",
       siteName: applicationName,
-      locale: 'en_US',
+      locale: "en_US",
     },
     publisher,
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       creator: twitterHandle,
     },
   };

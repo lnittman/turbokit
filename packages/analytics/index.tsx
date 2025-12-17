@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-import { PostHogProvider } from './posthog/client';
-import { VercelAnalytics } from './vercel';
+import type { ReactNode } from "react";
+import { PostHogProvider } from "./posthog/client";
+import { VercelAnalytics } from "./vercel";
 
 type AnalyticsProviderProps = {
   readonly children: ReactNode;

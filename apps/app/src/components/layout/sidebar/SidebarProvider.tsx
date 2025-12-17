@@ -1,7 +1,7 @@
 "use client";
 
+import { useMediaQuery } from "@spots/design/hooks/use-media-query";
 import { useAtom } from "jotai";
-import { useMediaQuery } from "@repo/design/hooks/use-media-query";
 import { useEffect, useState } from "react";
 import { sidebarOpenAtom } from "@/atoms/layout";
 
@@ -15,15 +15,16 @@ export function useSidebar() {
   useEffect(() => {
     // Only run this effect once after initial mount and media query is stable
     if (!isInitialised) {
-      if (!isDesktop) {
+      if (isDesktop) {
+        // On desktop, check localStorage or default to closed
+        const storedValue = localStorage.getItem("sidebarOpenAtom");
+        if (storedValue === null) {
+          // Only force closed if no stored state exists
+          setIsOpen(false);
+        }
+      } else {
         // Ensure sidebar is closed on mobile initially
         setIsOpen(false);
-      } else {
-        // On desktop, check localStorage or default to closed
-        const storedValue = localStorage.getItem('sidebarOpenAtom');
-        if (storedValue === null) { // Only force closed if no stored state exists
-           setIsOpen(false); 
-        }
       }
       setIsInitialised(true);
     }
@@ -34,9 +35,9 @@ export function useSidebar() {
   };
 
   // Render null until initialised to prevent flash of incorrect state
-  if (!isInitialised && !isDesktop) {
+  if (!(isInitialised || isDesktop)) {
     return { isOpen: false, toggle: () => {}, setIsOpen, isInitialised: false };
   }
 
   return { isOpen, toggle, setIsOpen, isInitialised: true };
-} 
+}

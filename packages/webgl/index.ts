@@ -1,5 +1,0 @@
-export * from './src/hooks/useUnicornJson'
-export * from './src/components/UnicornViewport'
-export * from './src/utils/path'
-export * from './src/utils/perf'
-export type { UnicornSceneInstance, UnicornSDK, UnicornAddSceneOptions, UnicornInteractivity } from './src/types/sdk'

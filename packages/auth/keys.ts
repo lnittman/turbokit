@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const keys = () =>
   createEnv({
@@ -8,14 +8,14 @@ export const keys = () =>
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('sk_'),
+          (val) => !val || val.startsWith("sk_"),
           'Must start with "sk_" if provided'
         ),
       CLERK_WEBHOOK_SECRET: z
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('whsec_'),
+          (val) => !val || val.startsWith("whsec_"),
           'Must start with "whsec_" if provided'
         ),
     },
@@ -24,35 +24,35 @@ export const keys = () =>
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('pk_'),
+          (val) => !val || val.startsWith("pk_"),
           'Must start with "pk_" if provided'
         ),
       NEXT_PUBLIC_CLERK_SIGN_IN_URL: z
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('/'),
+          (val) => !val || val.startsWith("/"),
           'Must start with "/" if provided'
         ),
       NEXT_PUBLIC_CLERK_SIGN_UP_URL: z
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('/'),
+          (val) => !val || val.startsWith("/"),
           'Must start with "/" if provided'
         ),
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('/'),
+          (val) => !val || val.startsWith("/"),
           'Must start with "/" if provided'
         ),
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z
         .string()
         .optional()
         .refine(
-          (val) => !val || val.startsWith('/'),
+          (val) => !val || val.startsWith("/"),
           'Must start with "/" if provided'
         ),
     },
@@ -61,8 +61,10 @@ export const keys = () =>
       CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET || undefined,
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
         process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || undefined,
-      NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL || undefined,
-      NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL || undefined,
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL:
+        process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL || undefined,
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL:
+        process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL || undefined,
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL:
         process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL || undefined,
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL:

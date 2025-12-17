@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import { Icon, IconNames } from "@repo/design/icons"
+import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
+import { Icon, IconNames } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function DropdownMenu({
   ...props

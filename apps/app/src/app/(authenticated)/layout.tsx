@@ -1,25 +1,23 @@
 "use client";
 
-import React from "react";
-
-import { motion } from 'framer-motion';
-import { useAtom } from 'jotai';
-
-import { useIsMobile } from "@repo/design/hooks/use-is-mobile";
-
-import { sidebarOpenAtom } from '@/atoms/layout';
-import { Sidebar } from '@/components/layout/sidebar/Sidebar';
-import { CommandMenuModal } from '@/components/layout/modal/command/menu';
-import { useKeyboardShortcuts } from '@/hooks/use-keyboard';
+import { useIsMobile } from "@spots/design/hooks/use-is-mobile";
+import { cn } from "@spots/design/lib/utils";
+import { useAtom } from "jotai";
+import type React from "react";
+import { sidebarCollapsedAtom } from "@/atoms/layout";
+import { CommandMenuModal } from "@/components/layout/modal/command/menu";
+import { Sidebar } from "@/components/layout/sidebar/Sidebar";
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps): React.ReactElement | null {
+export default function AuthenticatedLayout({
+  children,
+}: AuthenticatedLayoutProps): React.ReactElement | null {
   const { isMobile, ready } = useIsMobile();
-
-  const [isOpen] = useAtom(sidebarOpenAtom);
+  const [isCollapsed] = useAtom(sidebarCollapsedAtom);
 
   // Initialize keyboard shortcuts
   useKeyboardShortcuts();
@@ -31,22 +29,17 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
     <div className="flex min-h-screen flex-col">
       <Sidebar />
 
-      <motion.main
-        className="flex-1"
-        initial={false}
-        animate={{
-          marginLeft: isMobile ? 0 : (isOpen ? 280 : 48)
-        }}
-        transition={{
-          duration: 0.3,
-          ease: [0.32, 0.72, 0, 1]
-        }}
+      <main
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          isMobile ? "" : isCollapsed ? "lg:ml-16" : "lg:ml-64"
+        )}
       >
         {children}
-      </motion.main>
+      </main>
 
       {/* Portal components rendered at the root layout level for proper stacking context */}
       <CommandMenuModal />
     </div>
   );
-} 
+}

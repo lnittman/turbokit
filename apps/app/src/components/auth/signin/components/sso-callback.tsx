@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAtomValue } from 'jotai';
-import * as Clerk from '@clerk/elements/common';
-import * as ClerkSignIn from '@clerk/elements/sign-in';
-import { Button } from '@repo/design/components/ui/button';
+import * as Clerk from "@clerk/elements/common";
+import * as ClerkSignIn from "@clerk/elements/sign-in";
+import { Button } from "@spots/design/components/ui/button";
+import { useAtomValue } from "jotai";
+import type React from "react";
 
-import { appNameAtom, authDebugInfoAtom, authErrorAtom } from '@/atoms/auth';
+import { appNameAtom, authDebugInfoAtom, authErrorAtom } from "@/atoms/auth";
 
 interface SignInSsoCallbackStepProps {
   renderLogo?: () => React.ReactNode;
   goToHome: () => void;
 }
 
-export const SignInSsoCallbackStep: React.FC<SignInSsoCallbackStepProps> = ({ 
-  renderLogo, 
-  goToHome 
+export const SignInSsoCallbackStep: React.FC<SignInSsoCallbackStepProps> = ({
+  renderLogo,
+  goToHome,
 }) => {
   const appName = useAtomValue(appNameAtom);
   const debugInfo = useAtomValue(authDebugInfoAtom);
@@ -23,31 +23,37 @@ export const SignInSsoCallbackStep: React.FC<SignInSsoCallbackStepProps> = ({
 
   return (
     <ClerkSignIn.Step name="sso-callback">
-      <div className="text-center mb-10">
-        {renderLogo ? renderLogo() : (
-          <div className="text-4xl font-bold mb-2 text-foreground">{appName}</div>
+      <div className="mb-10 text-center">
+        {renderLogo ? (
+          renderLogo()
+        ) : (
+          <div className="mb-2 font-bold text-4xl text-foreground">
+            {appName}
+          </div>
         )}
-        <h2 className="text-xl font-medium text-foreground mt-4">Completing sign-in...</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h2 className="mt-4 font-medium text-foreground text-xl">
+          Completing sign-in...
+        </h2>
+        <p className="mt-2 text-muted-foreground text-sm">
           Please wait while we're completing your authentication
         </p>
         {debugInfo && (
-          <div className="mt-4 p-2 text-xs bg-muted text-muted-foreground rounded font-mono overflow-x-auto max-w-full">
+          <div className="mt-4 max-w-full overflow-x-auto rounded bg-muted p-2 font-mono text-muted-foreground text-xs">
             {debugInfo}
           </div>
         )}
         {error && (
-          <div className="mt-2 p-2 text-xs bg-destructive/20 text-destructive rounded font-mono overflow-x-auto max-w-full">
+          <div className="mt-2 max-w-full overflow-x-auto rounded bg-destructive/20 p-2 font-mono text-destructive text-xs">
             {error}
           </div>
         )}
       </div>
       <ClerkSignIn.Captcha />
-      <Clerk.GlobalError className="text-destructive text-sm mt-4 text-center" />
+      <Clerk.GlobalError className="mt-4 text-center text-destructive text-sm" />
       <div className="mt-4 text-center">
-        <Button 
+        <Button
+          className="mt-4 rounded-md border border-slate-300 bg-muted p-2 font-medium text-sm transition-all duration-200 hover:bg-muted/80 hover:shadow-sm dark:border-slate-700"
           onClick={goToHome}
-          className="mt-4 p-2 bg-muted hover:bg-muted/80 rounded-md text-sm font-medium transition-all duration-200 border border-slate-300 dark:border-slate-700 hover:shadow-sm"
         >
           Go to Home Page
         </Button>

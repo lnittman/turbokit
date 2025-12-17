@@ -1,17 +1,37 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import type { IconName } from "../names";
 
-function Svg({ children, className }: { children: React.ReactNode; className?: string }) {
+function Svg({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.0} strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2.0}
+      viewBox="0 0 24 24"
+    >
       {children}
     </svg>
   );
 }
 
-export function StreamlinePlumpIcon({ name, className }: { name: IconName; className?: string }) {
+export function StreamlinePlumpIcon({
+  name,
+  className,
+}: {
+  name: IconName;
+  className?: string;
+}) {
   switch (name) {
     case "x":
       return (
@@ -58,7 +78,7 @@ export function StreamlinePlumpIcon({ name, className }: { name: IconName; class
     case "panel-left":
       return (
         <Svg className={className}>
-          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <rect height="16" rx="2" width="18" x="3" y="4" />
           <path d="M9 4v16" />
         </Svg>
       );

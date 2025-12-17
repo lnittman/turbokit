@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Icon, IconNames } from "@spots/design/icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function ResizablePanelGroup({
   className,

@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-
 import { X } from "@phosphor-icons/react";
+import { Button } from "@spots/design/components/ui/button";
+import { cn } from "@spots/design/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-
-import { Button } from "@repo/design/components/ui/button";
-import { cn } from "@repo/design/lib/utils";
+import React, { useEffect, useRef } from "react";
 
 interface DetailModalProps {
   isOpen: boolean;
@@ -47,7 +45,7 @@ export function DetailModal({
 
   // Format JSON for display
   const formatContent = (data: any) => {
-    if (typeof data === 'object') {
+    if (typeof data === "object") {
       try {
         return JSON.stringify(data, null, 2);
       } catch (error) {
@@ -63,33 +61,36 @@ export function DetailModal({
         <div className="fixed inset-0 z-[100]">
           {/* Backdrop with blur */}
           <motion.div
-            className="fixed inset-0 bg-background/60 backdrop-blur-md"
-            onClick={handleBackdropClick}
-            aria-hidden="true"
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            aria-hidden="true"
+            className="fixed inset-0 bg-background/60 backdrop-blur-md"
             exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            onClick={handleBackdropClick}
             transition={{ duration: 0.2 }}
           />
 
           {/* Modal dialog */}
           <motion.div
-            className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform"
-            initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-full max-w-md transform"
             exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ scale: 0.95, opacity: 0 }}
             ref={modalRef}
+            transition={{ duration: 0.2 }}
           >
-            <div className="rounded-lg bg-background shadow-lg overflow-hidden border border-border/50 flex flex-col">
+            <div className="flex flex-col overflow-hidden rounded-lg border border-border/50 bg-background shadow-lg">
               {/* Header with close button */}
-              <div className="flex items-center justify-between border-b p-3 relative">
-                <h3 className="text-foreground text-sm font-normal">{title}</h3>
+              <div className="relative flex items-center justify-between border-b p-3">
+                <h3 className="font-normal text-foreground text-sm">{title}</h3>
                 <button
+                  className="flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-accent/50"
                   onClick={onClose}
-                  className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-accent/50 transition-colors"
                 >
-                  <X weight="duotone" className="h-4 w-4 text-muted-foreground" />
+                  <X
+                    className="h-4 w-4 text-muted-foreground"
+                    weight="duotone"
+                  />
                 </button>
               </div>
 
@@ -98,11 +99,17 @@ export function DetailModal({
                 <div className="space-y-4">
                   {sections.map((section, index) => (
                     <div key={index}>
-                      <h4 className="text-xs text-muted-foreground mb-1">{section.label}</h4>
-                      <pre className={cn(
-                        "bg-accent/20 p-2 rounded text-sm text-foreground font-mono overflow-auto",
-                        section.maxHeight ? `max-h-[${section.maxHeight}]` : "max-h-[150px]"
-                      )}>
+                      <h4 className="mb-1 text-muted-foreground text-xs">
+                        {section.label}
+                      </h4>
+                      <pre
+                        className={cn(
+                          "overflow-auto rounded bg-accent/20 p-2 font-mono text-foreground text-sm",
+                          section.maxHeight
+                            ? `max-h-[${section.maxHeight}]`
+                            : "max-h-[150px]"
+                        )}
+                      >
                         {formatContent(section.content)}
                       </pre>
                     </div>
@@ -110,13 +117,13 @@ export function DetailModal({
                 </div>
 
                 {/* Button row */}
-                <div className="flex justify-end mt-6">
+                <div className="mt-6 flex justify-end">
                   <Button
+                    className="text-xs"
+                    onClick={onClose}
+                    size="sm"
                     type="button"
                     variant="default"
-                    size="sm"
-                    onClick={onClose}
-                    className="text-xs"
                   >
                     close
                   </Button>

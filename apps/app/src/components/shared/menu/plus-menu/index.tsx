@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
 import { Plus } from "@phosphor-icons/react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { Button } from "@spots/design/components/ui/button";
+import { cn } from "@spots/design/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-
-import { Button } from "@repo/design/components/ui/button";
-import { cn } from "@repo/design/lib/utils";
+import React, { useEffect, useState } from "react";
 
 import { ManageToolsButton } from "./components/manage-tools-button";
 import { ScreenshotButton } from "./components/screenshot-button";
@@ -21,7 +19,7 @@ export function PlusMenu({ disabled = false }: PlusMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [showHoverEffect, setShowHoverEffect] = useState(false);
-  
+
   useEffect(() => {
     if (isOpen) {
       setShowHoverEffect(true);
@@ -29,48 +27,48 @@ export function PlusMenu({ disabled = false }: PlusMenuProps) {
       setShowHoverEffect(false);
     }
   }, [isOpen, isHovering]);
-  
+
   return (
     <DropdownMenuPrimitive.Root onOpenChange={setIsOpen} open={isOpen}>
       <DropdownMenuPrimitive.Trigger asChild>
-        <Button 
-          type="button" 
-          variant="outline"
-          size="icon"
+        <Button
           className={cn(
-            "h-8 w-8 border flex items-center justify-center transition-all duration-300 text-muted-foreground rounded-none",
-            showHoverEffect 
-              ? "bg-muted border-input" 
-              : "bg-muted/40 border-input/40 hover:text-foreground hover:bg-muted hover:border-input"
+            "flex h-8 w-8 items-center justify-center rounded-none border text-muted-foreground transition-all duration-300",
+            showHoverEffect
+              ? "border-input bg-muted"
+              : "border-input/40 bg-muted/40 hover:border-input hover:bg-muted hover:text-foreground"
           )}
           disabled={disabled}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
+          size="icon"
+          type="button"
+          variant="outline"
         >
-          <Plus 
-            weight="duotone" 
-            className={`h-4 w-4 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-45' : 'rotate-0'}`} 
+          <Plus
+            className={`h-4 w-4 transition-transform duration-300 ease-in-out ${isOpen ? "rotate-45" : "rotate-0"}`}
+            weight="duotone"
           />
         </Button>
       </DropdownMenuPrimitive.Trigger>
       <AnimatePresence>
         {isOpen && (
           <DropdownMenuPrimitive.Portal forceMount>
-            <DropdownMenuPrimitive.Content 
-              asChild
-              side="bottom"
+            <DropdownMenuPrimitive.Content
               align="start"
               alignOffset={0}
+              asChild
+              side="bottom"
               sideOffset={8}
             >
               <motion.div
-                className="z-50 min-w-[180px] overflow-hidden border border-border/20 bg-popover/95 backdrop-blur-sm p-1.5 shadow-md"
-                initial={{ opacity: 0, y: -4, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="z-50 min-w-[180px] overflow-hidden border border-border/20 bg-popover/95 p-1.5 shadow-md backdrop-blur-sm"
                 exit={{ opacity: 0, y: -4, scale: 0.95 }}
-                transition={{ 
+                initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                transition={{
                   duration: 0.2,
-                  ease: [0.32, 0.72, 0, 1]
+                  ease: [0.32, 0.72, 0, 1],
                 }}
               >
                 <UploadFileButton />
@@ -83,4 +81,4 @@ export function PlusMenu({ disabled = false }: PlusMenuProps) {
       </AnimatePresence>
     </DropdownMenuPrimitive.Root>
   );
-} 
+}

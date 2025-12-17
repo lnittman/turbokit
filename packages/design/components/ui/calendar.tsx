@@ -1,11 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Icon, IconNames } from "@spots/design/icons"
 import { DayPicker } from "react-day-picker"
 
-import { cn } from "@repo/design/lib/utils"
-import { buttonVariants } from "@repo/design/components/ui/button"
+import { cn } from "@spots/design/lib/utils"
+import { buttonVariants } from "@spots/design/components/ui/button"
 
 function Calendar({
   className,

@@ -1,5 +1,5 @@
 /* Import TurboKit Design System */
-@import '@repo/design/styles/globals.css';
+@import "@repo/design/styles/globals.css";
 
 /* Fumadocs-specific overrides aligned with TurboKit branding */
 :root {

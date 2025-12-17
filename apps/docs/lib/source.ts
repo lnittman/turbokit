@@ -1,9 +1,9 @@
-import { docs as collection } from '@/.source';
-import { loader } from 'fumadocs-core/source';
-import { createMDXSource } from 'fumadocs-mdx';
+import { loader } from "fumadocs-core/source";
+import { createMDXSource } from "fumadocs-mdx";
+import { docs as collection } from "@/.source";
 
 export const source = loader({
-  baseUrl: '/docs',
+  baseUrl: "/docs",
   source: createMDXSource(collection.docs as any, collection.meta as any),
 });
 

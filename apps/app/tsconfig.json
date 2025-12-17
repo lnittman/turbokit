@@ -1,10 +1,10 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@spots/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@repo/*": ["../../packages/*"]
+      "@spots/*": ["../../packages/*"]
     }
   },
   "include": [

@@ -1,11 +1,14 @@
 {
-  "name": "@repo/backend",
+  "name": "@spots/backend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "convex dev",
     "deploy": "convex deploy",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "main": "./types.ts",
   "exports": {
@@ -16,6 +19,7 @@
     "./dataModel": "./convex/_generated/dataModel.d.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.45",
     "@ai-sdk/openai": "^2.0.24",
     "@convex-dev/action-cache": "^0.2.11",
     "@convex-dev/action-retrier": "^0.2.1",
@@ -36,12 +40,18 @@
     "@useautumn/convex": "^0.0.10",
     "ai": "^5.0.33",
     "convex": "^1.26.2",
+    "google-auth-library": "^9.15.0",
     "react": "^19.2.0",
     "svix": "^1.76.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@clerk/backend": "^2.23.0",
+    "@edge-runtime/vm": "^5.0.0",
     "@types/node": "24.7.0",
-    "typescript": "^5.9.3"
+    "@types/react": "^19.2.6",
+    "convex-test": "^0.0.41",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
   }
 }

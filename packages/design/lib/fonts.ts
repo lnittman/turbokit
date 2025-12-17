@@ -1,4 +1,4 @@
-import { cn } from '@repo/design/lib/utils';
+import { cn } from '@spots/design/lib/utils';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 

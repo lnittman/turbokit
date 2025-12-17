@@ -1,32 +1,35 @@
-import './global.css';
-import { RootProvider } from 'fumadocs-ui/provider';
-import { DesignSystemProvider } from '@repo/design';
-import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
-import type { ReactNode, ReactElement } from 'react';
-import type { Metadata } from 'next';
+import "./global.css";
+import { DesignSystemProvider } from "@repo/design";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import { RootProvider } from "fumadocs-ui/provider";
+import type { Metadata } from "next";
+import type { ReactElement, ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: {
-    default: 'TurboKit Documentation',
-    template: '%s | TurboKit Docs',
+    default: "TurboKit Documentation",
+    template: "%s | TurboKit Docs",
   },
-  description: 'Build real-time Convex applications with AI-powered development tools',
-  keywords: ['turbokit', 'convex', 'nextjs', 'real-time', 'ai', 'development'],
-  authors: [{ name: 'TurboKit Team' }],
-  creator: 'TurboKit',
+  description:
+    "Build real-time Convex applications with AI-powered development tools",
+  keywords: ["turbokit", "convex", "nextjs", "real-time", "ai", "development"],
+  authors: [{ name: "TurboKit Team" }],
+  creator: "TurboKit",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://docs.turbokit.dev',
-    title: 'TurboKit Documentation',
-    description: 'Build real-time Convex applications with AI-powered development tools',
-    siteName: 'TurboKit Docs',
+    type: "website",
+    locale: "en_US",
+    url: "https://docs.turbokit.dev",
+    title: "TurboKit Documentation",
+    description:
+      "Build real-time Convex applications with AI-powered development tools",
+    siteName: "TurboKit Docs",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'TurboKit Documentation',
-    description: 'Build real-time Convex applications with AI-powered development tools',
-    creator: '@turbokit',
+    card: "summary_large_image",
+    title: "TurboKit Documentation",
+    description:
+      "Build real-time Convex applications with AI-powered development tools",
+    creator: "@turbokit",
   },
 };
 
@@ -42,7 +45,7 @@ export default function Layout({ children }: LayoutProps): ReactElement {
           <RootProvider
             theme={{
               enabled: true,
-              defaultTheme: 'system',
+              defaultTheme: "system",
             }}
           >
             {children}

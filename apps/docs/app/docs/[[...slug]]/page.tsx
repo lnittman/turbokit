@@ -1,14 +1,14 @@
-import { source } from '@/lib/source';
-import type { ReactElement } from 'react';
+import defaultMdxComponents from "fumadocs-ui/mdx";
 import {
-  DocsPage,
   DocsBody,
   DocsDescription,
+  DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { useMDXComponents } from '@/mdx-components';
+} from "fumadocs-ui/page";
+import { notFound } from "next/navigation";
+import type { ReactElement } from "react";
+import { source } from "@/lib/source";
+import { useMDXComponents } from "@/mdx-components";
 
 export default async function Page(props: any): Promise<ReactElement> {
   const { params } = props;
@@ -22,21 +22,21 @@ export default async function Page(props: any): Promise<ReactElement> {
 
   return (
     <DocsPage
-      toc={data.toc}
-      full={data.full}
-      lastUpdate={data.lastModified}
       editOnGithub={{
-        owner: 'turbokit',
-        repo: 'turbokit',
-        sha: 'main',
+        owner: "turbokit",
+        repo: "turbokit",
+        sha: "main",
         path: `docs/content/${page.file.path}`,
       }}
+      full={data.full}
+      lastUpdate={data.lastModified}
+      toc={data.toc}
     >
       <DocsTitle>{data.title}</DocsTitle>
       <DocsDescription>{data.description}</DocsDescription>
-      
+
       {/* badges removed for compatibility */}
-      
+
       <DocsBody>
         <MDX components={components} />
       </DocsBody>

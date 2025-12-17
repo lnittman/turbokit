@@ -1,44 +1,54 @@
-# TurboKit
+# Spots
 
-A modern, real-time application template powered by Convex.
+AI-powered location discovery platform built with Next.js, Convex, and Clerk.
 
 ## What's inside
 
 ### Apps
-- **`apps/app`** — Main Next.js application with Clerk auth, real-time Convex queries, and a full design system
-- **`apps/docs`** — Fumadocs-powered documentation site template for projects built with TurboKit
+- **`apps/app`** — Main Spots application with map visualization, AI-powered recommendations, and real-time features
+- **`apps/docs`** — Documentation site (Fumadocs)
 
 ### Packages
-- **`packages/backend`** — Complete Convex backend with database schema, functions, AI agents, workflows, and email templates
-- **`packages/design`** — Design system with Tailwind CSS v4, shadcn/ui components, and theme variations (brutalist, minimal, playful)
-- **`packages/auth`** — Clerk authentication wrapper with hooks and middleware for Next.js and Convex integration
-- **`packages/testing`** — Testing utilities with Vitest, Playwright, and Convex-specific test helpers
-- **`packages/typescript-config`** — Shared TypeScript configurations for different project types
-- **`packages/analytics`** — PostHog integration for user analytics and feature tracking
-- **`packages/observability`** — Monitoring setup with Sentry integration and status components
-
-### Documentation
-- **`apps/docs/`** — Live docs app (Fumadocs) you can customize per project
-- **`docs/`** — Agent developer docs (plain markdown) with role-based metaprompts
-  - `vision/` — Strategic vision and manifesto templates 
-  - `development/` — Architecture, design, product, and intelligence documentation templates
-  - Each directory includes `AGENTS.md` prompts for that domain
+- **`packages/backend`** — Convex backend with spots, interests, recommendations, AI agents, and workflows
+- **`packages/design`** — Design system with Tailwind CSS v4, shadcn/ui components, and Spots brand colors
+- **`packages/auth`** — Clerk authentication integration
+- **`packages/analytics`** — PostHog analytics integration
+- **`packages/observability`** — Sentry error tracking
+- **`packages/testing`** — Testing utilities (Vitest, Playwright)
+- **`packages/typescript-config`** — Shared TypeScript configurations
 
 ## Stack
 
 - **Frontend**: Next.js 15, React 19, Tailwind CSS v4
 - **Backend**: Convex (database, real-time queries, AI agents, workflows)
 - **Auth**: Clerk
-- **Design**: shadcn/ui, Radix UI, motion-primitives
-- **Testing**: Vitest, Playwright
-- **AI**: Convex Agent component with AI SDK v5
+- **Maps**: Mapbox GL + React Leaflet
+- **Design**: shadcn/ui, Radix UI, Framer Motion
+- **AI**: Convex Agent component with multi-provider LLM support (OpenAI, Anthropic)
 - **Email**: React Email with Resend
 
 ## Quick start
 
 ```bash
 pnpm install
+npx convex init
 pnpm dev
 ```
 
 The main app runs at `localhost:3000`.
+
+## Features
+
+- 🗺️ Interactive map-based spot discovery
+- 🤖 AI-powered personalized recommendations
+- 🏷️ Interest-based filtering and categorization
+- 📍 Location-aware search
+- 📚 Collections and trip planning
+- ⭐ Check-ins and reviews
+- 📧 Email notifications
+- 🌙 Dark/light mode
+- 📱 Mobile responsive
+
+## Development
+
+See `CLAUDE.md` for detailed architecture documentation and development guidelines.

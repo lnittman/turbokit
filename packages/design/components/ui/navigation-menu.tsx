@@ -1,9 +1,9 @@
 import * as React from "react"
-import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
+import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 import { cva } from "class-variance-authority"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Icon, IconNames } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function NavigationMenu({
   className,

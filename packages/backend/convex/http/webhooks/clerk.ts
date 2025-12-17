@@ -1,9 +1,9 @@
 /**
  * Clerk Webhook Handler
- * 
+ *
  * Handles user lifecycle events from Clerk to keep Convex database in sync.
  * Webhook endpoint: https://your-convex-url/clerk/webhook
- * 
+ *
  * Configure in Clerk Dashboard:
  * 1. Go to Webhooks in Clerk Dashboard
  * 2. Add endpoint: https://your-convex-url/clerk/webhook
@@ -11,14 +11,14 @@
  * 4. Copy signing secret to CLERK_WEBHOOK_SECRET env var
  */
 
-import { httpAction } from "../../_generated/server";
-import { internal } from "../../_generated/api";
+import type { WebhookEvent } from "@clerk/backend";
 import { Webhook } from "svix";
-import type { WebhookEvent } from "@clerk/nextjs/server";
+import { internal } from "../../_generated/api";
+import { httpAction } from "../../_generated/server";
 
 export const clerkWebhook = httpAction(async (ctx, request) => {
   const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
-  
+
   if (!webhookSecret) {
     console.error("Missing CLERK_WEBHOOK_SECRET");
     return new Response("Webhook secret not configured", { status: 500 });
@@ -30,7 +30,7 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
   const svixSignature = request.headers.get("svix-signature");
 
   // If there are no Svix headers, error out
-  if (!svixId || !svixTimestamp || !svixSignature) {
+  if (!(svixId && svixTimestamp && svixSignature)) {
     return new Response("Missing svix headers", { status: 400 });
   }
 
@@ -56,23 +56,33 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
 
   // Handle the webhook
   const eventType = evt.type;
-  
+
   switch (eventType) {
     case "user.created":
     case "user.updated": {
-      const { id, email_addresses, first_name, last_name, image_url, username } = evt.data;
-      
-      const primaryEmail = email_addresses.find(email => email.id === evt.data.primary_email_address_id);
-      
+      const {
+        id,
+        email_addresses,
+        first_name,
+        last_name,
+        image_url,
+        username,
+      } = evt.data;
+
+      const primaryEmail = email_addresses.find(
+        (email) => email.id === evt.data.primary_email_address_id
+      );
+
       await ctx.runMutation(internal.users.internal.syncUser, {
         clerkId: id,
         email: primaryEmail?.email_address || "",
-        name: [first_name, last_name].filter(Boolean).join(" ") || username || "",
+        name:
+          [first_name, last_name].filter(Boolean).join(" ") || username || "",
         imageUrl: image_url || undefined,
       });
       break;
     }
-    
+
     case "user.deleted": {
       if (evt.data.id) {
         await ctx.runMutation(internal.users.internal.deleteUserByClerkId, {
@@ -81,7 +91,7 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
       }
       break;
     }
-    
+
     default:
       console.log(`Unhandled webhook event type: ${eventType}`);
   }

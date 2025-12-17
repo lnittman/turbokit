@@ -13,9 +13,5 @@
     "packages/analytics/**",
     "scripts/**"
   ],
-  "ignoreBinaries": [
-    "vitest",
-    "playwright",
-    "npm-check-updates"
-  ]
+  "ignoreBinaries": ["vitest", "playwright", "npm-check-updates"]
 }

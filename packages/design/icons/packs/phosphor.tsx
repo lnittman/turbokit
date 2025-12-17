@@ -1,48 +1,61 @@
 "use client";
 
-import React from "react";
 import {
-  X as PhX,
-  Check as PhCheck,
-  Circle as PhCircle,
-  CaretLeft as PhCaretLeft,
-  CaretRight as PhCaretRight,
-  CaretDown as PhCaretDown,
-  CaretUp as PhCaretUp,
-  Sidebar as PhSidebar,
-  DotsSixVertical as PhDotsSixVertical,
-  MagnifyingGlass as PhSearch,
-  DotsThree as PhDotsThree,
-  Minus as PhMinus,
   ArrowLeft as PhArrowLeft,
   ArrowRight as PhArrowRight,
-  CaretRight as PhCaretRight2,
   Bell as PhBell,
-  User as PhUser,
-  GearSix as PhSettings,
+  Book as PhBook,
+  Robot as PhBot,
+  CaretDown as PhCaretDown,
+  CaretLeft as PhCaretLeft,
+  CaretRight as PhCaretRight,
+  CaretRight as PhCaretRight2,
+  CaretUp as PhCaretUp,
+  Check as PhCheck,
+  CheckCircle as PhCheckCircle,
+  Circle as PhCircle,
+  Code as PhCode,
+  Database as PhDatabase,
+  DotsSixVertical as PhDotsSixVertical,
+  DotsThree as PhDotsThree,
+  DownloadSimple as PhDownload,
+  Eye as PhEye,
+  File as PhFile,
   FileText as PhFileText,
   GithubLogo as PhGithub,
-  TwitterLogo as PhTwitter,
+  Globe as PhGlobe,
+  Image as PhImage,
+  MagnifyingGlass as PhMagnifyingGlass,
+  Minus as PhMinus,
+  Package as PhPackage,
+  Palette as PhPalette,
+  MagnifyingGlass as PhSearch,
+  GearSix as PhSettings,
+  Sidebar as PhSidebar,
   Sparkle as PhSparkles,
-  Lightning as PhZap,
-  Code as PhCode,
+  Trash as PhTrash,
+  TwitterLogo as PhTwitter,
+  UploadSimple as PhUpload,
+  User as PhUser,
   Users as PhUsers,
   UsersThree as PhUsersThree,
-  Globe as PhGlobe,
-  Database as PhDatabase,
   FlowArrow as PhWorkflow,
-  Robot as PhBot,
-  CheckCircle as PhCheckCircle,
-  Package as PhPackage,
-  Book as PhBook,
-  UploadSimple as PhUpload,
-  Image as PhImage,
-  File as PhFile,
+  X as PhX,
+  Lightning as PhZap,
 } from "@phosphor-icons/react";
+import React from "react";
 import type { IconWeight } from "../context";
 import type { IconName } from "../names";
 
-export function PhosphorIcon({ name, className, weight = "duotone" }: { name: IconName; className?: string; weight?: IconWeight }) {
+export function PhosphorIcon({
+  name,
+  className,
+  weight = "duotone",
+}: {
+  name: IconName;
+  className?: string;
+  weight?: IconWeight;
+}) {
   const common = { className, weight } as any;
   switch (name) {
     case "x":
@@ -94,7 +107,7 @@ export function PhosphorIcon({ name, className, weight = "duotone" }: { name: Ic
     case "code":
       return <PhCode {...common} />;
     case "users":
-      return (PhUsers ? <PhUsers {...common} /> : <PhUsersThree {...common} />);
+      return PhUsers ? <PhUsers {...common} /> : <PhUsersThree {...common} />;
     case "globe":
       return <PhGlobe {...common} />;
     case "database":
@@ -111,10 +124,20 @@ export function PhosphorIcon({ name, className, weight = "duotone" }: { name: Ic
       return <PhBook {...common} />;
     case "upload":
       return <PhUpload {...common} />;
+    case "download":
+      return <PhDownload {...common} />;
     case "image":
       return <PhImage {...common} />;
     case "file":
       return <PhFile {...common} />;
+    case "trash":
+      return <PhTrash {...common} />;
+    case "eye":
+      return <PhEye {...common} />;
+    case "palette":
+      return <PhPalette {...common} />;
+    case "magnifying-glass":
+      return <PhMagnifyingGlass {...common} />;
     default:
       return null;
   }

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/seo",
+  "name": "@spots/seo",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@spots/typescript-config": "workspace:*",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "24.7.0",
     "@types/react": "19.2.1",

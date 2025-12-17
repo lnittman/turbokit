@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Checkbox as CheckboxPrimitive } from "radix-ui"
+import { Icon, IconNames } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function Checkbox({
   className,

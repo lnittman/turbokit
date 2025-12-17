@@ -1,18 +1,34 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import type React from "react";
+import { createContext, useContext } from "react";
 
 export type IconPack = "phosphor" | "streamline";
-export type IconWeight = "thin" | "light" | "regular" | "bold" | "fill" | "duotone";
+export type IconWeight =
+  | "thin"
+  | "light"
+  | "regular"
+  | "bold"
+  | "fill"
+  | "duotone";
 
 export interface IconSettings {
   pack: IconPack;
   weight?: IconWeight;
 }
 
-const IconContext = createContext<IconSettings>({ pack: "phosphor", weight: "duotone" });
+const IconContext = createContext<IconSettings>({
+  pack: "phosphor",
+  weight: "duotone",
+});
 
-export function IconProvider({ settings, children }: { settings?: Partial<IconSettings>; children: React.ReactNode }) {
+export function IconProvider({
+  settings,
+  children,
+}: {
+  settings?: Partial<IconSettings>;
+  children: React.ReactNode;
+}) {
   const value: IconSettings = {
     pack: settings?.pack ?? "phosphor",
     weight: settings?.weight ?? "duotone",
@@ -23,4 +39,3 @@ export function IconProvider({ settings, children }: { settings?: Partial<IconSe
 export function useIconSettings(): IconSettings {
   return useContext(IconContext);
 }
-

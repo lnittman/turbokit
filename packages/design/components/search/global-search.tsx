@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { Button } from "@spots/design/components/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,11 +10,11 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@repo/design/components/ui/command";
-import { Button } from "@repo/design/components/ui/button";
-import { Icon, IconNames } from "@repo/design/icons";
-import type { IconName } from "@repo/design/icons/names";
-import { cn } from "@repo/design/lib/utils";
+} from "@spots/design/components/ui/command";
+import { Icon, IconNames } from "@spots/design/icons";
+import type { IconName } from "@spots/design/icons/names";
+import { cn } from "@spots/design/lib/utils";
+import React from "react";
 
 export type GlobalSearchItem = {
   id: string;
@@ -75,16 +75,20 @@ export function GlobalSearch({
   }, [items]);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} title="Search" description="Global search">
+    <CommandDialog
+      description="Global search"
+      onOpenChange={setOpen}
+      open={open}
+      title="Search"
+    >
       <CommandInput placeholder={placeholder} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         {grouped.map(([group, list]) => (
-          <CommandGroup key={group} heading={group}>
+          <CommandGroup heading={group} key={group}>
             {list.map((it) => (
               <CommandItem
                 key={it.id}
-                value={it.label}
                 onSelect={() => {
                   setOpen(false);
                   try {
@@ -92,10 +96,15 @@ export function GlobalSearch({
                     if (it.href) window.location.assign(it.href);
                   } catch {}
                 }}
+                value={it.label}
               >
-                {it.icon && <Icon name={it.icon} className="text-muted-foreground" />}
+                {it.icon && (
+                  <Icon className="text-muted-foreground" name={it.icon} />
+                )}
                 <span>{it.label}</span>
-                {it.shortcut && <CommandShortcut>{it.shortcut}</CommandShortcut>}
+                {it.shortcut && (
+                  <CommandShortcut>{it.shortcut}</CommandShortcut>
+                )}
               </CommandItem>
             ))}
           </CommandGroup>
@@ -113,23 +122,28 @@ type SearchButtonProps = {
   showKbd?: boolean;
 };
 
-export function SearchButton({ onClick, className, label = "Search", showKbd = true }: SearchButtonProps) {
+export function SearchButton({
+  onClick,
+  className,
+  label = "Search",
+  showKbd = true,
+}: SearchButtonProps) {
   return (
     <Button
-      type="button"
-      variant="outline"
+      aria-label={label}
       className={cn(
-        "h-9 gap-2 pl-2 pr-2 text-sm text-muted-foreground hover:text-foreground",
+        "h-9 gap-2 pr-2 pl-2 text-muted-foreground text-sm hover:text-foreground",
         "hidden md:inline-flex",
-        className,
+        className
       )}
       onClick={onClick}
-      aria-label={label}
+      type="button"
+      variant="outline"
     >
-      <Icon name={IconNames.Search} className="size-4" />
+      <Icon className="size-4" name={IconNames.Search} />
       <span className="hidden sm:inline">{label}</span>
       {showKbd && (
-        <kbd className="ml-2 hidden items-center gap-1 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-medium sm:flex">
+        <kbd className="ml-2 hidden items-center gap-1 rounded border bg-muted px-1.5 py-0.5 font-medium text-[10px] sm:flex">
           ⌘K
         </kbd>
       )}
@@ -151,8 +165,17 @@ export function SearchTrigger({
   const [open, setOpen] = React.useState(false);
   return (
     <>
-      <SearchButton className={buttonClassName} label={label} onClick={() => setOpen(true)} />
-      <GlobalSearch items={items} open={open} onOpenChange={setOpen} placeholder={placeholder} />
+      <SearchButton
+        className={buttonClassName}
+        label={label}
+        onClick={() => setOpen(true)}
+      />
+      <GlobalSearch
+        items={items}
+        onOpenChange={setOpen}
+        open={open}
+        placeholder={placeholder}
+      />
     </>
   );
 }

@@ -1,51 +1,36 @@
-import { query } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireAuth } from "../lib/auth";
+import { query } from "../../_generated/server";
+import { getAuthUser } from "../../lib/auth";
 
-export const getMe = query({
+export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    const { user } = await requireAuth(ctx);
-    return user;
-  },
-});
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
 
-export const getUserByClerkId = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, { clerkId }) => {
     return await ctx.db
       .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
       .unique();
   },
 });
 
-export const getUserProjects = query({
+export const getProfile = query({
   args: {},
   handler: async (ctx) => {
-    const { user } = await requireAuth(ctx);
-    const memberships = await ctx.db
-      .query("teamMembers")
+    const user = await getAuthUser(ctx);
+    const userInterests = await ctx.db
+      .query("userInterests")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
-    const projects = await Promise.all(
-      memberships.map(async (membership) => {
-        const project = await ctx.db.get(membership.projectId);
-        return project && { ...project, role: membership.role };
+
+    const interests = await Promise.all(
+      userInterests.map(async (ui) => {
+        const interest = await ctx.db.get(ui.interestId);
+        return { ...ui, interest };
       })
     );
-    return projects.filter(Boolean);
-  },
-});
 
-export const getActivities = query({
-  args: { limit: v.optional(v.number()) },
-  handler: async (ctx, { limit = 50 }) => {
-    const { user } = await requireAuth(ctx);
-    return await ctx.db
-      .query("activities")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .order("desc")
-      .take(limit);
+    return { ...user, interests: interests.filter((i) => i.interest !== null) };
   },
 });

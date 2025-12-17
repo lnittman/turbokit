@@ -1,21 +1,20 @@
-import { defineApp } from "convex/server";
-
+import actionCache from "@convex-dev/action-cache/convex.config";
+import actionRetrier from "@convex-dev/action-retrier/convex.config";
 // Convex Components (installed via app.use)
 import agent from "@convex-dev/agent/convex.config";
-import workflow from "@convex-dev/workflow/convex.config";
-import crons from "@convex-dev/crons/convex.config";
-import rateLimiter from "@convex-dev/rate-limiter/convex.config";
-import migrations from "@convex-dev/migrations/convex.config";
 import aggregate from "@convex-dev/aggregate/convex.config";
-import actionRetrier from "@convex-dev/action-retrier/convex.config";
-import resend from "@convex-dev/resend/convex.config";
-import rag from "@convex-dev/rag/convex.config";
+import crons from "@convex-dev/crons/convex.config";
+import migrations from "@convex-dev/migrations/convex.config";
+import streaming from "@convex-dev/persistent-text-streaming/convex.config";
 import presence from "@convex-dev/presence/convex.config";
 import r2 from "@convex-dev/r2/convex.config";
-import actionCache from "@convex-dev/action-cache/convex.config";
-import streaming from "@convex-dev/persistent-text-streaming/convex.config";
+import rag from "@convex-dev/rag/convex.config";
+import rateLimiter from "@convex-dev/rate-limiter/convex.config";
+import resend from "@convex-dev/resend/convex.config";
+import workflow from "@convex-dev/workflow/convex.config";
 import workpool from "@convex-dev/workpool/convex.config";
 import autumn from "@useautumn/convex/convex.config";
+import { defineApp } from "convex/server";
 
 const app: any = defineApp();
 

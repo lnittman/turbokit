@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Icon, IconNames } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function InputOTP({
   className,

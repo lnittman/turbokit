@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import { Icon } from "@repo/design/icons"
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui"
+import { Icon } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 
 function RadioGroup({
   className,

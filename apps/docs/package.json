@@ -9,7 +9,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
-    "@repo/design": "workspace:*",
+    "@spots/design": "workspace:*",
     "@vercel/analytics": "^1.5.0",
     "fumadocs-core": "^15.7.9",
     "fumadocs-docgen": "^3.0.0",
@@ -23,7 +23,7 @@
     "framer-motion": "^12.23.12"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@spots/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.13",
     "@types/node": "24.7.0",
     "@types/react": "19.2.1",

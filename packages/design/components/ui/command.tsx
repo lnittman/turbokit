@@ -2,16 +2,16 @@
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
-import { Icon, IconNames } from "@repo/design/icons"
+import { Icon, IconNames } from "@spots/design/icons"
 
-import { cn } from "@repo/design/lib/utils"
+import { cn } from "@spots/design/lib/utils"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@repo/design/components/ui/dialog"
+} from "@spots/design/components/ui/dialog"
 
 function Command({
   className,

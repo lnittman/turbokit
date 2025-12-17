@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@spots/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "plugins": [
@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["./*"],
       "contentlayer/generated": ["./.contentlayer/generated"],
-      "@repo/*": ["../../packages/*"]
+      "@spots/*": ["../../packages/*"]
     }
   },
   "include": [
@@ -20,8 +20,5 @@
     ".next/types/**/*.ts",
     ".contentlayer/generated"
   ],
-  "exclude": [
-    "node_modules",
-    ".source/**"
-  ]
+  "exclude": ["node_modules", ".source/**"]
 }

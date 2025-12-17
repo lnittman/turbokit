@@ -1,18 +1,24 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-
-import { MagnifyingGlass as Search, Sparkle as Sparkles, GearSix as Settings, User, FileText, Bell } from "@phosphor-icons/react";
+import {
+  Bell,
+  FileText,
+  MagnifyingGlass as Search,
+  GearSix as Settings,
+  Sparkle as Sparkles,
+  User,
+} from "@phosphor-icons/react";
+import { Dialog, DialogContent } from "@spots/design/components/ui/dialog";
+import { Input } from "@spots/design/components/ui/input";
+import { useMediaQuery } from "@spots/design/hooks/use-media-query";
+import { cn } from "@spots/design/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useAtom } from 'jotai';
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Dialog, DialogContent } from '@repo/design/components/ui/dialog';
-import { Input } from '@repo/design/components/ui/input';
-import { useMediaQuery } from "@repo/design/hooks/use-media-query";
-import { cn } from "@repo/design/lib/utils";
-
-import { commandMenuOpenAtom } from '@/atoms/layout';
+import { commandMenuOpenAtom } from "@/atoms/layout";
 
 interface CommandItem {
   id: string;
@@ -27,56 +33,56 @@ interface CommandItem {
 // Default command items - replace with your domain-specific items
 const defaultCommands: CommandItem[] = [
   {
-    id: 'search',
-    title: 'Search',
-    description: 'Search across all content',
-    icon: <Search className="w-4 h-4" />,
-    shortcut: '⌘K',
-    action: () => console.log('Search'),
-    category: 'General'
+    id: "search",
+    title: "Search",
+    description: "Search across all content",
+    icon: <Search className="h-4 w-4" />,
+    shortcut: "⌘K",
+    action: () => console.log("Search"),
+    category: "General",
   },
   {
-    id: 'create',
-    title: 'Create New',
-    description: 'Create a new item',
-    icon: <Sparkles className="w-4 h-4" />,
-    shortcut: '⌘N',
-    action: () => console.log('Create'),
-    category: 'Actions'
+    id: "create",
+    title: "Create New",
+    description: "Create a new item",
+    icon: <Sparkles className="h-4 w-4" />,
+    shortcut: "⌘N",
+    action: () => console.log("Create"),
+    category: "Actions",
   },
   {
-    id: 'settings',
-    title: 'Settings',
-    description: 'Open settings',
-    icon: <Settings className="w-4 h-4" />,
-    shortcut: '⌘,',
-    action: () => console.log('Settings'),
-    category: 'Navigation'
+    id: "settings",
+    title: "Settings",
+    description: "Open settings",
+    icon: <Settings className="h-4 w-4" />,
+    shortcut: "⌘,",
+    action: () => console.log("Settings"),
+    category: "Navigation",
   },
   {
-    id: 'profile',
-    title: 'Profile',
-    description: 'View your profile',
-    icon: <User className="w-4 h-4" />,
-    action: () => console.log('Profile'),
-    category: 'Navigation'
+    id: "profile",
+    title: "Profile",
+    description: "View your profile",
+    icon: <User className="h-4 w-4" />,
+    action: () => console.log("Profile"),
+    category: "Navigation",
   },
   {
-    id: 'docs',
-    title: 'Documentation',
-    description: 'View documentation',
-    icon: <FileText className="w-4 h-4" />,
-    action: () => window.open('/docs', '_blank'),
-    category: 'Help'
+    id: "docs",
+    title: "Documentation",
+    description: "View documentation",
+    icon: <FileText className="h-4 w-4" />,
+    action: () => window.open("/docs", "_blank"),
+    category: "Help",
   },
   {
-    id: 'notifications',
-    title: 'Notifications',
-    description: 'View notifications',
-    icon: <Bell className="w-4 h-4" />,
-    action: () => console.log('Notifications'),
-    category: 'Navigation'
-  }
+    id: "notifications",
+    title: "Notifications",
+    description: "View notifications",
+    icon: <Bell className="h-4 w-4" />,
+    action: () => console.log("Notifications"),
+    category: "Navigation",
+  },
 ];
 
 export function CommandMenuModal(): React.ReactElement {
@@ -88,21 +94,25 @@ export function CommandMenuModal(): React.ReactElement {
   const router = useRouter();
 
   // Filter commands based on search query
-  const filteredCommands = defaultCommands.filter(command => 
-    command.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    command.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    command.category?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCommands = defaultCommands.filter(
+    (command) =>
+      command.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      command.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      command.category?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Group commands by category
-  const groupedCommands = filteredCommands.reduce((acc, command) => {
-    const category = command.category || 'Other';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(command);
-    return acc;
-  }, {} as Record<string, CommandItem[]>);
+  const groupedCommands = filteredCommands.reduce(
+    (acc, command) => {
+      const category = command.category || "Other";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(command);
+      return acc;
+    },
+    {} as Record<string, CommandItem[]>
+  );
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -110,34 +120,34 @@ export function CommandMenuModal(): React.ReactElement {
       if (!isOpen) return;
 
       switch (e.key) {
-        case 'ArrowDown':
+        case "ArrowDown":
           e.preventDefault();
-          setSelectedIndex(prev => 
+          setSelectedIndex((prev) =>
             prev < filteredCommands.length - 1 ? prev + 1 : 0
           );
           break;
-        case 'ArrowUp':
+        case "ArrowUp":
           e.preventDefault();
-          setSelectedIndex(prev => 
+          setSelectedIndex((prev) =>
             prev > 0 ? prev - 1 : filteredCommands.length - 1
           );
           break;
-        case 'Enter':
+        case "Enter":
           e.preventDefault();
           if (filteredCommands[selectedIndex]) {
             filteredCommands[selectedIndex].action();
             setIsOpen(false);
           }
           break;
-        case 'Escape':
+        case "Escape":
           e.preventDefault();
           setIsOpen(false);
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, selectedIndex, filteredCommands, setIsOpen]);
 
   // Reset state when opened
@@ -150,22 +160,22 @@ export function CommandMenuModal(): React.ReactElement {
   }, [isOpen]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden">
-        <div className="flex flex-col h-[500px]">
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
+      <DialogContent className="max-w-2xl overflow-hidden p-0">
+        <div className="flex h-[500px] flex-col">
           {/* Search Header */}
-          <div className="border-b border-border p-4">
+          <div className="border-border border-b p-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
               <Input
-                ref={inputRef}
-                value={searchQuery}
+                className="h-12 border-0 pr-4 pl-10 text-base focus-visible:ring-0"
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
                 placeholder="Type a command or search..."
-                className="pl-10 pr-4 h-12 border-0 focus-visible:ring-0 text-base"
+                ref={inputRef}
+                value={searchQuery}
               />
             </div>
           </div>
@@ -173,45 +183,47 @@ export function CommandMenuModal(): React.ReactElement {
           {/* Command List */}
           <div className="flex-1 overflow-y-auto p-2">
             {Object.entries(groupedCommands).map(([category, commands]) => (
-              <div key={category} className="mb-4">
-                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+              <div className="mb-4" key={category}>
+                <div className="px-2 py-1.5 font-medium text-muted-foreground text-xs">
                   {category}
                 </div>
                 {commands.map((command, index) => {
                   const globalIndex = filteredCommands.indexOf(command);
                   const isSelected = globalIndex === selectedIndex;
-                  
+
                   return (
                     <motion.button
+                      animate={{ opacity: 1, y: 0 }}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors",
+                        isSelected ? "bg-accent" : "hover:bg-accent/50"
+                      )}
+                      initial={{ opacity: 0, y: -10 }}
                       key={command.id}
                       onClick={() => {
                         command.action();
                         setIsOpen(false);
                       }}
                       onMouseEnter={() => setSelectedIndex(globalIndex)}
-                      className={cn(
-                        "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left transition-colors",
-                        isSelected ? "bg-accent" : "hover:bg-accent/50"
-                      )}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.02 }}
                     >
                       {command.icon && (
-                        <div className="flex-shrink-0 w-8 h-8 rounded-md bg-background border border-border flex items-center justify-center">
+                        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border bg-background">
                           {command.icon}
                         </div>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm">{command.title}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="font-medium text-sm">
+                          {command.title}
+                        </div>
                         {command.description && (
-                          <div className="text-xs text-muted-foreground truncate">
+                          <div className="truncate text-muted-foreground text-xs">
                             {command.description}
                           </div>
                         )}
                       </div>
                       {command.shortcut && (
-                        <kbd className="px-2 py-0.5 text-xs bg-background border border-border rounded">
+                        <kbd className="rounded border border-border bg-background px-2 py-0.5 text-xs">
                           {command.shortcut}
                         </kbd>
                       )}
@@ -220,34 +232,40 @@ export function CommandMenuModal(): React.ReactElement {
                 })}
               </div>
             ))}
-            
+
             {filteredCommands.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="py-12 text-center text-muted-foreground">
                 No commands found for "{searchQuery}"
               </div>
             )}
           </div>
 
           {/* Footer */}
-          <div className="border-t border-border px-4 py-2 flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between border-border border-t px-4 py-2 text-muted-foreground text-xs">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-xs">↑</kbd>
-                <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-xs">↓</kbd>
+                <kbd className="rounded border border-border bg-background px-1.5 py-0.5 text-xs">
+                  ↑
+                </kbd>
+                <kbd className="rounded border border-border bg-background px-1.5 py-0.5 text-xs">
+                  ↓
+                </kbd>
                 Navigate
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-xs">⏎</kbd>
+                <kbd className="rounded border border-border bg-background px-1.5 py-0.5 text-xs">
+                  ⏎
+                </kbd>
                 Select
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-xs">ESC</kbd>
+                <kbd className="rounded border border-border bg-background px-1.5 py-0.5 text-xs">
+                  ESC
+                </kbd>
                 Close
               </span>
             </div>
-            <div>
-              {filteredCommands.length} results
-            </div>
+            <div>{filteredCommands.length} results</div>
           </div>
         </div>
       </DialogContent>

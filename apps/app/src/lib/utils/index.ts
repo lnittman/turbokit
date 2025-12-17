@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 /**
  * A utility function that combines multiple class names and properly merges Tailwind CSS classes
  * using clsx and tailwind-merge.
- * 
+ *
  * @param inputs - Class values to merge
  * @returns - Merged class string
  */
@@ -19,9 +19,9 @@ export function createSlug(str: string): string {
   return str
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 /**
@@ -32,13 +32,13 @@ export function debounce<T extends (...args: any[]) => any>(
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  
-  return function(...args: Parameters<T>): void {
+
+  return (...args: Parameters<T>): void => {
     const later = () => {
       timeout = null;
       func(...args);
     };
-    
+
     if (timeout !== null) {
       clearTimeout(timeout);
     }
@@ -50,12 +50,12 @@ export function debounce<T extends (...args: any[]) => any>(
  * Delay execution for a given time
  */
 export function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
  * Extracts the domain name from a URL.
- * 
+ *
  * @param url - URL to extract domain from
  * @returns - Domain name
  */
@@ -64,7 +64,7 @@ export function extractDomain(url: string): string {
     const urlObj = new URL(formatUrl(url));
     return urlObj.hostname;
   } catch (error) {
-    console.error('Error extracting domain:', error);
+    console.error("Error extracting domain:", error);
     return url;
   }
 }
@@ -96,10 +96,10 @@ export function formatUrl(url: string): string {
   if (!url) return "";
 
   // If URL doesn't start with a protocol, add https://
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+  if (!(url.startsWith("http://") || url.startsWith("https://"))) {
     return `https://${url}`;
   }
-  
+
   return url;
 }
 
@@ -136,12 +136,12 @@ export function truncate(str: string, length: number): string {
 
 /**
  * Truncates text to a maximum length, adding an ellipsis if truncated.
- * 
+ *
  * @param text - Text to truncate
  * @param maxLength - Maximum length
  * @returns - Truncated text
  */
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
+  return text.slice(0, maxLength) + "...";
 }

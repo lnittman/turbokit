@@ -1,37 +1,39 @@
-'use client';
+"use client";
 
-import React from 'react';
-import * as Clerk from '@clerk/elements/common';
-import * as ClerkSignIn from '@clerk/elements/sign-in';
+import * as Clerk from "@clerk/elements/common";
+import * as ClerkSignIn from "@clerk/elements/sign-in";
+import type React from "react";
 
 export const SignInForgotPasswordStep: React.FC = () => {
   return (
     <ClerkSignIn.Step name="forgot-password">
-      <div className="text-center mb-6">
-        <h1 className="text-xl font-bold text-foreground">reset your password</h1>
-        <p className="text-sm mt-2 text-muted-foreground">
+      <div className="mb-6 text-center">
+        <h1 className="font-bold text-foreground text-xl">
+          reset your password
+        </h1>
+        <p className="mt-2 text-muted-foreground text-sm">
           enter your email and we'll send you a reset link
         </p>
       </div>
-      
-      <Clerk.Field name="identifier" className="mb-5">
-        <Clerk.Label className="block text-sm font-medium mb-2 text-foreground">email</Clerk.Label>
-        <Clerk.Input 
-          className="w-full p-3 bg-card border-border border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-ring" 
-        />
-        <Clerk.FieldError className="text-destructive text-xs mt-2" />
+
+      <Clerk.Field className="mb-5" name="identifier">
+        <Clerk.Label className="mb-2 block font-medium text-foreground text-sm">
+          email
+        </Clerk.Label>
+        <Clerk.Input className="w-full rounded-md border border-border bg-card p-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring" />
+        <Clerk.FieldError className="mt-2 text-destructive text-xs" />
       </Clerk.Field>
-      
+
       <div className="flex flex-col gap-3">
-        <div className="w-full p-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md text-sm font-medium text-center transition-colors">
+        <div className="w-full rounded-md bg-primary p-3 text-center font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90">
           <ClerkSignIn.SupportedStrategy name="reset_password_email_code">
             reset password
           </ClerkSignIn.SupportedStrategy>
         </div>
-        
-        <ClerkSignIn.Action 
+
+        <ClerkSignIn.Action
+          className="block w-full cursor-pointer text-center text-muted-foreground text-sm hover:text-foreground"
           navigate="previous"
-          className="text-center block w-full text-sm text-muted-foreground hover:text-foreground cursor-pointer"
         >
           back to sign in
         </ClerkSignIn.Action>

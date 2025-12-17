@@ -1,15 +1,15 @@
 import { useAuth as useClerkAuth } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
 import { api } from "@repo/backend/api";
+import { useQuery } from "convex/react";
 
 export function useUser() {
   const { userId: clerkId } = useClerkAuth();
-  
+
   const user = useQuery(
     api.functions.queries.users.getUserByClerkId,
     clerkId ? { clerkId } : "skip"
   );
-  
+
   return {
     user,
     isLoading: user === undefined && clerkId !== null,
@@ -19,7 +19,7 @@ export function useUser() {
 
 export function useCurrentUser() {
   const user = useQuery(api.functions.queries.users.getMe);
-  
+
   return {
     user,
     isLoading: user === undefined,
@@ -29,7 +29,7 @@ export function useCurrentUser() {
 
 export function useUserProjects() {
   const projects = useQuery(api.functions.queries.users.getUserProjects);
-  
+
   return {
     projects: projects || [],
     isLoading: projects === undefined,
@@ -37,11 +37,10 @@ export function useUserProjects() {
 }
 
 export function useActivities(limit?: number) {
-  const activities = useQuery(
-    api.functions.queries.users.getActivities,
-    { limit }
-  );
-  
+  const activities = useQuery(api.functions.queries.users.getActivities, {
+    limit,
+  });
+
   return {
     activities: activities || [],
     isLoading: activities === undefined,

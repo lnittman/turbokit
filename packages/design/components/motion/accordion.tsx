@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { motion, AnimatePresence, type Transition, type Variant } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import {
+  AnimatePresence,
+  motion,
+  type Transition,
+  type Variant,
+} from "framer-motion";
+import * as React from "react";
+import { cn } from "../../lib/utils";
 
 interface AccordionContextValue {
   expandedValue: React.Key | null;
@@ -14,7 +19,9 @@ interface AccordionContextValue {
   transition?: Transition;
 }
 
-const AccordionContext = React.createContext<AccordionContextValue | undefined>(undefined);
+const AccordionContext = React.createContext<AccordionContextValue | undefined>(
+  undefined
+);
 
 interface AccordionProps {
   children: React.ReactNode;
@@ -38,22 +45,22 @@ export function Accordion({
   onValueChange,
   defaultExpandedValue = null,
 }: AccordionProps) {
-  const [internalExpandedValue, setInternalExpandedValue] = React.useState<React.Key | null>(
-    defaultExpandedValue
-  );
+  const [internalExpandedValue, setInternalExpandedValue] =
+    React.useState<React.Key | null>(defaultExpandedValue);
 
-  const expandedValue = controlledExpandedValue !== undefined 
-    ? controlledExpandedValue 
-    : internalExpandedValue;
+  const expandedValue =
+    controlledExpandedValue !== undefined
+      ? controlledExpandedValue
+      : internalExpandedValue;
 
   const toggleItem = React.useCallback(
     (value: React.Key) => {
       const newValue = expandedValue === value ? null : value;
-      
+
       if (controlledExpandedValue === undefined) {
         setInternalExpandedValue(newValue);
       }
-      
+
       onValueChange?.(newValue);
     },
     [expandedValue, onValueChange, controlledExpandedValue]
@@ -68,7 +75,7 @@ export function Accordion({
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <div className={cn('space-y-2', className)}>{children}</div>
+      <div className={cn("space-y-2", className)}>{children}</div>
     </AccordionContext.Provider>
   );
 }
@@ -79,17 +86,21 @@ interface AccordionItemProps {
   className?: string;
 }
 
-export function AccordionItem({ value, children, className }: AccordionItemProps) {
+export function AccordionItem({
+  value,
+  children,
+  className,
+}: AccordionItemProps) {
   const context = React.useContext(AccordionContext);
   if (!context) {
-    throw new Error('AccordionItem must be used within an Accordion');
+    throw new Error("AccordionItem must be used within an Accordion");
   }
 
   const isExpanded = context.expandedValue === value;
 
   return (
-    <div 
-      className={cn('border rounded-lg', className)} 
+    <div
+      className={cn("rounded-lg border", className)}
       data-expanded={isExpanded || undefined}
     >
       {children}
@@ -102,29 +113,32 @@ interface AccordionTriggerProps {
   className?: string;
 }
 
-export function AccordionTrigger({ children, className }: AccordionTriggerProps) {
+export function AccordionTrigger({
+  children,
+  className,
+}: AccordionTriggerProps) {
   const context = React.useContext(AccordionContext);
   if (!context) {
-    throw new Error('AccordionTrigger must be used within an AccordionItem');
+    throw new Error("AccordionTrigger must be used within an AccordionItem");
   }
 
   const itemContext = React.useContext(AccordionItemContext);
   if (!itemContext) {
-    throw new Error('AccordionTrigger must be used within an AccordionItem');
+    throw new Error("AccordionTrigger must be used within an AccordionItem");
   }
 
   const isExpanded = context.expandedValue === itemContext.value;
 
   return (
     <button
-      type="button"
-      onClick={() => context.toggleItem(itemContext.value)}
+      aria-expanded={isExpanded}
       className={cn(
-        'flex w-full items-center justify-between p-4 text-left font-medium transition-all hover:bg-accent/50',
-        'group',
+        "flex w-full items-center justify-between p-4 text-left font-medium transition-all hover:bg-accent/50",
+        "group",
         className
       )}
-      aria-expanded={isExpanded}
+      onClick={() => context.toggleItem(itemContext.value)}
+      type="button"
     >
       {children}
     </button>
@@ -136,43 +150,46 @@ interface AccordionContentProps {
   className?: string;
 }
 
-const AccordionItemContext = React.createContext<{ value: React.Key } | undefined>(
-  undefined
-);
+const AccordionItemContext = React.createContext<
+  { value: React.Key } | undefined
+>(undefined);
 
-export function AccordionContent({ children, className }: AccordionContentProps) {
+export function AccordionContent({
+  children,
+  className,
+}: AccordionContentProps) {
   const context = React.useContext(AccordionContext);
   if (!context) {
-    throw new Error('AccordionContent must be used within an Accordion');
+    throw new Error("AccordionContent must be used within an Accordion");
   }
 
   const itemContext = React.useContext(AccordionItemContext);
   if (!itemContext) {
-    throw new Error('AccordionContent must be used within an AccordionItem');
+    throw new Error("AccordionContent must be used within an AccordionItem");
   }
 
   const isExpanded = context.expandedValue === itemContext.value;
 
   const defaultVariants = {
-    expanded: { height: 'auto', opacity: 1 },
+    expanded: { height: "auto", opacity: 1 },
     collapsed: { height: 0, opacity: 0 },
   };
 
   const defaultTransition: Transition = {
     duration: 0.3,
-    ease: 'easeInOut',
+    ease: "easeInOut",
   };
 
   return (
     <AnimatePresence initial={false}>
       {isExpanded && (
         <motion.div
-          initial="collapsed"
           animate="expanded"
+          className={cn("overflow-hidden", className)}
           exit="collapsed"
-          variants={context.variants || defaultVariants}
+          initial="collapsed"
           transition={context.transition || defaultTransition}
-          className={cn('overflow-hidden', className)}
+          variants={context.variants || defaultVariants}
         >
           <div className="p-4 pt-0">{children}</div>
         </motion.div>
@@ -182,18 +199,22 @@ export function AccordionContent({ children, className }: AccordionContentProps)
 }
 
 // Update AccordionItem to provide context
-export function AccordionItemWithContext({ value, children, className }: AccordionItemProps) {
+export function AccordionItemWithContext({
+  value,
+  children,
+  className,
+}: AccordionItemProps) {
   const context = React.useContext(AccordionContext);
   if (!context) {
-    throw new Error('AccordionItem must be used within an Accordion');
+    throw new Error("AccordionItem must be used within an Accordion");
   }
 
   const isExpanded = context.expandedValue === value;
 
   return (
     <AccordionItemContext.Provider value={{ value }}>
-      <div 
-        className={cn('border rounded-lg', className)} 
+      <div
+        className={cn("rounded-lg border", className)}
         data-expanded={isExpanded || undefined}
       >
         {children}

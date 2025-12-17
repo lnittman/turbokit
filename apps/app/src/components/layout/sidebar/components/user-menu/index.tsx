@@ -1,21 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
-
 import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
-import { SignOut, CaretDown, CaretUp, Gear, Moon, Sun, Desktop } from "@phosphor-icons/react";
+import {
+  CaretDown,
+  CaretUp,
+  Desktop,
+  Gear,
+  Moon,
+  SignOut,
+  Sun,
+} from "@phosphor-icons/react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { motion, AnimatePresence } from "framer-motion";
+import { Tabs, TabsList, TabsTrigger } from "@spots/design/components/ui/tabs";
+import { useMediaQuery } from "@spots/design/hooks/use-media-query";
+import { cn } from "@spots/design/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-
-import { Tabs, TabsList, TabsTrigger } from "@repo/design/components/ui/tabs";
-import { useMediaQuery } from "@repo/design/hooks/use-media-query";
-import { cn } from "@repo/design/lib/utils";
-
-import { themeAtom } from "@/atoms/theme";
+import { useTheme } from "next-themes";
+import type React from "react";
+import { useState } from "react";
 import { sidebarOpenAtom } from "@/atoms/layout";
+import { themeAtom } from "@/atoms/theme";
 
 export function UserMenu(): React.ReactElement | null {
   const isClerkConfigured = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -36,105 +42,112 @@ export function UserMenu(): React.ReactElement | null {
   // Get user initials for avatar fallback
   const initials = user?.fullName
     ? user.fullName
-      .split(" ")
-      .map((name) => name[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2)
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
+        .toUpperCase()
+        .substring(0, 2)
     : user?.emailAddresses?.[0]?.emailAddress?.charAt(0).toUpperCase() || "?";
 
   const handleThemeChange = (value: string) => {
     // Update both state stores
-    setTheme(value as 'light' | 'dark' | 'system');
+    setTheme(value as "light" | "dark" | "system");
     setNextTheme(value);
   };
 
   // Navigate to settings page
   const handleOpenSettings = () => {
     setMenuOpen(false);
-    router.push('/settings');
+    router.push("/settings");
   };
 
   if (!isLoaded) return null;
 
   return (
-    <motion.div 
-      initial={false}
-      animate={{ 
-        opacity: isDesktop ? 1 : (isOpen ? 1 : 0),
-        pointerEvents: isDesktop || isOpen ? 'auto' : 'none'
+    <motion.div
+      animate={{
+        opacity: isDesktop ? 1 : isOpen ? 1 : 0,
+        pointerEvents: isDesktop || isOpen ? "auto" : "none",
       }}
+      initial={false}
       transition={{ duration: 0.3 }}
     >
-      <DropdownMenuPrimitive.Root open={menuOpen} onOpenChange={setMenuOpen}>
+      <DropdownMenuPrimitive.Root onOpenChange={setMenuOpen} open={menuOpen}>
         <DropdownMenuPrimitive.Trigger asChild>
           <button
             className={cn(
-              "h-8 flex items-center transition-colors w-full relative group",
+              "group relative flex h-8 w-full items-center transition-colors",
               isOpen && "hover:bg-accent/50",
               menuOpen && isOpen && "bg-accent/40"
             )}
             style={{ width: "260px" }}
           >
-            <div className="w-8 flex-none flex items-center justify-center">
+            <div className="flex w-8 flex-none items-center justify-center">
               <motion.div
                 className={cn(
-                  "h-8 w-8 bg-background text-foreground flex items-center justify-center text-xs font-medium flex-shrink-0 border border-border/40 hover:border-border transition-all duration-150",
+                  "flex h-8 w-8 flex-shrink-0 items-center justify-center border border-border/40 bg-background font-medium text-foreground text-xs transition-all duration-150 hover:border-border"
                 )}
               >
                 {initials}
               </motion.div>
             </div>
-            
+
             <AnimatePresence>
-                <div 
-                style={{
-                  opacity: isOpen ? 1 : 0,
-                  transition: "opacity 0.15s ease-in-out"
-                }}
+              <div
                 className={cn(
                   "opacity-0 transition-opacity duration-150",
                   isOpen && "opacity-100"
-                )}>
-                  <motion.span
-                    className={cn(
-                      "text-sm pl-1 text-muted-foreground group-hover:text-foreground transition-colors duration-150",
-                      menuOpen && "text-foreground"
+                )}
+                style={{
+                  opacity: isOpen ? 1 : 0,
+                  transition: "opacity 0.15s ease-in-out",
+                }}
+              >
+                <motion.span
+                  animate={{ opacity: 1 }}
+                  className={cn(
+                    "pl-1 text-muted-foreground text-sm transition-colors duration-150 group-hover:text-foreground",
+                    menuOpen && "text-foreground"
+                  )}
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
+                >
+                  {user?.firstName || "User"}
+                </motion.span>
+
+                <div className="-translate-y-1/2 absolute top-1/2 right-2">
+                  <AnimatePresence initial={false} mode="wait">
+                    {menuOpen ? (
+                      <motion.div
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -2 }}
+                        initial={{ opacity: 0, y: 2 }}
+                        key="up"
+                        transition={{ duration: 0.15 }}
+                      >
+                        <CaretUp
+                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
+                          weight="duotone"
+                        />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 2 }}
+                        initial={{ opacity: 0, y: -2 }}
+                        key="down"
+                        transition={{ duration: 0.15 }}
+                      >
+                        <CaretDown
+                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
+                          weight="duotone"
+                        />
+                      </motion.div>
                     )}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
-                  >
-                    {user?.firstName || "User"}
-                  </motion.span>
-                  
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    <AnimatePresence mode="wait" initial={false}>
-                      {menuOpen ? (
-                        <motion.div
-                          key="up"
-                          initial={{ opacity: 0, y: 2 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -2 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <CaretUp weight="duotone" className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="down"
-                          initial={{ opacity: 0, y: -2 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 2 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <CaretDown weight="duotone" className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  </AnimatePresence>
                 </div>
+              </div>
             </AnimatePresence>
           </button>
         </DropdownMenuPrimitive.Trigger>
@@ -143,106 +156,116 @@ export function UserMenu(): React.ReactElement | null {
           {menuOpen && (
             <DropdownMenuPrimitive.Portal forceMount>
               <DropdownMenuPrimitive.Content
+                align={isOpen ? "center" : "start"}
                 asChild
                 className={cn(
-                  "z-[500] min-w-[262px] overflow-hidden border border-border/20 bg-popover/95 backdrop-blur-sm p-1.5 shadow-xl",
+                  "z-[500] min-w-[262px] overflow-hidden border border-border/20 bg-popover/95 p-1.5 shadow-xl backdrop-blur-sm",
                   "data-[side=bottom]:origin-top data-[side=top]:origin-bottom"
                 )}
-                align={isOpen ? "center" : "start"}
                 side="top"
                 sideOffset={8}
               >
                 <motion.div
-                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 4 }}
+                  initial={{ opacity: 0, y: 8 }}
                   transition={{
                     type: "spring",
                     stiffness: 500,
                     damping: 30,
-                    mass: 0.8
+                    mass: 0.8,
                   }}
                 >
-                  <div className="px-2 py-1.5 mb-1 border-b border-slate-500/10">
-                    <p className="text-sm font-medium text-foreground">{user?.fullName}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{user?.emailAddresses?.[0]?.emailAddress}</p>
+                  <div className="mb-1 border-slate-500/10 border-b px-2 py-1.5">
+                    <p className="font-medium text-foreground text-sm">
+                      {user?.fullName}
+                    </p>
+                    <p className="mt-0.5 text-muted-foreground text-xs">
+                      {user?.emailAddresses?.[0]?.emailAddress}
+                    </p>
                   </div>
 
                   <DropdownMenuPrimitive.Item
                     className={cn(
-                      "relative flex cursor-pointer select-none items-center px-2 py-1.5 text-sm outline-none transition-colors duration-300 text-foreground/90 focus:text-foreground",
-                      "focus:bg-accent focus:text-accent-foreground mt-1 transition-colors duration-300",
+                      "relative flex cursor-pointer select-none items-center px-2 py-1.5 text-foreground/90 text-sm outline-none transition-colors duration-300 focus:text-foreground",
+                      "mt-1 transition-colors duration-300 focus:bg-accent focus:text-accent-foreground",
                       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                     )}
                     onClick={handleOpenSettings}
                   >
-                    <Gear className="w-4 h-4 mr-2" weight="duotone" />
+                    <Gear className="mr-2 h-4 w-4" weight="duotone" />
                     <span>settings</span>
                   </DropdownMenuPrimitive.Item>
 
                   {/* Divider before theme switcher */}
-                  <div className="my-1.5 border-t border-slate-500/10"></div>
+                  <div className="my-1.5 border-slate-500/10 border-t" />
 
                   {/* Theme selector using Tabs component - no title */}
                   <Tabs
-                    defaultValue={theme}
-                    value={theme}
-                    onValueChange={handleThemeChange}
                     className="flex flex-col"
+                    defaultValue={theme}
+                    onValueChange={handleThemeChange}
+                    value={theme}
                   >
-                    <TabsList className="bg-accent/30 w-full h-9 p-1 grid grid-cols-3 gap-1 relative">
+                    <TabsList className="relative grid h-9 w-full grid-cols-3 gap-1 bg-accent/30 p-1">
                       {/* Tab triggers with static icons (no animations) */}
                       <TabsTrigger
+                        className="z-10 flex h-full w-full items-center justify-center transition-all duration-300 hover:bg-background/60 focus:outline-none"
                         value="light"
-                        className="h-full w-full transition-all duration-300 hover:bg-background/60 focus:outline-none flex items-center justify-center z-10"
                       >
                         <Sun
-                          weight="duotone"
                           className={cn(
                             "h-4 w-4 transition-colors duration-300",
-                            theme === 'light' ? "text-foreground" : "text-muted-foreground"
+                            theme === "light"
+                              ? "text-foreground"
+                              : "text-muted-foreground"
                           )}
+                          weight="duotone"
                         />
                       </TabsTrigger>
                       <TabsTrigger
+                        className="z-10 flex h-full w-full items-center justify-center transition-all duration-300 hover:bg-background/60 focus:outline-none"
                         value="dark"
-                        className="h-full w-full transition-all duration-300 hover:bg-background/60 focus:outline-none flex items-center justify-center z-10"
                       >
                         <Moon
-                          weight="duotone"
                           className={cn(
                             "h-4 w-4 transition-colors duration-300",
-                            theme === 'dark' ? "text-foreground" : "text-muted-foreground"
+                            theme === "dark"
+                              ? "text-foreground"
+                              : "text-muted-foreground"
                           )}
+                          weight="duotone"
                         />
                       </TabsTrigger>
                       <TabsTrigger
+                        className="z-10 flex h-full w-full items-center justify-center transition-all duration-300 hover:bg-background/60 focus:outline-none"
                         value="system"
-                        className="h-full w-full transition-all duration-300 hover:bg-background/60 focus:outline-none flex items-center justify-center z-10"
                       >
                         <Desktop
-                          weight="duotone"
                           className={cn(
                             "h-4 w-4 transition-colors duration-300",
-                            theme === 'system' ? "text-foreground" : "text-muted-foreground"
+                            theme === "system"
+                              ? "text-foreground"
+                              : "text-muted-foreground"
                           )}
+                          weight="duotone"
                         />
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
 
                   {/* Divider after theme switcher */}
-                  <div className="my-1.5 border-t border-slate-500/10"></div>
+                  <div className="my-1.5 border-slate-500/10 border-t" />
 
                   <SignOutButton>
                     <DropdownMenuPrimitive.Item
                       className={cn(
                         "relative flex cursor-pointer select-none items-center px-2 py-1.5 text-sm outline-none transition-colors duration-300",
-                        "focus:bg-red-500/10 focus:text-red-500 mt-1 text-red-500/90",
+                        "mt-1 text-red-500/90 focus:bg-red-500/10 focus:text-red-500",
                         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                       )}
                     >
-                      <SignOut className="w-4 h-4 mr-2" weight="duotone" />
+                      <SignOut className="mr-2 h-4 w-4" weight="duotone" />
                       <span>log out</span>
                     </DropdownMenuPrimitive.Item>
                   </SignOutButton>
@@ -254,4 +277,4 @@ export function UserMenu(): React.ReactElement | null {
       </DropdownMenuPrimitive.Root>
     </motion.div>
   );
-} 
+}

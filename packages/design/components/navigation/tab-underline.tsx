@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@spots/design/lib/utils";
 import React from "react";
-import { cn } from "@repo/design/lib/utils";
 
 type TabItem = {
   key: string;
@@ -27,9 +27,10 @@ export function TabUnderlineNav({
 }: TabUnderlineNavProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const itemRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
-  const [indicator, setIndicator] = React.useState<{ left: number; width: number } | null>(
-    null,
-  );
+  const [indicator, setIndicator] = React.useState<{
+    left: number;
+    width: number;
+  } | null>(null);
   const [hoverKey, setHoverKey] = React.useState<string | null>(null);
 
   function updateIndicator(targetKey: string | null) {
@@ -37,11 +38,14 @@ export function TabUnderlineNav({
     if (!key) return;
     const el = itemRefs.current[key];
     const container = containerRef.current;
-    if (!el || !container) return;
+    if (!(el && container)) return;
 
     const elRect = el.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
-    setIndicator({ left: elRect.left - containerRect.left, width: elRect.width });
+    setIndicator({
+      left: elRect.left - containerRect.left,
+      width: elRect.width,
+    });
   }
 
   React.useLayoutEffect(() => {
@@ -58,38 +62,30 @@ export function TabUnderlineNav({
 
   return (
     <div
-      ref={containerRef}
-      role="tablist"
       className={cn(
-        "relative flex items-center gap-6 border-b border-border",
-        className,
+        "relative flex items-center gap-6 border-border border-b",
+        className
       )}
       onMouseLeave={() => {
         setHoverKey(null);
         updateIndicator(null);
       }}
+      ref={containerRef}
+      role="tablist"
     >
       {items.map((item) => {
         const selected = (hoverKey ?? activeKey ?? items[0]?.key) === item.key;
         return (
           <button
-            key={item.key}
-            ref={(n) => {
-              itemRefs.current[item.key] = n;
-            }}
-            role="tab"
-            aria-selected={activeKey === item.key}
             aria-controls={`panel-${item.key}`}
-            disabled={item.disabled}
+            aria-selected={activeKey === item.key}
             className={cn(
-              "text-sm whitespace-nowrap py-3 px-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-md",
+              "whitespace-nowrap rounded-md px-0.5 py-3 text-muted-foreground text-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20",
               selected && "text-foreground",
-              item.disabled && "opacity-50 cursor-not-allowed",
+              item.disabled && "cursor-not-allowed opacity-50"
             )}
-            onMouseEnter={() => {
-              setHoverKey(item.key);
-              updateIndicator(item.key);
-            }}
+            disabled={item.disabled}
+            key={item.key}
             onClick={(e) => {
               onSelect?.(item.key);
               if (item.href) {
@@ -101,6 +97,14 @@ export function TabUnderlineNav({
                 }
               }
             }}
+            onMouseEnter={() => {
+              setHoverKey(item.key);
+              updateIndicator(item.key);
+            }}
+            ref={(n) => {
+              itemRefs.current[item.key] = n;
+            }}
+            role="tab"
           >
             {item.label}
           </button>
@@ -113,7 +117,7 @@ export function TabUnderlineNav({
           aria-hidden
           className={cn(
             "absolute bottom-0 h-0.5 rounded bg-foreground",
-            underlineClassName,
+            underlineClassName
           )}
           style={{
             width: indicator.width,
