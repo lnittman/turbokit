@@ -109,7 +109,7 @@ export const createWithPush = internalMutation({
     }
 
     // Create in-app notification if enabled
-    let notificationId = null;
+    let notificationId: string | null = null;
     if (!prefs || prefs.inApp !== false) {
       notificationId = await ctx.db.insert("notifications", {
         userId,
