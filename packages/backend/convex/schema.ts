@@ -411,4 +411,51 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
+
+  // ==================== DESIGN PRESETS ====================
+
+  presets: defineTable({
+    // Identity
+    slug: v.string(), // kebab-case identifier (e.g., "sacred", "kumori")
+    name: v.string(),
+    description: v.string(),
+    author: v.string(),
+    version: v.string(),
+    tags: v.array(v.string()),
+
+    // Composable design layers (stored as JSON)
+    layers: v.any(), // PresetLayers from design/presets/schema.ts
+
+    // Metadata
+    metadata: v.optional(v.any()), // PresetMetadata
+    preview: v.optional(v.any()), // PresetPreview
+
+    // Visibility & Status
+    isPublic: v.boolean(),
+    isActive: v.boolean(), // Currently active preset for the user/system
+
+    // Ownership
+    createdBy: v.optional(v.id("users")), // null for system presets
+
+    // Timestamps
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_public", ["isPublic"])
+    .index("by_active", ["isActive"])
+    .index("by_created_by", ["createdBy"])
+    .index("by_public_created", ["isPublic", "createdAt"])
+    .searchIndex("search_name", {
+      searchField: "name",
+      filterFields: ["isPublic"],
+    }),
+
+  // User-specific preset preferences
+  userPresetSettings: defineTable({
+    userId: v.id("users"),
+    activePresetId: v.optional(v.id("presets")),
+    overrides: v.optional(v.any()), // Layer overrides
+    updatedAt: v.number(),
+  }).index("by_user", ["userId"]),
 });

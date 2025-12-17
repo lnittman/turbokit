@@ -22,6 +22,8 @@ import type * as app_notifications_queries from "../app/notifications/queries.js
 import type * as app_presence_mutations from "../app/presence/mutations.js";
 import type * as app_presence_presence from "../app/presence/presence.js";
 import type * as app_presence_queries from "../app/presence/queries.js";
+import type * as app_presets_mutations from "../app/presets/mutations.js";
+import type * as app_presets_queries from "../app/presets/queries.js";
 import type * as app_recommendations_queries from "../app/recommendations/queries.js";
 import type * as app_spots_mutations from "../app/spots/mutations.js";
 import type * as app_spots_queries from "../app/spots/queries.js";
@@ -71,6 +73,8 @@ declare const fullApi: ApiFromModules<{
   "app/presence/mutations": typeof app_presence_mutations;
   "app/presence/presence": typeof app_presence_presence;
   "app/presence/queries": typeof app_presence_queries;
+  "app/presets/mutations": typeof app_presets_mutations;
+  "app/presets/queries": typeof app_presets_queries;
   "app/recommendations/queries": typeof app_recommendations_queries;
   "app/spots/mutations": typeof app_spots_mutations;
   "app/spots/queries": typeof app_spots_queries;

@@ -55,6 +55,26 @@ export async function requireAuth<Ctx extends QueryCtx | MutationCtx>(
   return { ...(ctx as any), user, userId: user._id } as any;
 }
 
+export async function optionalAuth<Ctx extends QueryCtx | MutationCtx>(
+  ctx: Ctx
+): Promise<(Ctx & { user: Doc<"users">; userId: string }) | null> {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) {
+    return null;
+  }
+
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+    .unique();
+
+  if (!user) {
+    return null;
+  }
+
+  return { ...(ctx as any), user, userId: user._id } as any;
+}
+
 // Internal query for getting user by clerkId (used in actions)
 export const _getUserByClerkId = internalQuery({
   args: { clerkId: v.string() },
