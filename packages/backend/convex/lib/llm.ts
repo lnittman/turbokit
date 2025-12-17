@@ -46,6 +46,7 @@ export const OPERATION_TIERS = {
   trip_planning_assist: "STANDARD",
   review_sentiment: "STANDARD",
   quick_interest_match: "STANDARD",
+  interest_suggestions: "STANDARD",
 } as const;
 
 type OperationName = keyof typeof OPERATION_TIERS;

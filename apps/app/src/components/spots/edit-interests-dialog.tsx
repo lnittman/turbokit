@@ -13,33 +13,11 @@ import { Input } from "@spots/design/components/ui/input";
 import { Label } from "@spots/design/components/ui/label";
 import { MapPin, PlusCircle, RefreshCw, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQuery, useAction } from "convex/react";
+import { api } from "@spots/backend/api";
 import { InterestTile } from "@/components/spots/interest-tile";
 import { useDebounce } from "@/lib/hooks/use-debounce";
 import { enhanceInterest } from "@/lib/interest-utils";
-
-// Common interests for quick selection
-const commonInterests = [
-  "Coffee",
-  "Food",
-  "Shopping",
-  "Art",
-  "Music",
-  "Nature",
-  "Tech",
-  "Sports",
-  "Reading",
-  "Nightlife",
-  "Wine",
-  "Beer",
-  "Yoga",
-  "Hiking",
-  "Museums",
-  "Photography",
-  "Theater",
-  "Dance",
-  "Film",
-  "History",
-];
 
 interface EditInterestsDialogProps {
   userInterests: string[];
@@ -68,6 +46,10 @@ export function EditInterestsDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [loadingLocation, setLoadingLocation] = useState("");
 
+  // Convex hooks
+  const dbInterests = useQuery(api.app.interests.queries.list, {});
+  const getSuggestions = useAction(api.app.interests.actions.getSuggestions);
+
   // Debounced location search
   const debouncedLocation = useDebounce(location, 500);
 
@@ -77,13 +59,41 @@ export function EditInterestsDialog({
     setFavoriteCities([...userFavoriteCities]);
   }, [userInterests, userFavoriteCities]);
 
-  // Set up suggested interests (TODO: use Convex for LLM-based generation)
+  // Load initial suggestions from database
   useEffect(() => {
-    const filtered = commonInterests.filter(
-      (interest) => !interests.includes(interest)
-    );
-    setSuggestedInterests(filtered.sort(() => Math.random() - 0.5));
-  }, [interests]);
+    if (dbInterests) {
+      const filtered = dbInterests
+        .map((i) => i.name)
+        .filter((name) => !interests.includes(name));
+      setSuggestedInterests(filtered.slice(0, 20));
+    }
+  }, [dbInterests, interests]);
+
+  // Fetch LLM suggestions when location changes
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!debouncedLocation) return;
+
+      setLoadingLocation(debouncedLocation);
+      try {
+        const result = await getSuggestions({
+          location: debouncedLocation,
+          currentInterests: interests,
+          limit: 20,
+        });
+        const names = result.interests.map((i) => i.name);
+        setSuggestedInterests(names);
+      } catch (err) {
+        console.error("[INTERESTS] Failed to fetch suggestions:", err);
+      } finally {
+        setLoadingLocation("");
+      }
+    };
+
+    if (open) {
+      fetchSuggestions();
+    }
+  }, [debouncedLocation, open]);
 
   const handleToggleInterest = (interest: string) => {
     setInterests((prev) => {
@@ -107,9 +117,23 @@ export function EditInterestsDialog({
     setLocation(e.target.value);
   };
 
-  const handleRefresh = () => {
-    // Shuffle suggested interests
-    setSuggestedInterests((prev) => [...prev].sort(() => Math.random() - 0.5));
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    try {
+      const result = await getSuggestions({
+        location,
+        currentInterests: interests,
+        limit: 20,
+      });
+      const names = result.interests.map((i) => i.name);
+      setSuggestedInterests(names);
+    } catch (err) {
+      console.error("[INTERESTS] Failed to refresh:", err);
+      // Fall back to shuffling
+      setSuggestedInterests((prev) => [...prev].sort(() => Math.random() - 0.5));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle adding a new favorite city
@@ -134,18 +158,21 @@ export function EditInterestsDialog({
       )
     : suggestedInterests;
 
-  // Combine common interests with API suggestions for a complete list
-  const allSuggestions = [
-    ...new Set([
-      ...filteredSuggestions,
-      ...commonInterests.filter(
-        (interest) =>
-          interest.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !interests.includes(interest) &&
-          !filteredSuggestions.includes(interest)
-      ),
-    ]),
-  ];
+  // Also search database interests if we have a search query
+  const dbMatches =
+    searchQuery && dbInterests
+      ? dbInterests
+          .map((i) => i.name)
+          .filter(
+            (name) =>
+              name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+              !interests.includes(name) &&
+              !filteredSuggestions.includes(name)
+          )
+      : [];
+
+  // Combine suggestions with database matches
+  const allSuggestions = [...new Set([...filteredSuggestions, ...dbMatches])];
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>

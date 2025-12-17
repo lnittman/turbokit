@@ -2,338 +2,13 @@
 
 import { Badge } from "@spots/design/components/ui/badge";
 import { Button } from "@spots/design/components/ui/button";
-import { CheckCircle, MapPin, RefreshCw } from "lucide-react";
+import { MapPin, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useQuery, useAction } from "convex/react";
+import { api } from "@spots/backend/api";
 import type { Interest } from "@/lib/types";
+import { enhanceInterest } from "@/lib/interest-utils";
 import { cn } from "@/lib/utils";
-
-const defaultInterests: Interest[] = [
-  {
-    id: "coffee",
-    name: "Coffee",
-    emoji: "☕",
-    category: "food",
-    color: "#4ECDC4",
-  },
-  { id: "food", name: "Food", emoji: "🍽️", category: "food", color: "#FF6B6B" },
-  {
-    id: "shopping",
-    name: "Shopping",
-    emoji: "🛍️",
-    category: "shopping",
-    color: "#FFD166",
-  },
-  {
-    id: "history",
-    name: "History",
-    emoji: "🏛️",
-    category: "arts",
-    color: "#AAC789",
-  },
-  { id: "art", name: "Art", emoji: "🎨", category: "arts", color: "#FFD166" },
-  {
-    id: "music",
-    name: "Music",
-    emoji: "🎵",
-    category: "entertainment",
-    color: "#FF6B6B",
-  },
-  {
-    id: "gardens",
-    name: "Gardens",
-    emoji: "🌷",
-    category: "outdoors",
-    color: "#FF6B6B",
-  },
-  {
-    id: "picnics",
-    name: "Picnics",
-    emoji: "🧺",
-    category: "outdoors",
-    color: "#AAC789",
-  },
-  {
-    id: "cycling",
-    name: "Cycling",
-    emoji: "🚲",
-    category: "activities",
-    color: "#4ECDC4",
-  },
-  {
-    id: "brunch",
-    name: "Brunch",
-    emoji: "🥓",
-    category: "food",
-    color: "#FFD166",
-  },
-  {
-    id: "tech",
-    name: "Tech",
-    emoji: "💻",
-    category: "technology",
-    color: "#4ECDC4",
-  },
-  {
-    id: "sourdough",
-    name: "Sourdough",
-    emoji: "🍞",
-    category: "food",
-    color: "#FFD166",
-  },
-  {
-    id: "golden_gate",
-    name: "Golden Gate",
-    emoji: "🌉",
-    category: "culture",
-    color: "#FF6B6B",
-  },
-  {
-    id: "fog_chasing",
-    name: "Fog Chasing",
-    emoji: "🌫️",
-    category: "outdoors",
-    color: "#4ECDC4",
-  },
-  {
-    id: "hiking",
-    name: "Hiking",
-    emoji: "🥾",
-    category: "outdoors",
-    color: "#AAC789",
-  },
-  {
-    id: "photography",
-    name: "Photography",
-    emoji: "📷",
-    category: "arts",
-    color: "#4ECDC4",
-  },
-  {
-    id: "reading",
-    name: "Reading",
-    emoji: "📚",
-    category: "education",
-    color: "#4ECDC4",
-  },
-  {
-    id: "sports",
-    name: "Sports",
-    emoji: "⚽",
-    category: "activities",
-    color: "#4ECDC4",
-  },
-  {
-    id: "nature",
-    name: "Nature",
-    emoji: "🌿",
-    category: "outdoors",
-    color: "#AAC789",
-  },
-  {
-    id: "farmers_markets",
-    name: "Farmers Markets",
-    emoji: "🌽",
-    category: "food",
-    color: "#AAC789",
-  },
-  {
-    id: "wine_tasting",
-    name: "Wine Tasting",
-    emoji: "🍷",
-    category: "drink",
-    color: "#FF6B6B",
-  },
-  {
-    id: "craft_beer",
-    name: "Craft Beer",
-    emoji: "🍺",
-    category: "drink",
-    color: "#FFD166",
-  },
-  {
-    id: "tacos",
-    name: "Tacos",
-    emoji: "🌮",
-    category: "food",
-    color: "#FF6B6B",
-  },
-  {
-    id: "dim_sum",
-    name: "Dim Sum",
-    emoji: "🥟",
-    category: "food",
-    color: "#FF6B6B",
-  },
-  {
-    id: "burritos",
-    name: "Burritos",
-    emoji: "🌯",
-    category: "food",
-    color: "#FF6B6B",
-  },
-  {
-    id: "beach",
-    name: "Beach",
-    emoji: "🏖️",
-    category: "outdoors",
-    color: "#4ECDC4",
-  },
-  {
-    id: "architecture",
-    name: "Architecture",
-    emoji: "🏛️",
-    category: "arts",
-    color: "#AAC789",
-  },
-  {
-    id: "surfing",
-    name: "Surfing",
-    emoji: "🏄",
-    category: "activities",
-    color: "#4ECDC4",
-  },
-  {
-    id: "climbing",
-    name: "Climbing",
-    emoji: "🧗",
-    category: "activities",
-    color: "#AAC789",
-  },
-  {
-    id: "yoga",
-    name: "Yoga",
-    emoji: "🧘",
-    category: "wellness",
-    color: "#AAC789",
-  },
-  {
-    id: "mindfulness",
-    name: "Mindfulness",
-    emoji: "🧠",
-    category: "wellness",
-    color: "#4ECDC4",
-  },
-  {
-    id: "bookstores",
-    name: "Bookstores",
-    emoji: "📚",
-    category: "education",
-    color: "#FFD166",
-  },
-  {
-    id: "vintage",
-    name: "Vintage",
-    emoji: "👒",
-    category: "shopping",
-    color: "#FFD166",
-  },
-  {
-    id: "biking",
-    name: "Biking",
-    emoji: "🚴",
-    category: "activities",
-    color: "#4ECDC4",
-  },
-  {
-    id: "cocktails",
-    name: "Cocktails",
-    emoji: "🍸",
-    category: "drink",
-    color: "#FF6B6B",
-  },
-  {
-    id: "museums",
-    name: "Museums",
-    emoji: "🏛️",
-    category: "arts",
-    color: "#AAC789",
-  },
-  {
-    id: "parks",
-    name: "Parks",
-    emoji: "🌳",
-    category: "outdoors",
-    color: "#AAC789",
-  },
-  { id: "tea", name: "Tea", emoji: "🍵", category: "drink", color: "#4ECDC4" },
-  {
-    id: "seafood",
-    name: "Seafood",
-    emoji: "🦞",
-    category: "food",
-    color: "#FF6B6B",
-  },
-  {
-    id: "bakeries",
-    name: "Bakeries",
-    emoji: "🥐",
-    category: "food",
-    color: "#FFD166",
-  },
-  {
-    id: "ice_cream",
-    name: "Ice Cream",
-    emoji: "🍦",
-    category: "food",
-    color: "#FFD166",
-  },
-  {
-    id: "coit_tower",
-    name: "Coit Tower",
-    emoji: "🗼",
-    category: "culture",
-    color: "#AAC789",
-  },
-  {
-    id: "alcatraz",
-    name: "Alcatraz",
-    emoji: "🏝️",
-    category: "culture",
-    color: "#AAC789",
-  },
-  {
-    id: "chinatown",
-    name: "Chinatown",
-    emoji: "🏮",
-    category: "culture",
-    color: "#FF6B6B",
-  },
-  {
-    id: "lgbtq",
-    name: "LGBTQ",
-    emoji: "🏳️‍🌈",
-    category: "culture",
-    color: "#FF6B6B",
-  },
-  {
-    id: "street_art",
-    name: "Street Art",
-    emoji: "🎨",
-    category: "arts",
-    color: "#FFD166",
-  },
-  {
-    id: "napa",
-    name: "Napa",
-    emoji: "🍇",
-    category: "drink",
-    color: "#AAC789",
-  },
-  {
-    id: "running",
-    name: "Running",
-    emoji: "🏃",
-    category: "activities",
-    color: "#4ECDC4",
-  },
-  {
-    id: "waterfront",
-    name: "Waterfront",
-    emoji: "⚓",
-    category: "outdoors",
-    color: "#4ECDC4",
-  },
-];
 
 export interface InterestSelectorProps {
   interests?: Interest[];
@@ -347,7 +22,7 @@ export interface InterestSelectorProps {
 }
 
 export function InterestSelector({
-  interests: initialInterests = defaultInterests,
+  interests: initialInterests,
   selectedInterests = [],
   onInterestChange,
   maxSelections = 5,
@@ -360,17 +35,32 @@ export function InterestSelector({
   const [animatingItems, setAnimatingItems] = useState<{
     [key: string]: boolean;
   }>({});
-  const [interests, setInterests] = useState<Interest[]>(initialInterests);
+  const [interests, setInterests] = useState<Interest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const interestsContainerRef = useRef<HTMLDivElement>(null);
 
-  // On mount, fetch personalized interests based on location (TODO: use Convex)
+  // Fetch interests from Convex
+  const dbInterests = useQuery(api.app.interests.queries.list, {});
+  const getSuggestions = useAction(api.app.interests.actions.getSuggestions);
+
+  // Initialize interests from database or props
   useEffect(() => {
-    // For now, just shuffle the default interests
-    const shuffled = [...initialInterests].sort(() => Math.random() - 0.5);
-    setInterests(shuffled);
-  }, [location, initialInterests]);
+    if (initialInterests && initialInterests.length > 0) {
+      // Use provided interests if available
+      setInterests(initialInterests);
+    } else if (dbInterests) {
+      // Otherwise use database interests, enhanced with emoji/color
+      const enhanced = dbInterests.map((i) =>
+        enhanceInterest({
+          id: i._id,
+          name: i.name,
+          emoji: i.iconName ?? undefined,
+        })
+      ) as Interest[];
+      setInterests(enhanced);
+    }
+  }, [dbInterests, initialInterests]);
 
   useEffect(() => {
     // Update if selectedInterests prop changes
@@ -410,19 +100,42 @@ export function InterestSelector({
     }
   };
 
-  // Refresh the interests with a new set (TODO: use Convex action for LLM generation)
+  // Refresh the interests with LLM-generated suggestions
   const refreshInterests = async () => {
     setIsLoading(true);
-    // For now, just shuffle
-    const shuffled = [...interests].sort(() => Math.random() - 0.5);
-    setInterests(shuffled);
-    setIsLoading(false);
+    setError(null);
+
+    try {
+      const result = await getSuggestions({
+        location,
+        currentInterests: selected,
+        limit: 30,
+      });
+
+      const enhanced = result.interests.map((i) =>
+        enhanceInterest({
+          id: i.id,
+          name: i.name,
+        })
+      ) as Interest[];
+
+      setInterests(enhanced);
+    } catch (err) {
+      console.error("[INTERESTS] Failed to refresh:", err);
+      setError("Failed to refresh interests. Please try again.");
+      // Fall back to shuffling current interests
+      const shuffled = [...interests].sort(() => Math.random() - 0.5);
+      setInterests(shuffled);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Render a flowing grid of interests with uniform height
   const renderFlowGrid = () => {
-    // Show loading skeleton
-    if (isLoading && interests.length === 0) {
+    // Show loading skeleton when fetching initial data or refreshing
+    const isLoadingInitial = !dbInterests && !initialInterests;
+    if ((isLoading || isLoadingInitial) && interests.length === 0) {
       return (
         <div className="flex max-h-[400px] flex-wrap gap-2 overflow-y-auto p-1 sm:gap-3">
           {Array.from({ length: 12 }).map((_, index) => (
