@@ -22,7 +22,7 @@ export function SidebarToggle(): React.ReactElement {
     <div className="fixed top-3 left-2 z-[400]">
       <Button
         onClick={toggle}
-        className="h-8 w-8 flex items-center justify-center hover:bg-accent/60 active:bg-accent group text-muted-foreground hover:text-foreground/75 active:text-foreground transition-all duration-300 rounded-none"
+        className="h-8 w-8 flex items-center justify-center rounded-sm hover:bg-muted/80 active:bg-muted group text-muted-foreground hover:text-foreground transition-all duration-[0ms] hover:transition-duration-[150ms]"
         aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
         variant="ghost"
       >

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui"
 import { Icon } from "@repo/design/icons"
 
 import { cn } from "@repo/design/lib/utils"

@@ -1,0 +1,84 @@
+import { RAG } from "@convex-dev/rag";
+import { components } from "../_generated/api";
+import { getEmbeddingModel } from "./models";
+import type { ActionCtx } from "../_generated/server";
+
+export const rag = new RAG(components.rag as any, {
+  embedder: getEmbeddingModel() as any,
+  chunkSize: 1000,
+  chunkOverlap: 200,
+} as any);
+
+/**
+ * Helper: Ingest document into RAG system
+ *
+ * @example
+ * await ingestDocument(ctx, {
+ *   documentId: "user-guide-001",
+ *   content: "Full text of user guide...",
+ *   metadata: { type: "documentation", category: "user-guides" }
+ * });
+ */
+export async function ingestDocument(
+  ctx: ActionCtx,
+  args: {
+    documentId: string;
+    content: string;
+    metadata?: Record<string, any>;
+  }
+) {
+  return await rag.ingest(ctx as any, {
+    documentId: args.documentId,
+    content: args.content,
+    metadata: args.metadata || {},
+  } as any);
+}
+
+/**
+ * Helper: Search documents using semantic search
+ *
+ * @example
+ * const results = await searchDocuments(ctx, "How do I reset my password?", {
+ *   topK: 5,
+ *   threshold: 0.7
+ * });
+ */
+export async function searchDocuments(
+  ctx: ActionCtx,
+  query: string,
+  options?: {
+    topK?: number;
+    threshold?: number;
+    filters?: Record<string, any>;
+  }
+) {
+  return await rag.search(ctx as any, {
+    query,
+    topK: options?.topK || 5,
+    scoreThreshold: options?.threshold || 0.7,
+    filters: options?.filters,
+  } as any);
+}
+
+// Example ingestion patterns (implement in your domain logic):
+//
+// 1. Documentation ingestion:
+// await ingestDocument(ctx, {
+//   documentId: `doc-${docId}`,
+//   content: documentContent,
+//   metadata: { type: "documentation", category: "api" }
+// });
+//
+// 2. User-generated content:
+// await ingestDocument(ctx, {
+//   documentId: `post-${postId}`,
+//   content: postContent,
+//   metadata: { type: "post", userId, tags }
+// });
+//
+// 3. Code snippets:
+// await ingestDocument(ctx, {
+//   documentId: `snippet-${snippetId}`,
+//   content: codeSnippet,
+//   metadata: { type: "code", language: "typescript" }
+// });

@@ -36,31 +36,23 @@ export function NewButton(): React.ReactElement {
         <Link
           href="/"
           className={cn(
-            "h-8 flex items-center transition-colors duration-300 relative",
-            "group hover:bg-accent/60 active:bg-accent", 
-            "text-muted-foreground group-hover:text-foreground/80 group-active:text-foreground",
-            pathname === "/" ? "bg-accent hover:bg-accent text-foreground" : ""
+            "h-8 flex items-center gap-3 rounded-sm px-2 relative",
+            "group transition-all duration-[0ms] hover:transition-duration-[150ms]",
+            "hover:bg-muted/80 active:bg-muted",
+            "text-muted-foreground group-hover:text-foreground",
+            pathname === "/" ? "bg-muted text-foreground" : ""
           )}
           onClick={handleClick}
-          style={{
-            width: isOpen ? 'auto' : '32px',
-          }}
         >
-          <div className="w-8 flex-none flex items-center justify-center">
+          <div className="flex-none flex items-center justify-center">
             <Plus weight="duotone" className="h-4 w-4" />
           </div>
 
-          <div className="h-full flex items-center justify-start">
-            <span
-              className={cn(
-                "text-sm pl-1",
-                "transition-all duration-300 ease-out opacity-0 whitespace-nowrap",
-                isOpen && "opacity-100"
-              )}
-            >
+          {isOpen && (
+            <span className="text-sm font-mono whitespace-nowrap">
               create new
             </span>
-          </div>
+          )}
         </Link>
       </motion.div>
     </div>

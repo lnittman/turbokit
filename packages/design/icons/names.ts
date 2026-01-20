@@ -33,8 +33,13 @@ export const IconNames = {
   Package: "package",
   Book: "book",
   Upload: "upload",
+  Download: "download",
   Image: "image",
   File: "file",
+  Trash: "trash",
+  Eye: "eye",
+  Palette: "palette",
+  MagnifyingGlass: "magnifying-glass",
 } as const;
 
 export type IconName = typeof IconNames[keyof typeof IconNames];

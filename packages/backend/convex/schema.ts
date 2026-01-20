@@ -73,4 +73,171 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_timestamp", ["timestamp"])
     .index("by_resource", ["resourceType", "resourceId"]),
+
+  // Notifications: Convex-native in-app notifications
+  notifications: defineTable({
+    userId: v.id("users"),
+    type: v.string(),
+    title: v.string(),
+    body: v.string(),
+    data: v.optional(v.any()),
+    link: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    read: v.boolean(),
+    readAt: v.optional(v.number()),
+    archived: v.boolean(),
+    archivedAt: v.optional(v.number()),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_read", ["userId", "read"])
+    .index("by_user_archived", ["userId", "archived"])
+    .index("by_type", ["type"])
+    .index("by_created", ["createdAt"]),
+
+  // Device tokens for push notifications
+  deviceTokens: defineTable({
+    userId: v.id("users"),
+    token: v.string(),
+    platform: v.union(v.literal("fcm"), v.literal("apns"), v.literal("web")),
+    deviceInfo: v.optional(v.any()),
+    lastUsed: v.optional(v.number()),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_token", ["token"])
+    .index("by_platform", ["platform"]),
+
+  // Notification preferences
+  notificationPreferences: defineTable({
+    userId: v.id("users"),
+    email: v.boolean(),
+    push: v.boolean(),
+    inApp: v.boolean(),
+    types: v.optional(v.any()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"]),
+
+  // Media generation jobs (images, video, audio, 3D)
+  imageGenerationJobs: defineTable({
+    userId: v.id("users"),
+    provider: v.union(v.literal("openai"), v.literal("fal"), v.literal("openrouter")),
+    mediaType: v.optional(v.union(
+      v.literal("image"),
+      v.literal("video"),
+      v.literal("audio"),
+      v.literal("3d")
+    )),
+    prompt: v.optional(v.string()), // Optional for Fal generic input
+    input: v.optional(v.any()), // Generic input for Fal models
+    inputImage: v.optional(v.string()),
+    quality: v.optional(v.string()),
+    size: v.optional(v.string()),
+    model: v.optional(v.string()),
+    status: v.union(
+      v.literal("queued"),
+      v.literal("processing"),
+      v.literal("completed"),
+      v.literal("failed")
+    ),
+    attempts: v.number(),
+    resultB64: v.optional(v.string()), // For images only
+    resultUrl: v.optional(v.string()), // For all media types
+    duration: v.optional(v.number()), // For video/audio
+    error: v.optional(v.string()),
+    correlationId: v.optional(v.string()),
+    metadata: v.optional(v.any()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_user_status", ["userId", "status"])
+    .index("by_correlation", ["correlationId"]),
+
+  // Model cache - stores available models from providers
+  modelCache: defineTable({
+    provider: v.union(v.literal("openai"), v.literal("openrouter")),
+    filterKey: v.string(), // Hash of filters for OpenRouter
+    models: v.array(v.object({
+      id: v.string(),
+      name: v.optional(v.string()),
+      description: v.optional(v.string()),
+      capabilities: v.optional(v.array(v.string())),
+      pricing: v.optional(v.object({
+        input: v.optional(v.number()),
+        output: v.optional(v.number()),
+      })),
+      meta: v.optional(v.any()),
+    })),
+    fetchedAt: v.number(),
+    expiresAt: v.number(),
+  })
+    .index("by_provider_filter", ["provider", "filterKey"]),
+
+  // Design Presets - shareable design system presets
+  presets: defineTable({
+    presetId: v.string(), // Unique preset ID (kebab-case)
+    name: v.string(),
+    description: v.string(),
+    author: v.string(), // Author name
+    authorId: v.optional(v.id("users")), // User ID if created by registered user
+    tags: v.array(v.string()), // For discovery: "brutalist", "minimal", "iOS", etc.
+    version: v.string(),
+    preset: v.any(), // Complete DesignPreset JSON (layers, metadata, etc.)
+    isPublic: v.boolean(),
+    isBuiltin: v.boolean(), // True for TurboKit official presets
+    downloads: v.number(),
+    rating: v.optional(v.number()), // Average rating (0-5)
+    ratingCount: v.optional(v.number()), // Number of ratings
+    extractedFrom: v.optional(v.object({
+      path: v.string(),
+      detectedBy: v.union(v.literal("ai"), v.literal("manual")),
+      confidence: v.optional(v.number()),
+    })),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_preset_id", ["presetId"])
+    .index("by_author", ["author"])
+    .index("by_author_id", ["authorId"])
+    .index("by_tags", ["tags"])
+    .index("by_public", ["isPublic"])
+    .index("by_builtin", ["isBuiltin"])
+    .index("by_downloads", ["downloads"])
+    .index("by_created", ["createdAt"])
+    .searchIndex("search_name", {
+      searchField: "name",
+      filterFields: ["isPublic", "tags"],
+    })
+    .searchIndex("search_description", {
+      searchField: "description",
+      filterFields: ["isPublic", "tags"],
+    }),
+
+  // Preset ratings - user ratings for presets
+  presetRatings: defineTable({
+    presetId: v.string(),
+    userId: v.id("users"),
+    rating: v.number(), // 1-5
+    review: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_preset", ["presetId"])
+    .index("by_user", ["userId"])
+    .index("by_preset_user", ["presetId", "userId"]),
+
+  // Preset installations - track which users have installed which presets
+  presetInstallations: defineTable({
+    presetId: v.string(),
+    userId: v.id("users"),
+    installedAt: v.number(),
+    lastUsed: v.optional(v.number()),
+  })
+    .index("by_preset", ["presetId"])
+    .index("by_user", ["userId"])
+    .index("by_preset_user", ["presetId", "userId"]),
 });

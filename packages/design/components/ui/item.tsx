@@ -5,6 +5,8 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@repo/design/lib/utils"
 import { Separator } from "@repo/design/components/ui/separator"
 
+const SlotRoot = SlotPrimitive.Root
+
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -59,7 +61,7 @@ function Item({
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof itemVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? SlotPrimitive.Slot : "div"
+  const Comp = asChild ? SlotRoot : "div"
   return (
     <Comp
       data-slot="item"

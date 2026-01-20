@@ -1,11 +1,13 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
+import { Slot } from "radix-ui"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@repo/design/lib/utils"
 
+const SlotRoot = Slot.Root
+
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[2px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-none select-none",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[2px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive select-none active:scale-[0.98]",
   {
     variants: {
       variant: {
@@ -39,11 +41,11 @@ const buttonVariants = cva(
           "relative overflow-hidden border-2 border-[#e0e0e0] text-[#333] font-medium bg-gradient-to-b from-white to-[#f5f5f5] before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/90 before:to-transparent before:opacity-100 transition-all duration-150 hover:-translate-y-[2px] hover:from-white hover:to-[#ececec] hover:border-[#c0c0c0] hover:shadow-[0_3px_8px_rgba(0,0,0,0.15)] active:translate-y-[1px] active:shadow-none active:from-[#f0f0f0] active:to-[#e0e0e0] active:border-[#b0b0b0] active:before:opacity-0 dark:from-[#2a2a2a] dark:to-[#222] dark:border-[#333] dark:text-[#e0e0e0] dark:before:from-white/5 dark:hover:from-[#333] dark:hover:to-[#282828] dark:hover:border-[#444] dark:hover:shadow-[0_3px_8px_rgba(0,0,0,0.3)] dark:active:from-[#282828] dark:active:to-[#333] dark:active:border-[#555]",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        pill: "h-8 rounded-full px-4 has-[>svg]:px-3",
+        default: "h-11 px-5 text-[15px] has-[>svg]:px-4",
+        sm: "h-9 px-4 text-[13px] gap-1.5 has-[>svg]:px-3",
+        lg: "h-12 px-8 text-[16px] has-[>svg]:px-6",
+        icon: "size-11",
+        pill: "h-11 rounded-full px-5 text-[15px] has-[>svg]:px-4",
         square: "aspect-square p-0",
       },
     },
@@ -64,7 +66,7 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? SlotRoot : "button"
 
   return (
     <Comp

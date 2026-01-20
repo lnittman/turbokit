@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import * as ToastPrimitives from "@radix-ui/react-toast"
+import { Toast as ToastPrimitives } from "radix-ui"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@repo/design/lib/utils"
-import { Cross2Icon } from "@radix-ui/react-icons"
+import { Icon, IconNames } from "@repo/design/icons"
 
 const ToastProvider = ToastPrimitives.Provider
 
@@ -82,7 +82,7 @@ const ToastClose = React.forwardRef<
     toast-close=""
     {...props}
   >
-    <Cross2Icon className="h-4 w-4" />
+    <Icon name={IconNames.X} className="h-4 w-4" />
   </ToastPrimitives.Close>
 ))
 ToastClose.displayName = ToastPrimitives.Close.displayName

@@ -71,7 +71,7 @@
   --destructive: oklch(0.577 0.08 27.325); /* Muted red - less saturated */
   --destructive-foreground: oklch(0.97 0.005 85);
   --border: oklch(0.9 0.01 85); /* Subtle border color */
-  --input: oklch(0.94 0.01 85);
+  --input: oklch(0.9 0.01 85); /* Match border for consistency */
   --ring: oklch(0.7 0.01 85);
   /* Subtle, coordinated chart colors in Rams style */
   --chart-1: oklch(0.646 0.09 41.116);
@@ -79,8 +79,8 @@
   --chart-3: oklch(0.55 0.05 227.392);
   --chart-4: oklch(0.7 0.08 84.429);
   --chart-5: oklch(0.75 0.07 70.08);
-  --radius: 0.5rem; /* Slightly reduced radius for cleaner lines */
-  --sidebar: oklch(0.97 0.005 85); /* Slightly darker sidebar */
+  --radius: 0.375rem; /* 6px - Sweet spot between sharp and rounded */
+  --sidebar: var(--background); /* Matches main background for subtlety */
   --sidebar-foreground: oklch(0.2 0.01 85);
   --sidebar-primary: oklch(0.22 0.01 85);
   --sidebar-primary-foreground: oklch(0.97 0.005 85);
@@ -92,10 +92,10 @@
 }
 
 .dark {
-  /* Dark Bauhaus-inspired palette with material quality */
-  --background: oklch(0.2 0.02 240); /* Cool neutral dark background */
+  /* Warm dark with subtle coolness - elevated minimal aesthetic */
+  --background: #0a0a0a; /* True dark background (warm dark gray) */
   --foreground: oklch(0.94 0.01 60); /* Slightly warm white text */
-  --card: oklch(0.22 0.02 240); /* Slightly lighter than background */
+  --card: #111111; /* Opaque dark card */
   --card-foreground: oklch(0.94 0.01 60);
   --popover: oklch(0.22 0.02 240);
   --popover-foreground: oklch(0.94 0.01 60);
@@ -118,13 +118,13 @@
   --chart-3: oklch(0.5 0.09 130); /* Leaf green (power button reference) */
   --chart-4: oklch(0.55 0.08 260); /* Blue-grey like the T52 variant */
   --chart-5: oklch(0.65 0.07 300); /* Subtle purple, complementary to system */
-  --sidebar: oklch(0.18 0.02 240); /* Darker sidebar with material quality */
-  --sidebar-foreground: oklch(0.92 0.01 60);
+  --sidebar: var(--background); /* Matches main background for cohesion */
+  --sidebar-foreground: oklch(0.94 0.01 60);
   --sidebar-primary: oklch(0.5 0.12 30); /* Blood orange accent */
-  --sidebar-primary-foreground: oklch(0.92 0.01 60);
+  --sidebar-primary-foreground: oklch(0.94 0.01 60);
   --sidebar-accent: oklch(0.26 0.03 240);
-  --sidebar-accent-foreground: oklch(0.92 0.01 60);
-  --sidebar-border: oklch(0.25 0.02 240);
+  --sidebar-accent-foreground: oklch(0.94 0.01 60);
+  --sidebar-border: oklch(0.28 0.02 240);
   --sidebar-ring: oklch(0.35 0.04 240);
 }
 
@@ -261,262 +261,25 @@
 }
 
 html, body {
-  height: 100vh;
-  width: 100vw;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   background: var(--background);
   font-family: 'IosevkaTerm-Regular', monospace;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Faster transition */
 }
 
-/* Add utility classes for fonts */
+/* Typography utilities */
 .font-title {
   font-family: var(--title-font);
   letter-spacing: 0.01em;
   font-weight: 400;
 }
 
-.cursor {
-  display: inline-block;
-  width: 2px; /* Thin vertical line instead of 12px block */
-  height: 1.2em;
-  background-color: black;
-  margin-left: 1px;
-  vertical-align: middle;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  from, to {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.icon-button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 0.25rem; /* Square with slight rounding */
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 0;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.icon-button:hover {
-  background-color: #f3f4f6;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Web emoji styling */
-.web-emoji {
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.web-emoji.large {
-  font-size: 2rem;
-}
-
-.page-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid black;
-  background: white;
-}
-
-/* Main content area */
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  position: relative;
-}
-
-/* Input area styles */
-.input-area {
-  height: 4rem;
-  padding: 1rem;
-  background: white;
-}
-
-/* Footer styles */
-.page-container footer {
-  height: var(--footer-height);
-  background: white;
-  border-top: 1px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-  width: 100%;
-}
-
-/* Chat panel positioning */
-.chat-panel {
-  bottom: calc(var(--footer-height) + 4rem + 1rem); /* Adjusted to account for input area + footer */
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-in;
-}
-
-/* Status indicator */
-.status-indicator {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  z-index: 50;
-}
-
-.status-indicator.ready {
-  background-color: #10b981; /* Green */
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-
-.status-indicator.loading {
-  background-color: #f59e0b; /* Amber */
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.status-indicator.error {
-  background-color: #ef4444; /* Red */
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 0.6;
-    transform: scale(0.8);
-  }
-}
-
-/* Welcome message animation */
-.welcome-container {
-  padding-top: 4rem;
-  transition: opacity 0.5s ease-out;
-}
-
-.welcome-container.fade-out {
-  opacity: 0;
-}
-
-/* Summary tile */
-.summary-tile {
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.summary-tile-header {
-  padding: 0.75rem 1rem;
-  background-color: #f9fafb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.summary-tile-header:hover {
-  background-color: #f3f4f6;
-}
-
-/* V4 updated styles for improved modern browser compatibility */
-.gradient-bg {
-  background: linear-gradient(45deg, oklch(60% 0.25 240) 0%, oklch(65% 0.25 320) 100%);
-}
-
-.text-gradient {
-  background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(90deg, oklch(60% 0.25 240), oklch(80% 0.25 320));
-}
-
-/* Container query support in v4 */
-.container-query-demo {
-  container-type: inline-size;
-}
-
-@container (min-width: 400px) {
-  .container-adaptive {
-    font-size: 1.25rem;
-  }
-}
-
-/* Modern button color-mix for hover states */
-.modern-button {
-  background-color: oklch(60% 0.25 240);
-  transition: background-color 0.2s;
-}
-
-.modern-button:hover {
-  background-color: color-mix(in oklch, oklch(60% 0.25 240), white 20%);
-}
-
-/* Sheet customizations */
-[data-slot="sheet-overlay"] {
-  background-color: transparent !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-}
-
-/* Don't use separate blur container effect - use backdrop-filter instead */
-body.sheet-open .blur-container {
-  transition: filter 0.3s ease;
-}
-
-/* Command+K menu styling */
-.k-positioner {
-  z-index: 9999;
-}
-
-/* Sign-in button arrow animation */
-.arrow-icon {
-  transition: transform 0.2s ease;
-}
-
-a:hover .arrow-icon,
-button:hover .arrow-icon {
-  transform: translateX(3px);
-}
-
+/* Utility: Hide scrollbar while maintaining functionality */
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
@@ -526,18 +289,140 @@ button:hover .arrow-icon {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* Hide debug text */
-[style*="color:red"] {
-  display: none !important;
+/* Utility: Icon animation on hover */
+.hover-arrow {
+  transition: transform 0.15s ease-out;
 }
 
-.red {
-  display: none !important;
+a:hover .hover-arrow,
+button:hover .hover-arrow {
+  transform: translateX(3px);
 }
 
+/* Component layer utilities */
 @layer components {
   .font-highway {
     font-family: var(--title-font);
     letter-spacing: 0.01em;
   }
 }
+/* ============================================================================
+   TurboKit Design Preset System
+   ============================================================================
+
+   Runtime-switchable design presets via body classes.
+   
+   Usage:
+   - Apply preset: document.body.classList.add('preset-koto')
+   - Or use hooks: const { applyPreset } = usePreset(); applyPreset('koto');
+   
+   Presets are composed of layered tokens:
+   - Colors (semantic + palette)
+   - Spacing, radius, shadows
+   - Typography (fonts, sizes, line-heights)
+   - Z-index scales
+   - Animation durations and easings
+   
+   New presets can be:
+   - Extracted from existing projects via /extract-preset command
+   - Created manually in .turbokit/presets/{id}.json
+   - Composed from multiple presets via usePresetComposer() hook
+   - Shared via Convex registry
+   
+   ============================================================================ */
+
+/* Preset: Koto (Default)
+   iOS-inspired minimal design with glassmorphism effects and rounded aesthetics */
+body.preset-koto {
+  /* Colors - Semantic */
+  --background: oklch(0.98 0.005 85);
+  --foreground: oklch(0.2 0.01 85);
+  --card: oklch(1 0.005 85);
+  --card-foreground: oklch(0.2 0.01 85);
+  --popover: oklch(1 0.005 85);
+  --popover-foreground: oklch(0.2 0.01 85);
+  --primary: oklch(0.22 0.01 85);
+  --primary-foreground: oklch(0.97 0.005 85);
+  --secondary: oklch(0.94 0.01 85);
+  --secondary-foreground: oklch(0.22 0.01 85);
+  --muted: oklch(0.94 0.01 85);
+  --muted-foreground: oklch(0.5 0.005 85);
+  --accent: oklch(0.9 0.02 85);
+  --accent-foreground: oklch(0.22 0.01 85);
+  --destructive: oklch(0.577 0.08 27.325);
+  --destructive-foreground: oklch(0.97 0.005 85);
+  --border: oklch(0.9 0.01 85);
+  --input: oklch(0.94 0.01 85);
+  --ring: oklch(0.7 0.01 85);
+
+  /* Sidebar colors */
+  --sidebar: oklch(0.97 0.005 85);
+  --sidebar-foreground: oklch(0.2 0.01 85);
+  --sidebar-primary: oklch(0.22 0.01 85);
+  --sidebar-accent: oklch(0.94 0.01 85);
+  --sidebar-border: oklch(0.9 0.01 85);
+
+  /* Border radius - iOS-inspired (12pt default) */
+  --radius: 0.75rem;
+
+  /* Typography */
+  --font-family-mono: var(--font-geist-mono);
+
+  /* Shadows - Subtle */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Dark mode variant for koto preset */
+body.preset-koto.dark {
+  --background: #0a0a0a;
+  --foreground: oklch(0.94 0.01 60);
+  --card: #111111;
+  --card-foreground: oklch(0.94 0.01 60);
+  --popover: oklch(0.22 0.02 240);
+  --popover-foreground: oklch(0.94 0.01 60);
+  --primary: oklch(0.9 0.01 60);
+  --primary-foreground: oklch(0.2 0.02 240);
+  --secondary: oklch(0.26 0.03 240);
+  --secondary-foreground: oklch(0.94 0.01 60);
+  --muted: oklch(0.26 0.03 240);
+  --muted-foreground: oklch(0.72 0.02 60);
+  --accent: oklch(0.3 0.04 240);
+  --accent-foreground: oklch(0.94 0.01 60);
+  --destructive: oklch(0.5 0.12 25);
+  --destructive-foreground: oklch(0.9 0.01 60);
+  --border: oklch(0.28 0.02 240);
+  --input: oklch(0.24 0.03 240);
+  --ring: oklch(0.35 0.04 240);
+
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: oklch(0.94 0.01 60);
+  --sidebar-primary: oklch(0.5 0.12 30);
+  --sidebar-accent: oklch(0.26 0.03 240);
+  --sidebar-border: oklch(0.28 0.02 240);
+}
+
+/* ============================================================================
+   Future Presets Will Be Added Here
+   ============================================================================
+
+   Example structure for a new preset:
+
+   body.preset-{id} {
+     --background: ...;
+     --foreground: ...;
+     // ... all tokens
+   }
+
+   body.preset-{id}.dark {
+     // ... dark mode overrides
+   }
+
+   Presets to be added:
+   - sacred: Monospace-first terminal aesthetic (17 switchable fonts)
+   - kumori: iOS parity design (exact iOS color values)
+   - arbor: Brutalist rounded-none aesthetic  
+   - radar-layout: Center header nav pattern
+   
+   ============================================================================ */

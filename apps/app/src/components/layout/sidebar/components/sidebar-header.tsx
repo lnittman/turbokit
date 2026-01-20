@@ -20,18 +20,18 @@ export function SidebarHeader(): React.ReactElement {
       {/* Search button - always in DOM but fades in/out */}
       <motion.button
         onClick={() => setCommandMenuOpen(true)}
-        className="h-8 w-8 flex items-center justify-center hover:bg-accent/60 active:bg-accent group transition-all duration-300"
+        className="h-8 w-8 flex items-center justify-center rounded-sm hover:bg-muted/80 active:bg-muted group transition-all duration-[0ms] hover:transition-duration-[150ms]"
         aria-label="Search"
         initial={false}
-        animate={{ 
+        animate={{
           opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? 'auto' : 'none' 
+          pointerEvents: isOpen ? 'auto' : 'none'
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
-        <MagnifyingGlass 
-          weight="duotone" 
-          className="h-5 w-5 text-muted-foreground group-hover:text-foreground/75 group-active:text-foreground transition-all duration-300" 
+        <MagnifyingGlass
+          weight="duotone"
+          className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-all duration-[0ms] group-hover:transition-duration-[150ms]"
         />
       </motion.button>
     </div>

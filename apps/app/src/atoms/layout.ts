@@ -19,7 +19,8 @@ export const commandMenuOpenAtom = atom<boolean>(false);
 export const settingsModalOpenAtom = atom<boolean>(false);
 
 // Sidebar state
-export const sidebarOpenAtom = atom<boolean>(false); // Default to collapsed
+export const sidebarOpenAtom = atom<boolean>(false); // Mobile menu open state
+export const sidebarCollapsedAtom = atom<boolean>(false); // Desktop collapsed state (false = expanded 256px, true = collapsed 64px)
 
 // Generic modal state interface for items with an ID
 export interface ItemModalState {

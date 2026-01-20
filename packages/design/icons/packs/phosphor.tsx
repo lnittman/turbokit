@@ -36,8 +36,13 @@ import {
   Package as PhPackage,
   Book as PhBook,
   UploadSimple as PhUpload,
+  DownloadSimple as PhDownload,
   Image as PhImage,
   File as PhFile,
+  Trash as PhTrash,
+  Eye as PhEye,
+  Palette as PhPalette,
+  MagnifyingGlass as PhMagnifyingGlass,
 } from "@phosphor-icons/react";
 import type { IconWeight } from "../context";
 import type { IconName } from "../names";
@@ -111,10 +116,20 @@ export function PhosphorIcon({ name, className, weight = "duotone" }: { name: Ic
       return <PhBook {...common} />;
     case "upload":
       return <PhUpload {...common} />;
+    case "download":
+      return <PhDownload {...common} />;
     case "image":
       return <PhImage {...common} />;
     case "file":
       return <PhFile {...common} />;
+    case "trash":
+      return <PhTrash {...common} />;
+    case "eye":
+      return <PhEye {...common} />;
+    case "palette":
+      return <PhPalette {...common} />;
+    case "magnifying-glass":
+      return <PhMagnifyingGlass {...common} />;
     default:
       return null;
   }

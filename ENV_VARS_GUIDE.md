@@ -96,6 +96,41 @@ AUTUMN_TAX_ENABLED=true
 
 ---
 
+### 📱 Push Notifications (Mobile)
+
+```bash
+# ============================================
+# ANDROID (FCM via Google Cloud)
+# ============================================
+# Google Cloud project ID
+GOOGLE_CLOUD_PROJECT_ID="your-project-id"
+
+# Service account JSON (entire file, minified to single line)
+# Get from: Google Cloud Console > IAM & Admin > Service Accounts
+GOOGLE_SERVICE_ACCOUNT_JSON='{"type":"service_account","project_id":"...","private_key":"..."}'
+
+# ============================================
+# iOS (APNs)
+# ============================================
+# APNs auth key ID (from .p8 filename)
+# Get from: Apple Developer > Certificates, Identifiers & Profiles > Keys
+APNS_KEY_ID="ABC123XYZ"
+
+# Apple Developer Team ID
+APNS_TEAM_ID="DEF456UVW"
+
+# Base64-encoded .p8 key file
+# Convert with: cat AuthKey_XXX.p8 | base64 | tr -d '\n'
+APNS_KEY_P8="LS0tLS1CRUdJTi..."
+
+# App bundle identifier
+APNS_BUNDLE_ID="com.yourapp.bundle"
+```
+
+**Setup Guide:** See `packages/backend/convex/app/notifications/MOBILE_PUSH.md`
+
+---
+
 ### 🤖 AI Services
 
 ```bash
