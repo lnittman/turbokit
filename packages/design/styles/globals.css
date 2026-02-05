@@ -49,38 +49,125 @@
   font-display: swap;
 }
 
+/* ============================================================================
+   Dark-First Design Tokens
+   ============================================================================ */
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
-  --footer-height: 4rem; /* Defines footer height for consistent positioning */
-  --background: oklch(0.98 0.005 85); /* Warm paper-like off-white */
-  --foreground: oklch(0.2 0.01 85); /* Slightly warmer black */
-  --card: oklch(1 0.005 85); /* Slightly lighter paper */
+  /* Background */
+  --background: #0a0a0a;
+  --foreground: rgba(250, 250, 250, 0.94);
+
+  /* Cards - glass-like with subtle transparency */
+  --card: rgba(255, 255, 255, 0.04);
+  --card-solid: #141416;
+  --card-foreground: rgba(250, 250, 250, 0.94);
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  /* Popover */
+  --popover: #18181b;
+  --popover-foreground: rgba(250, 250, 250, 0.94);
+
+  /* Primary - near white on dark */
+  --primary: rgba(250, 250, 250, 0.94);
+  --primary-foreground: #0a0a0a;
+
+  /* Secondary */
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: rgba(250, 250, 250, 0.72);
+
+  /* Muted */
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: rgba(250, 250, 250, 0.48);
+
+  /* Accent */
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: rgba(250, 250, 250, 0.94);
+
+  /* Destructive */
+  --destructive: oklch(0.5 0.12 25);
+  --destructive-foreground: rgba(250, 250, 250, 0.94);
+
+  /* UI Chrome */
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: rgba(255, 255, 255, 0.2);
+
+  /* Radius - slightly rounded, squircle feel */
+  --radius: 0.75rem;
+
+  /* Chart colors */
+  --chart-1: oklch(0.5 0.12 30);
+  --chart-2: oklch(0.6 0.1 80);
+  --chart-3: oklch(0.5 0.09 130);
+  --chart-4: oklch(0.55 0.08 260);
+  --chart-5: oklch(0.65 0.07 300);
+
+  /* Sidebar */
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: rgba(250, 250, 250, 0.94);
+  --sidebar-primary: rgba(250, 250, 250, 0.94);
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: rgba(250, 250, 250, 0.94);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: rgba(255, 255, 255, 0.2);
+
+  /* Typography */
+  --title-font: 'IosevkaTerm-Regular', monospace;
+
+  /* Text hierarchy */
+  --text-primary: rgba(250, 250, 250, 0.94);
+  --text-secondary: rgba(250, 250, 250, 0.60);
+  --text-tertiary: rgba(250, 250, 250, 0.40);
+
+  /* Shadows */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4),
+                 0 2px 8px rgba(0, 0, 0, 0.2),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* Blur */
+  --blur: blur(24px);
+  --blur-heavy: blur(50px);
+
+  /* Easing */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 320ms;
+  --duration-slow: 500ms;
+}
+
+/* Light mode override */
+.light {
+  --background: oklch(0.98 0.005 85);
+  --foreground: oklch(0.2 0.01 85);
+  --card: oklch(1 0.005 85);
+  --card-solid: oklch(0.98 0.005 85);
   --card-foreground: oklch(0.2 0.01 85);
+  --card-border: oklch(0.9 0.01 85);
   --popover: oklch(1 0.005 85);
   --popover-foreground: oklch(0.2 0.01 85);
   --primary: oklch(0.22 0.01 85);
   --primary-foreground: oklch(0.97 0.005 85);
-  --secondary: oklch(0.94 0.01 85); /* Slightly darker secondary for accents */
+  --secondary: oklch(0.94 0.01 85);
   --secondary-foreground: oklch(0.22 0.01 85);
   --muted: oklch(0.94 0.01 85);
   --muted-foreground: oklch(0.5 0.01 85);
-  --accent: oklch(0.9 0.02 85); /* Subtle accent color */
+  --accent: oklch(0.9 0.02 85);
   --accent-foreground: oklch(0.22 0.01 85);
-  --destructive: oklch(0.577 0.08 27.325); /* Muted red - less saturated */
+  --destructive: oklch(0.577 0.08 27.325);
   --destructive-foreground: oklch(0.97 0.005 85);
-  --border: oklch(0.9 0.01 85); /* Subtle border color */
-  --input: oklch(0.9 0.01 85); /* Match border for consistency */
+  --border: oklch(0.9 0.01 85);
+  --input: oklch(0.9 0.01 85);
   --ring: oklch(0.7 0.01 85);
-  /* Subtle, coordinated chart colors in Rams style */
   --chart-1: oklch(0.646 0.09 41.116);
   --chart-2: oklch(0.6 0.06 184.704);
   --chart-3: oklch(0.55 0.05 227.392);
   --chart-4: oklch(0.7 0.08 84.429);
   --chart-5: oklch(0.75 0.07 70.08);
-  --radius: 0.375rem; /* 6px - Sweet spot between sharp and rounded */
-  --sidebar: var(--background); /* Matches main background for subtlety */
+  --sidebar: var(--background);
   --sidebar-foreground: oklch(0.2 0.01 85);
   --sidebar-primary: oklch(0.22 0.01 85);
   --sidebar-primary-foreground: oklch(0.97 0.005 85);
@@ -88,44 +175,11 @@
   --sidebar-accent-foreground: oklch(0.22 0.01 85);
   --sidebar-border: oklch(0.9 0.01 85);
   --sidebar-ring: oklch(0.7 0.01 85);
-  --title-font: 'IosevkaTerm-Regular', monospace;
-}
-
-.dark {
-  /* Warm dark with subtle coolness - elevated minimal aesthetic */
-  --background: #0a0a0a; /* True dark background (warm dark gray) */
-  --foreground: oklch(0.94 0.01 60); /* Slightly warm white text */
-  --card: #111111; /* Opaque dark card */
-  --card-foreground: oklch(0.94 0.01 60);
-  --popover: oklch(0.22 0.02 240);
-  --popover-foreground: oklch(0.94 0.01 60);
-  --primary: oklch(0.9 0.01 60);
-  --primary-foreground: oklch(0.2 0.02 240);
-  --secondary: oklch(0.26 0.03 240); /* Slightly lighter secondary */
-  --secondary-foreground: oklch(0.94 0.01 60);
-  --muted: oklch(0.26 0.03 240);
-  --muted-foreground: oklch(0.72 0.02 60);
-  --accent: oklch(0.3 0.04 240); /* Subtle accent with material quality */
-  --accent-foreground: oklch(0.94 0.01 60);
-  --destructive: oklch(0.5 0.12 25); /* Muted red - like in Rams' FM radio buttons */
-  --destructive-foreground: oklch(0.9 0.01 60);
-  --border: oklch(0.28 0.02 240); /* Border with subtle coolness */
-  --input: oklch(0.24 0.03 240);
-  --ring: oklch(0.35 0.04 240);
-  /* Coordinated chart colors inspired by Rams' selective color approach */
-  --chart-1: oklch(0.5 0.12 30); /* Blood orange (FM radio reference) */
-  --chart-2: oklch(0.6 0.1 80); /* Honey yellow (phono reference) */
-  --chart-3: oklch(0.5 0.09 130); /* Leaf green (power button reference) */
-  --chart-4: oklch(0.55 0.08 260); /* Blue-grey like the T52 variant */
-  --chart-5: oklch(0.65 0.07 300); /* Subtle purple, complementary to system */
-  --sidebar: var(--background); /* Matches main background for cohesion */
-  --sidebar-foreground: oklch(0.94 0.01 60);
-  --sidebar-primary: oklch(0.5 0.12 30); /* Blood orange accent */
-  --sidebar-primary-foreground: oklch(0.94 0.01 60);
-  --sidebar-accent: oklch(0.26 0.03 240);
-  --sidebar-accent-foreground: oklch(0.94 0.01 60);
-  --sidebar-border: oklch(0.28 0.02 240);
-  --sidebar-ring: oklch(0.35 0.04 240);
+  --text-primary: oklch(0.2 0.01 85);
+  --text-secondary: oklch(0.4 0.01 85);
+  --text-tertiary: oklch(0.55 0.01 85);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08),
+                 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 @theme inline {
@@ -187,7 +241,7 @@
   }
 }
 
-/* This layer is added by shadcn/ui */
+/* Base layer */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -197,7 +251,6 @@
   }
 }
 
-/* This layer is by next-forge */
 @layer base {
   ::after,
   ::before,
@@ -242,22 +295,6 @@
   --tw-prose-pre-bg: var(--color-background);
   --tw-prose-th-borders: var(--color-border);
   --tw-prose-td-borders: var(--color-border);
-  --tw-prose-invert-body: var(--color-foreground);
-  --tw-prose-invert-headings: var(--color-foreground);
-  --tw-prose-invert-lead: var(--color-muted-foreground);
-  --tw-prose-invert-links: var(--color-primary);
-  --tw-prose-invert-bold: var(--color-foreground);
-  --tw-prose-invert-counters: var(--color-foreground);
-  --tw-prose-invert-bullets: var(--color-foreground);
-  --tw-prose-invert-hr: var(--color-muted-foreground);
-  --tw-prose-invert-quotes: var(--color-muted-foreground);
-  --tw-prose-invert-quote-borders: var(--color-border);
-  --tw-prose-invert-captions: var(--color-muted-foreground);
-  --tw-prose-invert-code: var(--color-foreground);
-  --tw-prose-invert-pre-code: var(--color-foreground);
-  --tw-prose-invert-pre-bg: var(--color-background);
-  --tw-prose-invert-th-borders: var(--color-border);
-  --tw-prose-invert-td-borders: var(--color-border);
 }
 
 html, body {
@@ -266,10 +303,9 @@ html, body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   background: var(--background);
   font-family: 'IosevkaTerm-Regular', monospace;
-  transition: background-color 0.2s ease, color 0.2s ease; /* Faster transition */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Typography utilities */
@@ -281,12 +317,12 @@ body {
 
 /* Utility: Hide scrollbar while maintaining functionality */
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Utility: Icon animation on hover */
@@ -299,130 +335,585 @@ button:hover .hover-arrow {
   transform: translateX(3px);
 }
 
-/* Component layer utilities */
 @layer components {
   .font-highway {
     font-family: var(--title-font);
     letter-spacing: 0.01em;
   }
 }
-/* ============================================================================
-   TurboKit Design Preset System
-   ============================================================================
-
-   Runtime-switchable design presets via body classes.
-   
-   Usage:
-   - Apply preset: document.body.classList.add('preset-koto')
-   - Or use hooks: const { applyPreset } = usePreset(); applyPreset('koto');
-   
-   Presets are composed of layered tokens:
-   - Colors (semantic + palette)
-   - Spacing, radius, shadows
-   - Typography (fonts, sizes, line-heights)
-   - Z-index scales
-   - Animation durations and easings
-   
-   New presets can be:
-   - Extracted from existing projects via /extract-preset command
-   - Created manually in .turbokit/presets/{id}.json
-   - Composed from multiple presets via usePresetComposer() hook
-   - Shared via Convex registry
-   
-   ============================================================================ */
-
-/* Preset: Koto (Default)
-   iOS-inspired minimal design with glassmorphism effects and rounded aesthetics */
-body.preset-koto {
-  /* Colors - Semantic */
-  --background: oklch(0.98 0.005 85);
-  --foreground: oklch(0.2 0.01 85);
-  --card: oklch(1 0.005 85);
-  --card-foreground: oklch(0.2 0.01 85);
-  --popover: oklch(1 0.005 85);
-  --popover-foreground: oklch(0.2 0.01 85);
-  --primary: oklch(0.22 0.01 85);
-  --primary-foreground: oklch(0.97 0.005 85);
-  --secondary: oklch(0.94 0.01 85);
-  --secondary-foreground: oklch(0.22 0.01 85);
-  --muted: oklch(0.94 0.01 85);
-  --muted-foreground: oklch(0.5 0.005 85);
-  --accent: oklch(0.9 0.02 85);
-  --accent-foreground: oklch(0.22 0.01 85);
-  --destructive: oklch(0.577 0.08 27.325);
-  --destructive-foreground: oklch(0.97 0.005 85);
-  --border: oklch(0.9 0.01 85);
-  --input: oklch(0.94 0.01 85);
-  --ring: oklch(0.7 0.01 85);
-
-  /* Sidebar colors */
-  --sidebar: oklch(0.97 0.005 85);
-  --sidebar-foreground: oklch(0.2 0.01 85);
-  --sidebar-primary: oklch(0.22 0.01 85);
-  --sidebar-accent: oklch(0.94 0.01 85);
-  --sidebar-border: oklch(0.9 0.01 85);
-
-  /* Border radius - iOS-inspired (12pt default) */
-  --radius: 0.75rem;
-
-  /* Typography */
-  --font-family-mono: var(--font-geist-mono);
-
-  /* Shadows - Subtle */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-/* Dark mode variant for koto preset */
-body.preset-koto.dark {
-  --background: #0a0a0a;
-  --foreground: oklch(0.94 0.01 60);
-  --card: #111111;
-  --card-foreground: oklch(0.94 0.01 60);
-  --popover: oklch(0.22 0.02 240);
-  --popover-foreground: oklch(0.94 0.01 60);
-  --primary: oklch(0.9 0.01 60);
-  --primary-foreground: oklch(0.2 0.02 240);
-  --secondary: oklch(0.26 0.03 240);
-  --secondary-foreground: oklch(0.94 0.01 60);
-  --muted: oklch(0.26 0.03 240);
-  --muted-foreground: oklch(0.72 0.02 60);
-  --accent: oklch(0.3 0.04 240);
-  --accent-foreground: oklch(0.94 0.01 60);
-  --destructive: oklch(0.5 0.12 25);
-  --destructive-foreground: oklch(0.9 0.01 60);
-  --border: oklch(0.28 0.02 240);
-  --input: oklch(0.24 0.03 240);
-  --ring: oklch(0.35 0.04 240);
-
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: oklch(0.94 0.01 60);
-  --sidebar-primary: oklch(0.5 0.12 30);
-  --sidebar-accent: oklch(0.26 0.03 240);
-  --sidebar-border: oklch(0.28 0.02 240);
-}
 
 /* ============================================================================
-   Future Presets Will Be Added Here
-   ============================================================================
-
-   Example structure for a new preset:
-
-   body.preset-{id} {
-     --background: ...;
-     --foreground: ...;
-     // ... all tokens
-   }
-
-   body.preset-{id}.dark {
-     // ... dark mode overrides
-   }
-
-   Presets to be added:
-   - sacred: Monospace-first terminal aesthetic (17 switchable fonts)
-   - kumori: iOS parity design (exact iOS color values)
-   - arbor: Brutalist rounded-none aesthetic  
-   - radar-layout: Center header nav pattern
-   
+   Overlay System (Base UI Dialog)
    ============================================================================ */
+
+/* Scroll fade mask support */
+@property --mask-fade-top {
+  syntax: '<color>';
+  initial-value: black;
+  inherits: false;
+}
+
+@property --mask-fade-bottom {
+  syntax: '<color>';
+  initial-value: black;
+  inherits: false;
+}
+
+/* Base UI Dialog backdrop */
+.tk-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 280ms var(--ease-out);
+}
+
+.tk-dialog-backdrop[data-starting-style],
+.tk-dialog-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+/* Base UI Dialog popup (viewport) */
+.tk-dialog-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  pointer-events: none;
+}
+
+/* Dual card container */
+.tk-dual-cards {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  pointer-events: auto;
+  transform: translateX(248px) scale(1);
+  opacity: 1;
+  transition: transform 0.35s var(--ease-spring),
+              opacity 0.3s ease;
+}
+
+.tk-dialog-popup[data-starting-style] .tk-dual-cards {
+  opacity: 0;
+  transform: translateX(248px) scale(0.96);
+}
+
+.tk-dialog-popup[data-ending-style] .tk-dual-cards {
+  opacity: 0;
+  transform: translateX(248px) scale(0.97);
+  transition: opacity 200ms var(--ease-in),
+              transform 200ms var(--ease-in);
+}
+
+.tk-dual-cards.expanded {
+  transform: translateX(0) scale(1);
+}
+
+.tk-dialog-popup[data-starting-style] .tk-dual-cards.expanded {
+  transform: translateX(0) scale(0.96);
+}
+
+.tk-dialog-popup[data-ending-style] .tk-dual-cards.expanded {
+  transform: translateX(0) scale(0.97);
+}
+
+/* Glass card */
+.tk-card {
+  background: linear-gradient(
+    180deg,
+    hsl(240 10% 8% / 0.3) 0%,
+    hsl(240 10% 6% / 0.5) 40%,
+    hsl(240 10% 8% / 0.85) 70%,
+    hsl(240 10% 10% / 0.95) 100%
+  );
+  backdrop-filter: blur(2px) saturate(1.1);
+  -webkit-backdrop-filter: blur(2px) saturate(1.1);
+  border-radius: var(--radius-xl, 1rem);
+  corner-shape: squircle;
+  box-shadow:
+    inset 0 1px 0 0 hsl(200 20% 50% / 0.1),
+    0 0 0 1px hsl(220 10% 25% / 0.3),
+    0 30px 60px -20px hsl(0 0% 0% / 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Left card (list/nav) */
+.tk-card-left {
+  width: 440px;
+  min-height: 480px;
+  max-height: min(85vh, 640px);
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.tk-card-left.shifted {
+  transform: translateX(-8px);
+}
+
+/* Right card (detail) */
+.tk-card-right {
+  width: 500px;
+  min-height: 480px;
+  max-height: min(85vh, 640px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(16px);
+  transition:
+    opacity 0.24s var(--ease-in),
+    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s 0.24s;
+}
+
+.tk-card-right.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition:
+    opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s var(--ease-spring),
+    visibility 0s;
+}
+
+/* Single card (no dual layout) */
+.tk-card-single {
+  width: 100%;
+  max-width: 440px;
+  min-height: 480px;
+  max-height: min(85vh, 640px);
+  pointer-events: auto;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+}
+
+.tk-dialog-popup[data-starting-style] .tk-card-single {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+}
+
+.tk-dialog-popup[data-ending-style] .tk-card-single {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition: opacity 200ms var(--ease-in),
+              transform 200ms var(--ease-in);
+}
+
+/* Overlay header */
+.tk-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tk-overlay-title {
+  font-family: var(--title-font);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  text-transform: lowercase;
+}
+
+/* Overlay content area with scroll fade */
+.tk-overlay-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  --mask-fade-top: black;
+  --mask-fade-bottom: black;
+  transition: --mask-fade-top 200ms ease-out, --mask-fade-bottom 200ms ease-out;
+  mask-image: linear-gradient(
+    to bottom,
+    var(--mask-fade-top) 0%,
+    black 16%,
+    black 84%,
+    var(--mask-fade-bottom) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    var(--mask-fade-top) 0%,
+    black 16%,
+    black 84%,
+    var(--mask-fade-bottom) 100%
+  );
+}
+
+.tk-overlay-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tile button (used in overlay headers) */
+.tk-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all 150ms ease;
+  cursor: pointer;
+}
+
+.tk-tile:hover {
+  background: var(--accent);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.tk-tile:active {
+  transform: scale(0.96);
+}
+
+/* Drawer styles (mobile) */
+.tk-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.tk-drawer-content {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: var(--card-solid, #141416);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--border);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tk-drawer-handle-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 8px;
+}
+
+.tk-drawer-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tk-drawer-safe-area {
+  height: env(safe-area-inset-bottom, 0px);
+}
+
+/* List items in overlays */
+.tk-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 150ms ease;
+  color: var(--text-secondary);
+}
+
+.tk-list-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+}
+
+.tk-list-item.active {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+/* ============================================================================
+   Command Palette (Base UI Dialog)
+   ============================================================================ */
+
+.tk-cmd-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 200ms var(--ease-out);
+}
+
+.tk-cmd-backdrop[data-starting-style],
+.tk-cmd-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.tk-cmd-popup {
+  position: fixed;
+  z-index: 201;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 560px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  background: var(--card-solid, #141416);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tk-cmd-popup[data-starting-style] {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.96);
+}
+
+.tk-cmd-popup[data-ending-style] {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.97);
+  transition: opacity 150ms var(--ease-in),
+              transform 150ms var(--ease-in);
+}
+
+/* Search input area */
+.tk-cmd-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tk-cmd-search-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.tk-cmd-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: var(--title-font);
+  color: var(--text-primary);
+}
+
+.tk-cmd-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Kbd badges */
+.tk-cmd-kbd {
+  padding: 2px 8px;
+  font-family: var(--title-font);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.tk-cmd-kbd-sm {
+  padding: 1px 6px;
+  font-family: var(--title-font);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.tk-cmd-kbd-xs {
+  padding: 1px 5px;
+  font-family: var(--title-font);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+/* Command list */
+.tk-cmd-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tk-cmd-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Group */
+.tk-cmd-group {
+  padding-bottom: 8px;
+}
+
+.tk-cmd-group-label {
+  padding: 4px 12px 8px;
+  font-family: var(--title-font);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--text-tertiary);
+}
+
+/* Command item */
+.tk-cmd-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-secondary);
+  transition: background 100ms ease;
+  outline: none;
+}
+
+.tk-cmd-item[data-highlighted] {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.tk-cmd-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.tk-cmd-item[data-highlighted] .tk-cmd-item-icon {
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+.tk-cmd-item-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tk-cmd-item-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: inherit;
+}
+
+.tk-cmd-item-desc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty state */
+.tk-cmd-empty {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* Footer */
+.tk-cmd-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tk-cmd-footer-hints {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tk-cmd-footer-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.tk-cmd-footer-count {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+/* ================================================================
+   Sidebar tooltip
+   ================================================================ */
+
+.tk-sidebar-tooltip {
+  transform-origin: var(--transform-origin);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: var(--surface-1);
+  padding: 4px 10px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  transition: transform 150ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 150ms cubic-bezier(0.32, 0.72, 0, 1);
+
+  &[data-starting-style] {
+    opacity: 0;
+    transform: translateX(-4px) scale(0.96);
+  }
+
+  &[data-ending-style] {
+    opacity: 0;
+    transform: translateX(-2px) scale(0.98);
+  }
+
+  &[data-instant] {
+    transition-duration: 0ms;
+  }
+}

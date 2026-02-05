@@ -5,21 +5,20 @@ import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import type React from 'react';
 
-import { commandMenuOpenAtom } from '@/atoms/layout';
-import { sidebarOpenAtom } from '@/atoms/layout';
+import { commandModalAtom, sidebarOpenAtom } from '@/atoms/layout';
 
 export function SidebarHeader(): React.ReactElement {
   const [isOpen] = useAtom(sidebarOpenAtom);
-  const [, setCommandMenuOpen] = useAtom(commandMenuOpenAtom);
+  const [, setCommandModal] = useAtom(commandModalAtom);
 
   return (
     <div className="h-14 relative flex justify-between items-center px-2" style={{ width: 276 }}>
       {/* Button spacer to maintain layout when toggle button is outside */}
       <div className="h-8 w-8"></div>
-      
+
       {/* Search button - always in DOM but fades in/out */}
       <motion.button
-        onClick={() => setCommandMenuOpen(true)}
+        onClick={() => setCommandModal({ open: true, activeItemId: null, searchQuery: '' })}
         className="h-8 w-8 flex items-center justify-center rounded-sm hover:bg-muted/80 active:bg-muted group transition-all duration-[0ms] hover:transition-duration-[150ms]"
         aria-label="Search"
         initial={false}

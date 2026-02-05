@@ -12,9 +12,6 @@ export const uiPreferencesAtom = atomWithStorage<UIPreferences>('uiPreferences',
   compactMode: false,
 });
 
-// Command menu open state
-export const commandMenuOpenAtom = atom<boolean>(false);
-
 // Settings modal open state
 export const settingsModalOpenAtom = atom<boolean>(false);
 

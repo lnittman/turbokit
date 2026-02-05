@@ -4,8 +4,9 @@ import { useEffect } from 'react';
 import type React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { House, Plus, Palette } from '@phosphor-icons/react';
+import { House, Plus, GearSix } from '@phosphor-icons/react';
 
+import { Tooltip } from '@base-ui-components/react/tooltip';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 
@@ -31,8 +32,8 @@ export function Sidebar(): React.ReactElement {
 
   const navItems = [
     { href: '/', label: 'Home', icon: House },
-    { href: '/presets', label: 'Presets', icon: Palette },
     { href: '/create', label: 'Create', icon: Plus },
+    { href: '/settings', label: 'Settings', icon: GearSix },
   ];
 
   // Desktop sidebar - collapsible (64px collapsed, 256px expanded)
@@ -71,37 +72,57 @@ export function Sidebar(): React.ReactElement {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-2 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+        <Tooltip.Provider delay={300} closeDelay={0}>
+          <nav className="flex-1 px-3 py-2 space-y-1">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-sm',
-                  'transition-all duration-[0ms] hover:transition-duration-[150ms]',
-                  'hover:bg-accent/10 active:scale-[0.98]',
-                  isActive
-                    ? 'bg-accent/20 text-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
-                  isCollapsed && 'justify-center px-0'
-                )}
-                title={isCollapsed ? item.label : undefined}
-              >
-                <Icon weight={isActive ? 'fill' : 'regular'} className="h-5 w-5 flex-shrink-0" />
-                <span className={cn(
-                  "transition-all duration-300",
-                  isCollapsed && "opacity-0 w-0 overflow-hidden"
-                )}>
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
+              const link = (
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-sm',
+                    'transition-all duration-[0ms] hover:transition-duration-[150ms]',
+                    'hover:bg-accent/10 active:scale-[0.98]',
+                    isActive
+                      ? 'bg-accent/20 text-foreground'
+                      : 'text-muted-foreground hover:text-foreground',
+                    isCollapsed && 'justify-center px-0'
+                  )}
+                >
+                  <Icon weight={isActive ? 'fill' : 'regular'} className="h-5 w-5 flex-shrink-0" />
+                  <span className={cn(
+                    "transition-all duration-300",
+                    isCollapsed && "opacity-0 w-0 overflow-hidden"
+                  )}>
+                    {item.label}
+                  </span>
+                </Link>
+              );
+
+              if (!isCollapsed) {
+                return <div key={item.href}>{link}</div>;
+              }
+
+              return (
+                <Tooltip.Root key={item.href}>
+                  <Tooltip.Trigger
+                    render={link}
+                    aria-label={item.label}
+                  />
+                  <Tooltip.Portal>
+                    <Tooltip.Positioner side="right" sideOffset={8}>
+                      <Tooltip.Popup className="tk-sidebar-tooltip">
+                        {item.label}
+                      </Tooltip.Popup>
+                    </Tooltip.Positioner>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              );
+            })}
+          </nav>
+        </Tooltip.Provider>
 
         {/* User section */}
         <div className="border-t border-border p-3">

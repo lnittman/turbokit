@@ -13,18 +13,17 @@ import { sidebarCollapsedAtom } from '@/atoms/layout';
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
+  overlay: React.ReactNode;
 }
 
-export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps): React.ReactElement | null {
+export default function AuthenticatedLayout({ children, overlay }: AuthenticatedLayoutProps): React.ReactElement | null {
   const { isMobile, ready } = useIsMobile();
   const [isCollapsed] = useAtom(sidebarCollapsedAtom);
 
-  // Initialize keyboard shortcuts
   useKeyboardShortcuts();
 
   if (!ready) return null;
 
-  // For normal routes, render the full layout with sidebar
   return (
     <div className="flex min-h-screen flex-col">
       <Sidebar />
@@ -36,8 +35,11 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
         {children}
       </main>
 
-      {/* Portal components rendered at the root layout level for proper stacking context */}
+      {/* Overlay slot (parallel route) */}
+      {overlay}
+
+      {/* Portal components */}
       <CommandMenuModal />
     </div>
   );
-} 
+}
