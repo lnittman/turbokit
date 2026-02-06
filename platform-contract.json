@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Cross-template platform contract for templates monorepo",
+  "templates": {
+    "turbokit": {
+      "path": "turbokit",
+      "flywheel": "turborepo",
+      "requiredFiles": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".loop.json",
+        ".npmrc",
+        ".env.example"
+      ],
+      "requiredLoopKeys": ["project.name", "project.team", "project.workspace", "flywheel", "commands.build", "commands.test"],
+      "forbiddenPackages": [
+        "@repo/auth",
+        "@repo/typescript-config"
+      ],
+      "requiredSharedPackages": [
+        "@lnittman/auth",
+        "@lnittman/typescript-config",
+        "@lnittman/analytics",
+        "@lnittman/observability",
+        "@lnittman/seo",
+        "@lnittman/next-config"
+      ],
+      "qualityGates": ["lint", "typecheck", "build", "test"]
+    },
+    "applekit": {
+      "path": "applekit",
+      "flywheel": "xcode",
+      "requiredFiles": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".loop.json",
+        "project.yml"
+      ],
+      "requiredLoopKeys": ["project.name", "project.team", "project.workspace", "flywheel", "commands.build", "commands.test"],
+      "forbiddenPackages": [],
+      "requiredSharedPackages": [],
+      "qualityGates": ["build", "test"]
+    }
+  },
+  "shared": {
+    "requiredRootFiles": [".abbie/config.json"],
+    "requiredConfigKeys": ["name", "team", "workspace"],
+    "team": "TEMP",
+    "workspace": "luke-labs"
+  }
+}
