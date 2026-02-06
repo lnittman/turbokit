@@ -13,9 +13,15 @@ A modern, real-time application template powered by Convex.
 - **`packages/design`** — Design system with Tailwind CSS v4, shadcn/ui components, and theme variations (brutalist, minimal, playful)
 - **`packages/auth`** — Clerk authentication wrapper with hooks and middleware for Next.js and Convex integration
 - **`packages/testing`** — Testing utilities with Vitest, Playwright, and Convex-specific test helpers
-- **`packages/typescript-config`** — Shared TypeScript configurations for different project types
-- **`packages/analytics`** — PostHog integration for user analytics and feature tracking
-- **`packages/observability`** — Monitoring setup with Sentry integration and status components
+- **`packages/media`** — Media generation abstractions and provider wiring
+- **`packages/webgl`** — 3D and rendering helpers for richer UI experiences
+
+### Shared Infra Packages
+- **`@lnittman/typescript-config`** — Shared TypeScript configuration presets
+- **`@lnittman/next-config`** — Shared Next.js config, diagnostics, and PostHog rewrites
+- **`@lnittman/seo`** — Metadata and SEO helpers
+- **`@lnittman/analytics`** — PostHog analytics providers and page-view tracking
+- **`@lnittman/observability`** — Sentry instrumentation and runtime helpers
 
 ### Documentation
 - **`apps/docs/`** — Live docs app (Fumadocs) you can customize per project

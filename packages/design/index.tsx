@@ -1,4 +1,4 @@
-import { AuthProvider } from "@repo/auth/provider";
+import { AuthProvider } from "@lnittman/auth/provider";
 import type { ThemeProviderProps } from "next-themes";
 import type React from "react";
 

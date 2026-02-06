@@ -1,8 +1,10 @@
-import { keys as auth } from "@repo/auth/keys";
+import { keys as analytics } from "@lnittman/analytics/keys";
+import { keys as auth } from "@lnittman/auth/keys";
+import { keys as observability } from "@lnittman/observability/keys";
 import { createEnv } from "@t3-oss/env-nextjs";
 
 export const env = createEnv({
-	extends: [auth()],
+	extends: [auth(), analytics(), observability()],
 	server: {
 		// Add server-side environment variables here
 		// Example: DATABASE_URL: z.string().url(),

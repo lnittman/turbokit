@@ -1,13 +1,14 @@
-import { DesignSystemProvider } from "@repo/design";
-import type { Metadata } from "next";
+import { createMetadata } from "@lnittman/seo/metadata";
 import type React from "react";
+import { Providers } from "@/components/providers";
 
 import "@/styles/globals.css";
 
-export const metadata: Metadata = {
+export const metadata = createMetadata({
 	title: "turbokit",
 	description: "template project",
-};
+	applicationName: "turbokit",
+});
 
 export default function RootLayout({
 	children,
@@ -17,7 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className="min-h-screen bg-background" suppressHydrationWarning>
-				<DesignSystemProvider>{children}</DesignSystemProvider>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);

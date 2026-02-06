@@ -1,35 +1,56 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-	// Enable React strict mode for better development experience
-	reactStrictMode: true,
+const loadModule = (specifier: string) =>
+	// biome-ignore lint: dynamic import workaround for ESM config packages
+	new Function("s", "return import(s)")(specifier) as Promise<any>;
 
-	// Disable powered-by header for security
-	poweredByHeader: false,
+const createConfig = async (): Promise<NextConfig> => {
+	const { config: baseConfig, withAnalyzer } = await loadModule(
+		"@lnittman/next-config",
+	);
+	const { printEnvBanner } = await loadModule(
+		"@lnittman/next-config/diagnostics",
+	);
 
-	// Disable dev indicators
-	devIndicators: false,
+	const baseTranspilePackages = baseConfig.transpilePackages ?? [];
+	const baseRemotePatterns = baseConfig.images?.remotePatterns ?? [];
+	const baseServerActions =
+		typeof baseConfig.experimental?.serverActions === "object"
+			? baseConfig.experimental.serverActions
+			: {};
 
-	// Ensure design package is transpiled and CSS exports resolve
-	transpilePackages: ["@repo/design"],
-
-	// Configure image domains if needed
-	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "**",
-			},
-		],
-	},
-
-	// Experimental features
-	experimental: {
-		// Enable server actions
-		serverActions: {
-			bodySizeLimit: "2mb",
+	let nextConfig: NextConfig = {
+		...baseConfig,
+		reactStrictMode: true,
+		poweredByHeader: false,
+		devIndicators: false,
+		transpilePackages: [...new Set([...baseTranspilePackages, "@repo/design"])],
+		images: {
+			...(baseConfig.images ?? {}),
+			remotePatterns: [
+				...baseRemotePatterns,
+				{
+					protocol: "https",
+					hostname: "**",
+				},
+			],
 		},
-	},
+		experimental: {
+			...(baseConfig.experimental ?? {}),
+			serverActions: {
+				...baseServerActions,
+				bodySizeLimit: "2mb",
+			},
+		},
+	};
+
+	if (process.env.ANALYZE === "true") {
+		nextConfig = withAnalyzer(nextConfig);
+	}
+
+	printEnvBanner("turbokit-app");
+
+	return nextConfig;
 };
 
-export default nextConfig;
+export default createConfig;
