@@ -147,12 +147,24 @@ const EMPTY_CANVAS_DATA: CanvasStarterData = {
 	maxZoom: 200,
 };
 
+/**
+ * Demo data provides realistic content so layouts render out of the box.
+ * Replace these defaults with real Convex queries when wiring your app.
+ */
+import {
+	DEMO_CANVAS,
+	DEMO_CHAT,
+	DEMO_DASHBOARD,
+	DEMO_FEED,
+	DEMO_KANBAN,
+} from "./demo-data";
+
 const defaultStarterLayoutSeams: StarterLayoutSeams = {
-	useDashboard: () => ({ status: "empty", data: EMPTY_DASHBOARD_DATA }),
-	useFeed: () => ({ status: "empty", data: EMPTY_FEED_DATA }),
-	useChat: () => ({ status: "empty", data: EMPTY_CHAT_DATA }),
-	useKanban: () => ({ status: "empty", data: EMPTY_KANBAN_DATA }),
-	useCanvas: () => ({ status: "empty", data: EMPTY_CANVAS_DATA }),
+	useDashboard: () => ({ status: "ready", data: DEMO_DASHBOARD }),
+	useFeed: () => ({ status: "ready", data: DEMO_FEED }),
+	useChat: () => ({ status: "ready", data: DEMO_CHAT }),
+	useKanban: () => ({ status: "ready", data: DEMO_KANBAN }),
+	useCanvas: () => ({ status: "ready", data: DEMO_CANVAS }),
 };
 
 const StarterLayoutSeamContext = createContext<StarterLayoutSeams>(
