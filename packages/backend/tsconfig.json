@@ -10,6 +10,8 @@
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noImplicitAny": false,
+		"declaration": false,
+		"declarationMap": false,
 		"noEmit": true,
 		"types": ["@types/node"]
 	},
