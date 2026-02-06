@@ -13,7 +13,7 @@ import { internal } from "./_generated/api";
  */
 export const run = action({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<{ seeded: number; skipped: number }> => {
     console.log("🌱 Seeding built-in presets...");
 
     const result = await ctx.runMutation(

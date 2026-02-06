@@ -1,5 +1,15 @@
-import { internalMutation } from "../../_generated/server";
+import { internalMutation, internalQuery } from "../../_generated/server";
 import { v } from "convex/values";
+
+export const getUserByClerkId = internalQuery({
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .unique();
+  },
+});
 
 export const createUser = internalMutation({
   args: { clerkId: v.string(), email: v.string(), name: v.optional(v.string()), imageUrl: v.optional(v.string()) },
@@ -23,7 +33,24 @@ export const updateUser = internalMutation({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
       .unique();
     if (!user) {
-      return ctx.scheduler.runNow(ctx.api.app.users.internal.createUser, { clerkId, email, name, imageUrl });
+      // User doesn't exist, create them
+      const userId = await ctx.db.insert("users", {
+        clerkId,
+        email,
+        name,
+        imageUrl,
+        role: "user",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      });
+      await ctx.db.insert("activities", {
+        userId,
+        action: "user.created",
+        resourceType: "user",
+        resourceId: userId,
+        timestamp: Date.now(),
+      });
+      return userId;
     }
     await ctx.db.patch(user._id, { email, name, imageUrl, updatedAt: Date.now() });
     return user._id;

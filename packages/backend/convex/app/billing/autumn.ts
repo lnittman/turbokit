@@ -2,7 +2,7 @@ import { components } from "../../_generated/api";
 import { Autumn } from "@useautumn/convex";
 
 export const autumn = new Autumn(components.autumn, {
-  identify: async (ctx) => {
+  identify: async (ctx: any) => {
     const user = await ctx.auth.getUserIdentity?.();
     if (!user) return { customerId: "anonymous" } as any;
     return {

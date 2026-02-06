@@ -1,8 +1,6 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
-    "extends": [
-        "ultracite"
-    ],
+    "$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+    "extends": ["ultracite/next"],
     "files": {
         "includes": [
             "**",

@@ -27,7 +27,7 @@ export default function SettingsOverlayPage() {
         >
           <div className="flex flex-col items-start gap-0.5">
             <span className="text-sm font-medium">{item.label}</span>
-            <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+            <span className="text-xs text-foreground-tertiary">
               {item.description}
             </span>
           </div>
@@ -40,13 +40,10 @@ export default function SettingsOverlayPage() {
 function SettingsDetail({ id, label }: { id: string; label: string }) {
   return (
     <div className="flex flex-col gap-4">
-      <h3
-        className="text-sm font-medium"
-        style={{ color: "var(--text-primary)" }}
-      >
+      <h3 className="text-sm font-medium text-foreground">
         {label}
       </h3>
-      <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+      <p className="text-sm text-foreground-tertiary">
         {id} settings will be configured here.
       </p>
     </div>

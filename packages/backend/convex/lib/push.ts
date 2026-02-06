@@ -1,3 +1,5 @@
+"use node";
+
 /**
  * Mobile Push Notifications - No Firebase Platform Required
  *

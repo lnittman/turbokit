@@ -23,7 +23,7 @@
     "framer-motion": "^12.23.12"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@lnittman/typescript-config": "^0.1.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "24.7.0",
     "@types/react": "19.2.1",

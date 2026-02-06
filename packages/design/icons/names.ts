@@ -40,6 +40,14 @@ export const IconNames = {
   Eye: "eye",
   Palette: "palette",
   MagnifyingGlass: "magnifying-glass",
+  // Admin/utility icons
+  Plus: "plus",
+  Star: "star",
+  Lock: "lock",
+  Pencil: "pencil",
+  Copy: "copy",
+  Sun: "sun",
+  Moon: "moon",
 } as const;
 
 export type IconName = typeof IconNames[keyof typeof IconNames];

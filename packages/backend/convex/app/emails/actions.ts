@@ -5,7 +5,7 @@ import { checkRateLimit } from "../../lib/rateLimiter";
 
 export const sendWelcomeEmail = action({
   args: { userId: v.id("users"), email: v.string(), name: v.string() },
-  handler: async (ctx, { userId, email, name }) => {
+  handler: async (ctx, { userId, email, name }): Promise<{ emailId: string | null }> => {
     await checkRateLimit(ctx, "emailSend", userId);
     const html = `<h1>Welcome to TurboKit!</h1><p>Hi ${name}, we're excited to have you on board.</p>`;
     const text = `Welcome to TurboKit, ${name}! We're excited to have you on board.`;
@@ -16,7 +16,7 @@ export const sendWelcomeEmail = action({
 
 export const sendPasswordResetEmail = action({
   args: { userId: v.id("users"), email: v.string(), name: v.string(), resetToken: v.string() },
-  handler: async (ctx, { userId, email, name, resetToken }) => {
+  handler: async (ctx, { userId, email, name, resetToken }): Promise<{ emailId: string | null }> => {
     await checkRateLimit(ctx, "emailSend", userId);
     // In production, use Vercel URL or fallback to localhost for dev
     const appUrl = process.env.VERCEL_URL 
@@ -32,7 +32,7 @@ export const sendPasswordResetEmail = action({
 
 export const sendNotificationEmail = action({
   args: { userId: v.id("users"), email: v.string(), subject: v.string(), body: v.string(), html: v.optional(v.string()) },
-  handler: async (ctx, { userId, email, subject, body, html }) => {
+  handler: async (ctx, { userId, email, subject, body, html }): Promise<{ emailId: string | null }> => {
     await checkRateLimit(ctx, "emailSend", userId);
     const emailId = await resend.sendEmail(ctx, { from: EMAIL_CONFIG.from.notifications, to: email, subject, text: body, html: html || body, replyTo: [EMAIL_CONFIG.replyTo] });
     return { emailId };

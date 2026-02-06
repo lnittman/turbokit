@@ -14,7 +14,20 @@
 import { httpAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
 import { Webhook } from "svix";
-import type { WebhookEvent } from "@clerk/nextjs/server";
+
+// Clerk webhook event types (simplified for backend use)
+interface ClerkWebhookEvent {
+  type: string;
+  data: {
+    id: string;
+    email_addresses: Array<{ id: string; email_address: string }>;
+    primary_email_address_id?: string;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    image_url?: string;
+  };
+}
 
 export const clerkWebhook = httpAction(async (ctx, request) => {
   const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
@@ -40,7 +53,7 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
   // Create a new Svix instance with your webhook secret
   const wh = new Webhook(webhookSecret);
 
-  let evt: WebhookEvent;
+  let evt: ClerkWebhookEvent;
 
   // Verify the webhook
   try {
@@ -48,7 +61,7 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
       "svix-id": svixId,
       "svix-timestamp": svixTimestamp,
       "svix-signature": svixSignature,
-    }) as WebhookEvent;
+    }) as ClerkWebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
     return new Response("Invalid signature", { status: 400 });

@@ -30,7 +30,7 @@
     "openai": "^4.71.0"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@lnittman/typescript-config": "^0.1.0",
     "@types/node": "^20.11.0",
     "@types/react": "^19.0.0",
     "typescript": "^5.9.3"

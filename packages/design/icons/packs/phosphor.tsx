@@ -43,6 +43,13 @@ import {
   Eye as PhEye,
   Palette as PhPalette,
   MagnifyingGlass as PhMagnifyingGlass,
+  Plus as PhPlus,
+  Star as PhStar,
+  Lock as PhLock,
+  PencilSimple as PhPencil,
+  Copy as PhCopy,
+  Sun as PhSun,
+  Moon as PhMoon,
 } from "@phosphor-icons/react";
 import type { IconWeight } from "../context";
 import type { IconName } from "../names";
@@ -130,6 +137,20 @@ export function PhosphorIcon({ name, className, weight = "duotone" }: { name: Ic
       return <PhPalette {...common} />;
     case "magnifying-glass":
       return <PhMagnifyingGlass {...common} />;
+    case "plus":
+      return <PhPlus {...common} />;
+    case "star":
+      return <PhStar {...common} />;
+    case "lock":
+      return <PhLock {...common} />;
+    case "pencil":
+      return <PhPencil {...common} />;
+    case "copy":
+      return <PhCopy {...common} />;
+    case "sun":
+      return <PhSun {...common} />;
+    case "moon":
+      return <PhMoon {...common} />;
     default:
       return null;
   }

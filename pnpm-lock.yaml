@@ -13,9 +13,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.3.13
         version: 2.3.13
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:packages/typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: 22.15.3
         version: 22.15.3
@@ -116,12 +116,15 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.2.1)(immer@10.1.3)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0))
     devDependencies:
+      '@lnittman/playwright-config':
+        specifier: ^0.1.0
+        version: 0.1.0(@playwright/test@1.58.1)
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@playwright/test':
         specifier: ^1.57.0
         version: 1.58.1
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@types/node':
         specifier: 22.15.3
         version: 22.15.3
@@ -183,9 +186,9 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
@@ -257,9 +260,9 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: 24.7.0
         version: 24.7.0
@@ -306,9 +309,9 @@ importers:
       '@clerk/types':
         specifier: ^4.92.0
         version: 4.92.0
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: 24.7.0
         version: 24.7.0
@@ -500,9 +503,9 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@tailwindcss/postcss':
         specifier: ^4.1.14
         version: 4.1.14
@@ -552,9 +555,9 @@ importers:
         specifier: ^19.0.0
         version: 19.2.0
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ^20.11.0
         version: 20.19.11
@@ -580,9 +583,9 @@ importers:
         specifier: ^4.1.5
         version: 4.1.5
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       next:
         specifier: 15.5.2
         version: 15.5.2(@opentelemetry/api@1.9.0)(@playwright/test@1.58.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -608,9 +611,9 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: 24.7.0
         version: 24.7.0
@@ -639,9 +642,9 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/lodash.merge':
         specifier: ^4.6.9
         version: 4.6.9
@@ -711,9 +714,9 @@ importers:
 
   packages/webgl:
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
+      '@lnittman/typescript-config':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ^22.5.0
         version: 22.15.21
@@ -1912,6 +1915,14 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@lnittman/playwright-config@0.1.0':
+    resolution: {integrity: sha512-APVhXp7DMGTX73OOjLqBkCr+yGWuzfvbvoJ5+rTTZqyyIWiSLkr/WYZhSb1OxXEOAgk+LTZhKVA00Ne8UL5Uew==, tarball: https://npm.pkg.github.com/download/@lnittman/playwright-config/0.1.0/3f87198d570fd4d8ff47db13cec3f2bc146a0401}
+    peerDependencies:
+      '@playwright/test': ^1.55.0
+
+  '@lnittman/typescript-config@0.1.0':
+    resolution: {integrity: sha512-yWr39LVuPgwKkP/q7BuRo6Tg9s9z1InxnaLleZ89O2F69f+tbxmIjVH9tD+HQSvQkFduzd4cw7IpXynBs9/ZJA==, tarball: https://npm.pkg.github.com/download/@lnittman/typescript-config/0.1.0/995ce6cbb4b5f77aa291d6c7f9e18403e2ae7824}
 
   '@logtail/next@0.2.1':
     resolution: {integrity: sha512-kvI7CNzei+fIErWOfMf/o3mgZkmGptR6W/C4850+oyXS0ouJO9C2+5a166Rd6ywzXb/lP9QPOABPS1r26dNnpQ==}
@@ -8854,6 +8865,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@lnittman/playwright-config@0.1.0(@playwright/test@1.58.1)':
+    dependencies:
+      '@playwright/test': 1.58.1
+
+  '@lnittman/typescript-config@0.1.0': {}
+
   '@logtail/next@0.2.1(next@15.5.2(@opentelemetry/api@1.9.0)(@playwright/test@1.58.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)':
     dependencies:
       next: 15.5.2(@opentelemetry/api@1.9.0)(@playwright/test@1.58.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -11038,7 +11055,7 @@ snapshots:
   '@testing-library/dom@10.4.1':
     dependencies:
       '@babel/code-frame': 7.27.1
-      '@babel/runtime': 7.27.0
+      '@babel/runtime': 7.28.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16

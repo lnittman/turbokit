@@ -415,6 +415,35 @@ See `packages/backend/convex/app/notifications/CLAUDE.md` for full documentation
 
 ---
 
+## Human Setup Gates (Required)
+
+Agents should auto-implement code paths, then explicitly flag these manual steps:
+
+1. **GitHub Packages auth**
+   - Ensure repo-root `.npmrc` includes:
+     - `@lnittman:registry=https://npm.pkg.github.com`
+     - `//npm.pkg.github.com/:_authToken=${NPM_TOKEN}`
+   - Ensure `NPM_TOKEN` exists in Doppler (`dev` + `prd`).
+2. **Email (Resend)**
+   - Human must create Resend domain/sender + API key.
+   - Set `RESEND_API_KEY` in Convex dashboard env vars.
+3. **Push Notifications (APNS/FCM/Web Push)**
+   - Human must provision Apple/Firebase/VAPID credentials.
+   - Set `APNS_*`, `FCM_SERVER_KEY`, and VAPID env vars.
+4. **Analytics / Observability**
+   - Human must create PostHog + Sentry projects.
+   - Set `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`, `NEXT_PUBLIC_SENTRY_DSN`.
+5. **Coverage / CI**
+   - Human must connect Codecov and set required org/repo settings.
+   - Keep CI running `lint`, `typecheck`, `test`, `test:e2e`.
+
+When a setup gate is not completed, agents should:
+- mark it clearly as `human_required`
+- provide exact env var names and destination (Convex dashboard, Vercel, GitHub)
+- continue with all code-side automation that does not require secrets.
+
+---
+
 ## Media Generation
 
 Location: `packages/media/` (client library) + `packages/backend/convex/app/images/` (backend)

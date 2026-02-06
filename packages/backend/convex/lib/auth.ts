@@ -1,6 +1,7 @@
 import { QueryCtx, MutationCtx, ActionCtx } from "../_generated/server";
 import { ConvexError } from "convex/values";
 import { Doc } from "../_generated/dataModel";
+import { internal } from "../_generated/api";
 
 type AuthenticatedQueryCtx = QueryCtx & {
   user: Doc<"users">;
@@ -51,19 +52,14 @@ export async function requireAuthAction(
 ): Promise<AuthenticatedActionCtx> {
   const clerkId = await getAuthUserId(ctx);
   // In actions, we need to query the database via runQuery
-  const user = await ctx.runQuery(
-    async ({ db }: { db: any }) => {
-      return await db
-        .query("users")
-        .withIndex("by_clerk_id", (q: any) => q.eq("clerkId", clerkId))
-        .unique();
-    }
-  );
-  
+  const user = await ctx.runQuery(internal.app.users.internal.getUserByClerkId, {
+    clerkId,
+  });
+
   if (!user) {
     throw new ConvexError("User not found");
   }
-  
+
   return Object.assign({}, ctx as any, { user, userId: user._id }) as any;
 }
 

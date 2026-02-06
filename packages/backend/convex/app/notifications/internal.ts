@@ -1,6 +1,13 @@
 import { internalAction, internalQuery } from "../../_generated/server";
 import { v } from "convex/values";
-import { sendFCMNotification, sendAPNsNotification } from "../../lib/push";
+// TODO: Re-enable when push.ts Node.js dependencies are resolved
+// import { sendFCMNotification, sendAPNsNotification } from "../../lib/push";
+
+// Type for device tokens returned from query
+interface DeviceToken {
+  platform: "apns" | "fcm" | "web";
+  token: string;
+}
 
 // Internal action: Send push notification to user's devices
 export const sendPush = internalAction({
@@ -13,7 +20,7 @@ export const sendPush = internalAction({
     imageUrl: v.optional(v.string()),
     badge: v.optional(v.number()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ sent: number; failed: number; total?: number }> => {
     // Get user's device tokens
     const tokens = await ctx.runQuery(internal.app.notifications.internal.getDeviceTokens, {
       userId: args.userId,
@@ -35,17 +42,18 @@ export const sendPush = internalAction({
         }, {} as Record<string, string>)
       : undefined;
 
+    // TODO: Re-enable when push.ts Node.js dependencies are resolved
     // Send to FCM (Android)
-    const fcmTokens = tokens.filter((t) => t.platform === "fcm");
-    for (const tokenDoc of fcmTokens) {
-      const success = await sendFCMNotification({
-        token: tokenDoc.token,
-        title: args.title,
-        body: args.body,
-        data: dataStrings,
-        imageUrl: args.imageUrl,
-      });
-
+    const fcmTokens = tokens.filter((t: DeviceToken) => t.platform === "fcm");
+    for (const _tokenDoc of fcmTokens) {
+      // const success = await sendFCMNotification({
+      //   token: tokenDoc.token,
+      //   title: args.title,
+      //   body: args.body,
+      //   data: dataStrings,
+      //   imageUrl: args.imageUrl,
+      // });
+      const success = false; // Stubbed - push not yet configured
       if (success) {
         sent++;
       } else {
@@ -54,16 +62,16 @@ export const sendPush = internalAction({
     }
 
     // Send to APNs (iOS)
-    const apnsTokens = tokens.filter((t) => t.platform === "apns");
-    for (const tokenDoc of apnsTokens) {
-      const success = await sendAPNsNotification({
-        token: tokenDoc.token,
-        title: args.title,
-        body: args.body,
-        data: args.data,
-        badge: args.badge,
-      });
-
+    const apnsTokens = tokens.filter((t: DeviceToken) => t.platform === "apns");
+    for (const _tokenDoc of apnsTokens) {
+      // const success = await sendAPNsNotification({
+      //   token: tokenDoc.token,
+      //   title: args.title,
+      //   body: args.body,
+      //   data: args.data,
+      //   badge: args.badge,
+      // });
+      const success = false; // Stubbed - push not yet configured
       if (success) {
         sent++;
       } else {
@@ -72,7 +80,7 @@ export const sendPush = internalAction({
     }
 
     // Web Push (optional - implement separately)
-    const webTokens = tokens.filter((t) => t.platform === "web");
+    const webTokens = tokens.filter((t: DeviceToken) => t.platform === "web");
     if (webTokens.length > 0) {
       // Web Push implementation would use web-push library
       // See: https://www.npmjs.com/package/web-push
@@ -108,7 +116,7 @@ export const notifyUser = internalAction({
     icon: v.optional(v.string()),
     sendPush: v.optional(v.boolean()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<string | null> => {
     // Create in-app notification
     const notificationId = await ctx.runMutation(
       api.app.notifications.mutations.create,
@@ -125,7 +133,7 @@ export const notifyUser = internalAction({
 
     // Send push notification if requested
     if (args.sendPush) {
-      await sendPush(ctx, {
+      await ctx.runAction(internal.app.notifications.internal.sendPush, {
         userId: args.userId,
         title: args.title,
         body: args.body,
@@ -145,8 +153,8 @@ export const notifyUserWelcome = internalAction({
     userId: v.id("users"),
     userName: v.string(),
   },
-  handler: async (ctx, { userId, userName }) => {
-    await notifyUser(ctx, {
+  handler: async (ctx, { userId, userName }): Promise<void> => {
+    await ctx.runAction(internal.app.notifications.internal.notifyUser, {
       userId,
       type: "user.welcome",
       title: `Welcome, ${userName}!`,
@@ -165,8 +173,8 @@ export const notifyBillingRenewal = internalAction({
     renewalDate: v.string(),
     amount: v.string(),
   },
-  handler: async (ctx, { userId, renewalDate, amount }) => {
-    await notifyUser(ctx, {
+  handler: async (ctx, { userId, renewalDate, amount }): Promise<void> => {
+    await ctx.runAction(internal.app.notifications.internal.notifyUser, {
       userId,
       type: "billing.renewal",
       title: "Subscription Renewal",

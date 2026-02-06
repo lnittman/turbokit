@@ -1,10 +1,10 @@
-import { action } from "../../_generated/server";
+import { action } from "../_generated/server";
 import { v } from "convex/values";
-import { requireAuthAction } from "../../lib/auth";
-import { checkAiTokenLimit } from "../../lib/rateLimiter";
+import { requireAuthAction } from "../lib/auth";
+import { checkAiTokenLimit } from "../lib/rateLimiter";
 import { sendMessage as sendAssistantMessage } from "./definitions/assistant";
-import { generateCode as generateCodeWithAgent } from "./definitions/code-generator";
-import { api } from "../../_generated/api";
+import { generateCode as generateCodeWithAgent } from "./definitions/codeGenerator";
+import { internal } from "../_generated/api";
 import { createThread as createAssistantThreadHelper } from "./definitions/assistant";
 
 export const sendAIMessage = action({
@@ -14,7 +14,7 @@ export const sendAIMessage = action({
     const estimatedTokens = Math.ceil((prompt.length * 2) / 4);
     await checkAiTokenLimit(ctx, user._id, estimatedTokens);
     const result = await sendAssistantMessage(ctx, threadId, prompt, user._id);
-    await ctx.runMutation(api.app.users.internal.logActivity, {
+    await ctx.runMutation(internal.app.users.internal.logActivity, {
       userId: user._id,
       action: "ai.message.sent",
       resourceType: "thread",
@@ -32,7 +32,7 @@ export const generateAICode = action({
     const estimatedTokens = Math.ceil((prompt.length * 4) / 4);
     await checkAiTokenLimit(ctx, user._id, estimatedTokens);
     const result = await generateCodeWithAgent(ctx, prompt, language, context);
-    await ctx.runMutation(api.app.users.internal.logActivity, {
+    await ctx.runMutation(internal.app.users.internal.logActivity, {
       userId: user._id,
       action: "ai.code.generated",
       resourceType: "code",
@@ -48,7 +48,7 @@ export const createAssistantThread = action({
   handler: async (ctx) => {
     const { user } = await requireAuthAction(ctx);
     const threadId = await createAssistantThreadHelper(ctx, user._id);
-    await ctx.runMutation(api.app.users.internal.logActivity, {
+    await ctx.runMutation(internal.app.users.internal.logActivity, {
       userId: user._id,
       action: "ai.thread.created",
       resourceType: "thread",

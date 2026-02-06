@@ -50,51 +50,67 @@
 }
 
 /* ============================================================================
-   Dark-First Design Tokens
+   Design Tokens — 4-layer surface, 4-level text hierarchy
    ============================================================================ */
 
 :root {
-  /* Background */
-  --background: #0a0a0a;
-  --foreground: rgba(250, 250, 250, 0.94);
+  /* Surfaces */
+  --background: #0c0c0d;
+  --background-secondary: #141416;
+  --background-tertiary: #1c1c1f;
+  --background-elevated: #242428;
 
-  /* Cards - glass-like with subtle transparency */
-  --card: rgba(255, 255, 255, 0.04);
-  --card-solid: #141416;
-  --card-foreground: rgba(250, 250, 250, 0.94);
-  --card-border: rgba(255, 255, 255, 0.08);
+  /* Text */
+  --foreground: #fafafa;
+  --foreground-secondary: rgba(250, 250, 250, 0.72);
+  --foreground-tertiary: rgba(250, 250, 250, 0.48);
+  --foreground-quaternary: rgba(250, 250, 250, 0.28);
 
-  /* Popover */
-  --popover: #18181b;
-  --popover-foreground: rgba(250, 250, 250, 0.94);
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-secondary: rgba(255, 255, 255, 0.03);
+  --border-hover: rgba(255, 255, 255, 0.12);
 
-  /* Primary - near white on dark */
-  --primary: rgba(250, 250, 250, 0.94);
-  --primary-foreground: #0a0a0a;
-
-  /* Secondary */
-  --secondary: rgba(255, 255, 255, 0.08);
-  --secondary-foreground: rgba(250, 250, 250, 0.72);
-
-  /* Muted */
-  --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: rgba(250, 250, 250, 0.48);
-
-  /* Accent */
-  --accent: rgba(255, 255, 255, 0.08);
-  --accent-foreground: rgba(250, 250, 250, 0.94);
+  /* Primary */
+  --primary: #fafafa;
+  --primary-foreground: #0c0c0d;
 
   /* Destructive */
-  --destructive: oklch(0.5 0.12 25);
-  --destructive-foreground: rgba(250, 250, 250, 0.94);
+  --destructive: #ff4d4d;
+  --destructive-foreground: #ffffff;
 
-  /* UI Chrome */
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.06);
-  --ring: rgba(255, 255, 255, 0.2);
+  /* Card */
+  --card: #161618;
+  --card-foreground: var(--foreground);
 
-  /* Radius - slightly rounded, squircle feel */
-  --radius: 0.75rem;
+  /* Semantic aliases */
+  --secondary: var(--background-tertiary);
+  --secondary-foreground: var(--foreground-secondary);
+  --muted: var(--background-secondary);
+  --muted-foreground: var(--foreground-secondary);
+  --popover: var(--background-elevated);
+  --popover-foreground: var(--foreground);
+  --accent: var(--background-tertiary);
+  --accent-foreground: var(--foreground);
+  --input: var(--background-tertiary);
+  --ring: var(--primary);
+
+  /* Sidebar (aliases for shadcn sidebar component) */
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--background-secondary);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* Radii */
+  --radius: 0.625rem;
+  --radius-sm: 0.375rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 9999px;
 
   /* Chart colors */
   --chart-1: oklch(0.5 0.12 30);
@@ -103,92 +119,70 @@
   --chart-4: oklch(0.55 0.08 260);
   --chart-5: oklch(0.65 0.07 300);
 
-  /* Sidebar */
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: rgba(250, 250, 250, 0.94);
-  --sidebar-primary: rgba(250, 250, 250, 0.94);
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: rgba(255, 255, 255, 0.06);
-  --sidebar-accent-foreground: rgba(250, 250, 250, 0.94);
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: rgba(255, 255, 255, 0.2);
-
   /* Typography */
   --title-font: 'IosevkaTerm-Regular', monospace;
 
-  /* Text hierarchy */
-  --text-primary: rgba(250, 250, 250, 0.94);
-  --text-secondary: rgba(250, 250, 250, 0.60);
-  --text-tertiary: rgba(250, 250, 250, 0.40);
-
   /* Shadows */
-  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4),
-                 0 2px 8px rgba(0, 0, 0, 0.2),
-                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  /* Blur */
-  --blur: blur(24px);
-  --blur-heavy: blur(50px);
+  --shadow-card: 0 4px 24px -4px rgba(0, 0, 0, 0.5),
+                 0 0 0 1px rgba(255, 255, 255, 0.03);
 
   /* Easing */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --duration-fast: 200ms;
-  --duration-normal: 320ms;
-  --duration-slow: 500ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
 }
 
-/* Light mode override */
+/* Light mode */
 .light {
-  --background: oklch(0.98 0.005 85);
-  --foreground: oklch(0.2 0.01 85);
-  --card: oklch(1 0.005 85);
-  --card-solid: oklch(0.98 0.005 85);
-  --card-foreground: oklch(0.2 0.01 85);
-  --card-border: oklch(0.9 0.01 85);
-  --popover: oklch(1 0.005 85);
-  --popover-foreground: oklch(0.2 0.01 85);
-  --primary: oklch(0.22 0.01 85);
-  --primary-foreground: oklch(0.97 0.005 85);
-  --secondary: oklch(0.94 0.01 85);
-  --secondary-foreground: oklch(0.22 0.01 85);
-  --muted: oklch(0.94 0.01 85);
-  --muted-foreground: oklch(0.5 0.01 85);
-  --accent: oklch(0.9 0.02 85);
-  --accent-foreground: oklch(0.22 0.01 85);
-  --destructive: oklch(0.577 0.08 27.325);
-  --destructive-foreground: oklch(0.97 0.005 85);
-  --border: oklch(0.9 0.01 85);
-  --input: oklch(0.9 0.01 85);
-  --ring: oklch(0.7 0.01 85);
-  --chart-1: oklch(0.646 0.09 41.116);
-  --chart-2: oklch(0.6 0.06 184.704);
-  --chart-3: oklch(0.55 0.05 227.392);
-  --chart-4: oklch(0.7 0.08 84.429);
-  --chart-5: oklch(0.75 0.07 70.08);
-  --sidebar: var(--background);
-  --sidebar-foreground: oklch(0.2 0.01 85);
-  --sidebar-primary: oklch(0.22 0.01 85);
-  --sidebar-primary-foreground: oklch(0.97 0.005 85);
-  --sidebar-accent: oklch(0.94 0.01 85);
-  --sidebar-accent-foreground: oklch(0.22 0.01 85);
-  --sidebar-border: oklch(0.9 0.01 85);
-  --sidebar-ring: oklch(0.7 0.01 85);
-  --text-primary: oklch(0.2 0.01 85);
-  --text-secondary: oklch(0.4 0.01 85);
-  --text-tertiary: oklch(0.55 0.01 85);
-  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08),
-                 0 1px 4px rgba(0, 0, 0, 0.04);
+  --background: #f4f5f7;
+  --background-secondary: #ffffff;
+  --background-tertiary: #f8f9fa;
+  --background-elevated: #ffffff;
+
+  --foreground: #0f0f10;
+  --foreground-secondary: rgba(15, 15, 16, 0.72);
+  --foreground-tertiary: rgba(15, 15, 16, 0.48);
+  --foreground-quaternary: rgba(15, 15, 16, 0.28);
+
+  --border: rgba(0, 0, 0, 0.06);
+  --border-secondary: rgba(0, 0, 0, 0.03);
+  --border-hover: rgba(0, 0, 0, 0.12);
+
+  --primary: #0f0f10;
+  --primary-foreground: #f4f5f7;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+
+  --shadow-card: 0 4px 24px -4px rgba(0, 0, 0, 0.08),
+                 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
 
 @theme inline {
+  /* Surfaces */
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-background-elevated: var(--background-elevated);
+
+  /* Text */
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-foreground-quaternary: var(--foreground-quaternary);
+
+  /* Borders */
+  --color-border: var(--border);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-hover: var(--border-hover);
+
+  /* Semantic colors */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -199,18 +193,21 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* Chart */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Sidebar (for shadcn sidebar component) */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -219,26 +216,13 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
 
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
+  /* Radii */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
 }
 
 /* Base layer */
@@ -423,23 +407,12 @@ button:hover .hover-arrow {
   transform: translateX(0) scale(0.97);
 }
 
-/* Glass card */
+/* Card */
 .tk-card {
-  background: linear-gradient(
-    180deg,
-    hsl(240 10% 8% / 0.3) 0%,
-    hsl(240 10% 6% / 0.5) 40%,
-    hsl(240 10% 8% / 0.85) 70%,
-    hsl(240 10% 10% / 0.95) 100%
-  );
-  backdrop-filter: blur(2px) saturate(1.1);
-  -webkit-backdrop-filter: blur(2px) saturate(1.1);
-  border-radius: var(--radius-xl, 1rem);
-  corner-shape: squircle;
-  box-shadow:
-    inset 0 1px 0 0 hsl(200 20% 50% / 0.1),
-    0 0 0 1px hsl(220 10% 25% / 0.3),
-    0 30px 60px -20px hsl(0 0% 0% / 0.4);
+  background: var(--background-secondary);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -519,7 +492,7 @@ button:hover .hover-arrow {
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.02em;
-  color: var(--text-secondary);
+  color: var(--foreground-secondary);
   text-transform: lowercase;
 }
 
@@ -563,15 +536,15 @@ button:hover .hover-arrow {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--foreground-secondary);
   transition: all 150ms ease;
   cursor: pointer;
 }
 
 .tk-tile:hover {
   background: var(--accent);
-  color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--foreground);
+  border-color: var(--border-hover);
 }
 
 .tk-tile:active {
@@ -592,7 +565,7 @@ button:hover .hover-arrow {
   left: 0;
   right: 0;
   z-index: 101;
-  background: var(--card-solid, #141416);
+  background: var(--background-secondary);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   border-top: 1px solid var(--border);
@@ -627,17 +600,17 @@ button:hover .hover-arrow {
   border-radius: 12px;
   cursor: pointer;
   transition: background 150ms ease;
-  color: var(--text-secondary);
+  color: var(--foreground-secondary);
 }
 
 .tk-list-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-primary);
+  background: var(--background-tertiary);
+  color: var(--foreground);
 }
 
 .tk-list-item.active {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
+  background: var(--background-secondary);
+  color: var(--foreground);
 }
 
 /* ============================================================================
@@ -671,7 +644,7 @@ button:hover .hover-arrow {
   display: flex;
   flex-direction: column;
   outline: none;
-  background: var(--card-solid, #141416);
+  background: var(--background-secondary);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow:
@@ -708,7 +681,7 @@ button:hover .hover-arrow {
 .tk-cmd-search-icon {
   width: 16px;
   height: 16px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
   flex-shrink: 0;
 }
 
@@ -719,11 +692,11 @@ button:hover .hover-arrow {
   outline: none;
   font-size: 14px;
   font-family: var(--title-font);
-  color: var(--text-primary);
+  color: var(--foreground);
 }
 
 .tk-cmd-input::placeholder {
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
 }
 
 /* Kbd badges */
@@ -731,7 +704,7 @@ button:hover .hover-arrow {
   padding: 2px 8px;
   font-family: var(--title-font);
   font-size: 11px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
   border: 1px solid var(--border);
   border-radius: 6px;
   background: transparent;
@@ -742,8 +715,8 @@ button:hover .hover-arrow {
   padding: 1px 6px;
   font-family: var(--title-font);
   font-size: 11px;
-  color: var(--text-tertiary);
-  background: rgba(255, 255, 255, 0.04);
+  color: var(--foreground-tertiary);
+  background: var(--background-secondary);
   border: 1px solid var(--border);
   border-radius: 5px;
 }
@@ -752,8 +725,8 @@ button:hover .hover-arrow {
   padding: 1px 5px;
   font-family: var(--title-font);
   font-size: 10px;
-  color: var(--text-tertiary);
-  background: rgba(255, 255, 255, 0.04);
+  color: var(--foreground-tertiary);
+  background: var(--background-secondary);
   border: 1px solid var(--border);
   border-radius: 4px;
 }
@@ -783,7 +756,7 @@ button:hover .hover-arrow {
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: lowercase;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
 }
 
 /* Command item */
@@ -798,14 +771,14 @@ button:hover .hover-arrow {
   background: transparent;
   cursor: pointer;
   text-align: left;
-  color: var(--text-secondary);
+  color: var(--foreground-secondary);
   transition: background 100ms ease;
   outline: none;
 }
 
 .tk-cmd-item[data-highlighted] {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
+  background: var(--background-tertiary);
+  color: var(--foreground);
 }
 
 .tk-cmd-item-icon {
@@ -816,14 +789,14 @@ button:hover .hover-arrow {
   height: 32px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--background-secondary);
   flex-shrink: 0;
-  color: var(--text-secondary);
+  color: var(--foreground-secondary);
 }
 
 .tk-cmd-item[data-highlighted] .tk-cmd-item-icon {
-  border-color: rgba(255, 255, 255, 0.12);
-  color: var(--text-primary);
+  border-color: var(--border-hover);
+  color: var(--foreground);
 }
 
 .tk-cmd-item-content {
@@ -842,7 +815,7 @@ button:hover .hover-arrow {
 
 .tk-cmd-item-desc {
   font-size: 12px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -853,7 +826,7 @@ button:hover .hover-arrow {
   text-align: center;
   padding: 40px 20px;
   font-size: 13px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
 }
 
 /* Footer */
@@ -877,12 +850,12 @@ button:hover .hover-arrow {
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
 }
 
 .tk-cmd-footer-count {
   font-size: 11px;
-  color: var(--text-tertiary);
+  color: var(--foreground-tertiary);
 }
 
 /* ================================================================
@@ -892,16 +865,15 @@ button:hover .hover-arrow {
 .tk-sidebar-tooltip {
   transform-origin: var(--transform-origin);
   border-radius: 8px;
-  border: 1px solid var(--glass-border);
-  background: var(--surface-1);
+  border: 1px solid var(--border);
+  background: var(--background-elevated);
   padding: 4px 10px;
-  font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 12px;
-  color: var(--text-primary);
+  color: var(--foreground);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   pointer-events: none;
-  transition: transform 150ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 150ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 150ms var(--ease-out),
+    opacity 150ms var(--ease-out);
 
   &[data-starting-style] {
     opacity: 0;

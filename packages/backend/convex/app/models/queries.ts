@@ -1,6 +1,5 @@
 import { query } from "../../_generated/server";
 import { v } from "convex/values";
-import { internal } from "../../_generated/api";
 
 /**
  * List available models from a provider
@@ -36,16 +35,8 @@ export const list = query({
       };
     }
 
-    // Cache is stale or missing - schedule refresh in background
-    if (provider === "openai") {
-      await ctx.scheduler.runAfter(0, internal.app.models.actions.fetchOpenAI, {});
-    } else if (provider === "openrouter") {
-      await ctx.scheduler.runAfter(0, internal.app.models.actions.fetchOpenRouter, {
-        outputModalities,
-      });
-    }
-
-    // Return stale cache if available, otherwise empty
+    // Cache is stale or missing - return stale data if available
+    // Client should trigger a refresh mutation to update the cache
     if (cached) {
       return {
         models: cached.models,

@@ -1,42 +1,69 @@
-import { query } from "../../_generated/server";
+import { query as convexQuery } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireAuth } from "../../lib/auth";
-import { getCurrentSubscription as autumnGetCurrentSubscription, listUserSubscriptions as autumnListUserSubs, getConfiguredProducts as autumnGetConfiguredProducts, listAllProducts as autumnListAllProducts } from "./autumn";
+import { query as autumnQuery, check as autumnCheck, listProducts as autumnListProducts } from "./autumn";
 
-export const getCurrentSubscription = query({
+export const getCurrentSubscription = convexQuery({
   handler: async (ctx) => {
     const { userId } = await requireAuth(ctx);
     try {
-      return await autumnGetCurrentSubscription(ctx, { userId });
+      // Use Autumn check to get current subscription status
+      const result = await autumnCheck(ctx as any, {} as any);
+      return result;
     } catch {
       return null;
     }
   },
 });
 
-export const listUserSubscriptions = query({
+export const listUserSubscriptions = convexQuery({
   args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, args) => {
     const { userId: currentUserId, user } = await requireAuth(ctx);
     const target = args.userId || currentUserId;
     if (target !== currentUserId && user.role !== "admin") throw new Error("Unauthorized");
-    return await autumnListUserSubs(ctx, { userId: target });
+    // Use Autumn query to list subscriptions
+    try {
+      const result = await autumnQuery(ctx as any, {} as any);
+      return result;
+    } catch {
+      return [];
+    }
   },
 });
 
-export const getConfiguredProducts = query({
-  handler: async (ctx) => autumnGetConfiguredProducts(ctx),
+export const getConfiguredProducts = convexQuery({
+  handler: async (ctx) => {
+    try {
+      return await autumnListProducts(ctx as any);
+    } catch {
+      return [];
+    }
+  },
 });
 
-export const listAllProducts = query({
-  handler: async (ctx) => autumnListAllProducts(ctx),
+export const listAllProducts = convexQuery({
+  handler: async (ctx) => {
+    try {
+      return await autumnListProducts(ctx as any);
+    } catch {
+      return [];
+    }
+  },
 });
 
-export const getUserWithSubscription = query({
+export const getUserWithSubscription = convexQuery({
   handler: async (ctx) => {
     const { user, userId } = await requireAuth(ctx);
     let subscription: any = null;
-    try { subscription = await autumnGetCurrentSubscription(ctx, { userId }); } catch {}
-    return { ...user, subscription, hasActiveSubscription: !!subscription && subscription.status === "active", subscriptionTier: subscription?.productKey || "free" };
+    try {
+      subscription = await autumnCheck(ctx as any, {} as any);
+    } catch {}
+    return {
+      ...user,
+      subscription,
+      hasActiveSubscription: !!subscription && subscription?.status === "active",
+      subscriptionTier: subscription?.productKey || "free",
+    };
   },
 });

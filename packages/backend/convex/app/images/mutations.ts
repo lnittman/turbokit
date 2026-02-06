@@ -41,7 +41,7 @@ export const startGeneration = mutation({
       .first();
 
     if (existing) {
-      return { jobId: existing._id, status: existing.status as const };
+      return { jobId: existing._id, status: existing.status };
     }
 
     const processing = await ctx.db
@@ -53,7 +53,7 @@ export const startGeneration = mutation({
       .first();
 
     if (processing) {
-      return { jobId: processing._id, status: processing.status as const };
+      return { jobId: processing._id, status: processing.status };
     }
 
     // Create new job
@@ -64,11 +64,8 @@ export const startGeneration = mutation({
       inputImage: args.inputImage,
       quality: args.quality,
       size: args.size,
-      outputFormat: args.outputFormat,
-      numImages: args.numImages,
       model: args.model,
       input: args.input,
-      aspectRatio: args.aspectRatio,
       status: "queued",
       attempts: 0,
       correlationId: args.correlationId || crypto.randomUUID(),
@@ -152,14 +149,16 @@ export const completeJob = internalMutation({
       mediaType: args.resultType,
       resultUrl: args.resultUrl,
       resultB64: args.resultB64,
-      resultWidth: args.resultWidth,
-      resultHeight: args.resultHeight,
-      resultContentType: args.resultContentType,
       duration: args.resultDuration,
-      resultHasAudio: args.resultHasAudio,
-      resultFormat: args.resultFormat,
-      resultPreviewUrl: args.resultPreviewUrl,
-      metadata: args.metadata,
+      metadata: {
+        ...args.metadata,
+        width: args.resultWidth,
+        height: args.resultHeight,
+        contentType: args.resultContentType,
+        hasAudio: args.resultHasAudio,
+        format: args.resultFormat,
+        previewUrl: args.resultPreviewUrl,
+      },
       updatedAt: Date.now(),
     });
 

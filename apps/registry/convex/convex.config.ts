@@ -1,5 +1,5 @@
 import { defineApp } from "convex/server";
 
-const app = defineApp();
+const app: any = defineApp();
 
 export default app;

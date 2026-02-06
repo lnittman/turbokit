@@ -1,26 +1,35 @@
 import type { NextConfig } from 'next';
 
-import { config, withAnalyzer } from '@repo/next-config';
-import { printEnvBanner } from '@repo/next-config/diagnostics';
+const nextConfig: NextConfig = {
+  // Enable React strict mode for better development experience
+  reactStrictMode: true,
 
-import { env } from './env';
+  // Disable powered-by header for security
+  poweredByHeader: false,
 
-let nextConfig: NextConfig = config;
+  // Disable dev indicators
+  devIndicators: false,
 
-// Use process.env directly for build-time analysis
-if (process.env.ANALYZE === 'true') {
-  nextConfig = withAnalyzer(nextConfig);
-}
+  // Ensure design package is transpiled and CSS exports resolve
+  transpilePackages: ['@repo/design'],
 
-nextConfig.devIndicators = false;
-// Ensure design package is transpiled and CSS exports resolve
-// @ts-ignore - field exists in Next 15
-nextConfig.transpilePackages = [
-  ...(Array.isArray((nextConfig as any).transpilePackages) ? (nextConfig as any).transpilePackages : []),
-  '@repo/design',
-];
+  // Configure image domains if needed
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
 
-// Print clear env guidance during dev and build
-printEnvBanner('app');
+  // Experimental features
+  experimental: {
+    // Enable server actions
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
+};
 
 export default nextConfig;
