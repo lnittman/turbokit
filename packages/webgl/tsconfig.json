@@ -1,11 +1,10 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@lnittman/typescript-config/library.json",
-  "compilerOptions": {
-    "outDir": "./.dist",
-    "rootDir": ".",
-    "jsx": "react-jsx"
-  },
-  "include": ["src", "index.ts", "AGENTS.md", "CLAUDE.md"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "@lnittman/typescript-config/library.json",
+	"compilerOptions": {
+		"outDir": "./.dist",
+		"rootDir": ".",
+		"jsx": "react-jsx"
+	},
+	"include": ["src", "index.ts", "AGENTS.md", "CLAUDE.md"]
 }
-

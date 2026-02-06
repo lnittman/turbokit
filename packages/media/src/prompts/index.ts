@@ -1,2 +1,2 @@
-export * from './utils';
-export * from './anime';
+export * from "./anime";
+export * from "./utils";

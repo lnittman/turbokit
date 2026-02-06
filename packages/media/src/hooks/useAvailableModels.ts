@@ -19,30 +19,35 @@
  * ```
  */
 
-import type { ModelInfo } from '../types/enums';
+import type { ModelInfo } from "../types/enums";
+
+type ConvexQueryHook = (
+	query: unknown,
+	args: Record<string, unknown> | "skip",
+) => unknown;
 
 export interface UseAvailableModelsOptions {
-  /** For OpenRouter: filter by output modalities (e.g., ['image', 'text']) */
-  outputModalities?: string[];
+	/** For OpenRouter: filter by output modalities (e.g., ['image', 'text']) */
+	outputModalities?: string[];
 }
 
 export interface UseAvailableModelsResult {
-  /** Available models (empty array while loading) */
-  models: ModelInfo[];
-  /** Whether models are currently being loaded */
-  isLoading: boolean;
-  /** Whether data is from cache */
-  cached?: boolean;
-  /** Whether cached data is stale (refresh in progress) */
-  stale?: boolean;
-  /** When models were last fetched */
-  fetchedAt?: number;
-  /** For Fal.ai: info about browsing models */
-  info?: {
-    message: string;
-    url: string;
-    note: string;
-  };
+	/** Available models (empty array while loading) */
+	models: ModelInfo[];
+	/** Whether models are currently being loaded */
+	isLoading: boolean;
+	/** Whether data is from cache */
+	cached?: boolean;
+	/** Whether cached data is stale (refresh in progress) */
+	stale?: boolean;
+	/** When models were last fetched */
+	fetchedAt?: number;
+	/** For Fal.ai: info about browsing models */
+	info?: {
+		message: string;
+		url: string;
+		note: string;
+	};
 }
 
 /**
@@ -53,40 +58,59 @@ export interface UseAvailableModelsResult {
  * @returns A hook function for fetching available models
  */
 export function createUseAvailableModels(api: any) {
-  return function useAvailableModels(
-    provider: 'openai' | 'openrouter' | 'fal',
-    options?: UseAvailableModelsOptions
-  ): UseAvailableModelsResult {
-    // Lazy import to avoid bundling Convex in non-React environments
-    let useQuery: any;
-    try {
-      useQuery = require('convex/react').useQuery;
-    } catch {
-      throw new Error(
-        'convex/react not found. Make sure you have Convex installed and configured.'
-      );
-    }
+	return function useAvailableModels(
+		provider: "openai" | "openrouter" | "fal",
+		options?: UseAvailableModelsOptions,
+	): UseAvailableModelsResult {
+		let useQuery: ConvexQueryHook;
+		try {
+			useQuery = (
+				require("convex/react") as {
+					useQuery: ConvexQueryHook;
+				}
+			).useQuery;
+		} catch {
+			throw new Error(
+				"convex/react not found. Make sure you have Convex installed and configured.",
+			);
+		}
 
-    if (provider === 'fal') {
-      const info = useQuery(api.app.models.getFalInfo, {});
-      return {
-        models: [],
-        isLoading: info === undefined,
-        info,
-      };
-    }
+		const isFalProvider = provider === "fal";
+		const falInfo = useQuery(
+			api.app.models.getFalInfo,
+			isFalProvider ? {} : "skip",
+		) as UseAvailableModelsResult["info"] | undefined;
+		const modelData = useQuery(
+			api.app.models.list,
+			isFalProvider
+				? "skip"
+				: {
+						provider,
+						outputModalities: options?.outputModalities,
+					},
+		) as
+			| {
+					models?: ModelInfo[];
+					cached?: boolean;
+					stale?: boolean;
+					fetchedAt?: number;
+			  }
+			| undefined;
 
-    const data = useQuery(api.app.models.list, {
-      provider,
-      outputModalities: options?.outputModalities,
-    });
+		if (isFalProvider) {
+			return {
+				models: [],
+				isLoading: falInfo === undefined,
+				info: falInfo,
+			};
+		}
 
-    return {
-      models: data?.models || [],
-      isLoading: data === undefined,
-      cached: data?.cached,
-      stale: data?.stale,
-      fetchedAt: data?.fetchedAt,
-    };
-  };
+		return {
+			models: modelData?.models || [],
+			isLoading: modelData === undefined,
+			cached: modelData?.cached,
+			stale: modelData?.stale,
+			fetchedAt: modelData?.fetchedAt,
+		};
+	};
 }

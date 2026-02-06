@@ -1,21 +1,17 @@
 {
-  "$schema": "https://unpkg.com/knip@latest/knip.schema.json",
-  "ignore": [
-    "apps/docs/.source/**",
-    "apps/app/postcss.config.mjs",
-    "packages/backend/convex/**",
-    "packages/backend/convex/_generated/**",
-    "packages/design/**",
-    "apps/app/src/components/**",
-    "apps/app/src/lib/utils/**",
-    "apps/docs/components/**",
-    "apps/docs/app/layout.config.tsx",
-    "packages/analytics/**",
-    "scripts/**"
-  ],
-  "ignoreBinaries": [
-    "vitest",
-    "playwright",
-    "npm-check-updates"
-  ]
+	"$schema": "https://unpkg.com/knip@latest/knip.schema.json",
+	"ignore": [
+		"apps/docs/.source/**",
+		"apps/app/postcss.config.mjs",
+		"packages/backend/convex/**",
+		"packages/backend/convex/_generated/**",
+		"packages/design/**",
+		"apps/app/src/components/**",
+		"apps/app/src/lib/utils/**",
+		"apps/docs/components/**",
+		"apps/docs/app/layout.config.tsx",
+		"packages/analytics/**",
+		"scripts/**"
+	],
+	"ignoreBinaries": ["vitest", "playwright", "npm-check-updates"]
 }

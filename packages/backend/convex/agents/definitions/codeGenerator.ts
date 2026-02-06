@@ -1,10 +1,10 @@
 import { Agent } from "@convex-dev/agent";
 import { components } from "../../_generated/api";
-import { getAdvancedModel, getEmbeddingModel } from "../../lib/models";
+import { getAdvancedModel } from "../../lib/models";
 
 export const codeGeneratorAgent = new Agent(components.agent, {
-  name: "code-generator",
-  instructions: `
+	name: "code-generator",
+	instructions: `
 You are an expert code generation AI assistant.
 
 Your responsibilities:
@@ -29,27 +29,27 @@ When generating code:
 4. Include necessary imports and types
 5. Add error handling and validation
   `,
-  languageModel: getAdvancedModel() as any, // Use more powerful model for code generation
-  tools: {
-    // Could add tools for:
-    // - Searching documentation
-    // - Running code snippets
-    // - Validating syntax
-    // - Fetching examples
-  },
+	languageModel: getAdvancedModel() as any, // Use more powerful model for code generation
+	tools: {
+		// Could add tools for:
+		// - Searching documentation
+		// - Running code snippets
+		// - Validating syntax
+		// - Fetching examples
+	},
 });
 
 export async function generateCode(
-  ctx: any,
-  prompt: string,
-  language: string = "typescript",
-  context?: any
+	ctx: any,
+	prompt: string,
+	language: string = "typescript",
+	context?: any,
 ) {
-  // Create a single-use thread for code generation
-  const { threadId } = await codeGeneratorAgent.createThread(ctx, {});
-  
-  // Format the prompt with context
-  const fullPrompt = `
+	// Create a single-use thread for code generation
+	const { threadId } = await codeGeneratorAgent.createThread(ctx, {});
+
+	// Format the prompt with context
+	const fullPrompt = `
 Language: ${language}
 Context: ${context ? JSON.stringify(context, null, 2) : "None"}
 
@@ -57,16 +57,16 @@ Request: ${prompt}
 
 Please generate the requested code following best practices.
   `;
-  
-  // Get the response
-  const result = await codeGeneratorAgent.generateText(
-    ctx,
-    { threadId },
-    { prompt: fullPrompt }
-  );
-  
-  return {
-    code: result.text,
-    threadId,
-  };
+
+	// Get the response
+	const result = await codeGeneratorAgent.generateText(
+		ctx,
+		{ threadId },
+		{ prompt: fullPrompt },
+	);
+
+	return {
+		code: result.text,
+		threadId,
+	};
 }

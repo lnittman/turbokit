@@ -1,25 +1,25 @@
-import { useCallback, useMemo } from 'react';
-import { Provider } from '../types/enums';
-import { useMediaBase } from './useMediaBase';
-import type { ImageMediaResult } from '../types/results';
-import type { OpenAIImageInput } from '../types/inputs';
+import { useCallback, useMemo } from "react";
+import { Provider } from "../types/enums";
+import type { OpenAIImageInput } from "../types/inputs";
+import type { ImageMediaResult } from "../types/results";
+import { useMediaBase } from "./useMediaBase";
 
 export interface UseOpenAIParams {
-  /** OpenAI API key (defaults to process.env.NEXT_PUBLIC_OPENAI_API_KEY) */
-  apiKey?: string;
+	/** OpenAI API key (defaults to process.env.NEXT_PUBLIC_OPENAI_API_KEY) */
+	apiKey?: string;
 }
 
 export interface UseOpenAIResult {
-  /** Generated image result (null until generation completes) */
-  image: ImageMediaResult | null;
-  /** Whether generation is in progress */
-  isLoading: boolean;
-  /** Error if generation failed */
-  error: any;
-  /** Generate an image */
-  generate: (input: OpenAIImageInput) => Promise<ImageMediaResult>;
-  /** Cancel ongoing generation */
-  cancel: () => void;
+	/** Generated image result (null until generation completes) */
+	image: ImageMediaResult | null;
+	/** Whether generation is in progress */
+	isLoading: boolean;
+	/** Error if generation failed */
+	error: any;
+	/** Generate an image */
+	generate: (input: OpenAIImageInput) => Promise<ImageMediaResult>;
+	/** Cancel ongoing generation */
+	cancel: () => void;
 }
 
 /**
@@ -40,42 +40,44 @@ export interface UseOpenAIResult {
  * ```
  */
 export function useOpenAI(params: UseOpenAIParams = {}): UseOpenAIResult {
-  const apiKey = useMemo(
-    () => params.apiKey || process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
-    [params.apiKey]
-  );
+	const apiKey = useMemo(
+		() => params.apiKey || process.env.NEXT_PUBLIC_OPENAI_API_KEY || "",
+		[params.apiKey],
+	);
 
-  const base = useMediaBase<ImageMediaResult>(Provider.OPENAI);
+	const base = useMediaBase<ImageMediaResult>(Provider.OPENAI);
 
-  const generate = useCallback(
-    async (input: OpenAIImageInput): Promise<ImageMediaResult> => {
-      return base.execute(async (signal) => {
-        if (!apiKey) {
-          throw new Error('OPENAI_API_KEY is required. Pass it as a param or set NEXT_PUBLIC_OPENAI_API_KEY');
-        }
+	const generate = useCallback(
+		async (input: OpenAIImageInput): Promise<ImageMediaResult> => {
+			return base.execute(async (_signal) => {
+				if (!apiKey) {
+					throw new Error(
+						"OPENAI_API_KEY is required. Pass it as a param or set NEXT_PUBLIC_OPENAI_API_KEY",
+					);
+				}
 
-        // Dynamic import to avoid bundling in server environments
-        const { MediaClient } = await import('../client');
+				// Dynamic import to avoid bundling in server environments
+				const { MediaClient } = await import("../client");
 
-        const client = new MediaClient({ OPENAI_API_KEY: apiKey });
-        const result = await client.generateWithOpenAI(input);
+				const client = new MediaClient({ OPENAI_API_KEY: apiKey });
+				const result = await client.generateWithOpenAI(input);
 
-        // TODO: Handle abort signal if needed
-        // The MediaClient doesn't support abort signals yet
+				// TODO: Handle abort signal if needed
+				// The MediaClient doesn't support abort signals yet
 
-        return result;
-      });
-    },
-    [apiKey, base]
-  );
+				return result;
+			});
+		},
+		[apiKey, base],
+	);
 
-  return {
-    image: base.result,
-    isLoading: base.isLoading,
-    error: base.error,
-    generate,
-    cancel: base.cancel,
-  };
+	return {
+		image: base.result,
+		isLoading: base.isLoading,
+		error: base.error,
+		generate,
+		cancel: base.cancel,
+	};
 }
 
 // Backward compatibility: export as useImageGen1

@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
  * Redirects to home — profile is overlay-only via (.)profile intercept.
  */
 export default function ProfilePage() {
-  redirect("/");
+	redirect("/");
 }

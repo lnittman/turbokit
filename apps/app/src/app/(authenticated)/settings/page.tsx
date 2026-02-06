@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
  * Redirects to home — settings is overlay-only via (.)settings intercept.
  */
 export default function SettingsPage() {
-  redirect("/");
+	redirect("/");
 }

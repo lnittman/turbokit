@@ -1,6 +1,5 @@
-import { internalAction } from "../../_generated/server";
 import { v } from "convex/values";
-import { internal } from "../../_generated/api";
+import { internalAction } from "../../_generated/server";
 // TODO: Re-enable when @repo/media workspace package is properly resolved
 // import { fetchOpenAIModels, fetchOpenRouterModels } from "@repo/media/server";
 
@@ -9,12 +8,16 @@ import { internal } from "../../_generated/api";
  * TODO: Re-enable when @repo/media workspace package is properly resolved
  */
 export const fetchOpenAI = internalAction({
-  args: {},
-  handler: async (ctx) => {
-    // Stubbed - @repo/media not yet configured
-    console.error("[MODELS] @repo/media package not configured");
-    return { success: false, error: "Model fetching not yet configured. Install and configure @repo/media package." };
-  },
+	args: {},
+	handler: async (_ctx) => {
+		// Stubbed - @repo/media not yet configured
+		console.error("[MODELS] @repo/media package not configured");
+		return {
+			success: false,
+			error:
+				"Model fetching not yet configured. Install and configure @repo/media package.",
+		};
+	},
 });
 
 /**
@@ -22,12 +25,16 @@ export const fetchOpenAI = internalAction({
  * TODO: Re-enable when @repo/media workspace package is properly resolved
  */
 export const fetchOpenRouter = internalAction({
-  args: {
-    outputModalities: v.optional(v.array(v.string())),
-  },
-  handler: async (ctx, args) => {
-    // Stubbed - @repo/media not yet configured
-    console.error("[MODELS] @repo/media package not configured");
-    return { success: false, error: "Model fetching not yet configured. Install and configure @repo/media package." };
-  },
+	args: {
+		outputModalities: v.optional(v.array(v.string())),
+	},
+	handler: async (_ctx, _args) => {
+		// Stubbed - @repo/media not yet configured
+		console.error("[MODELS] @repo/media package not configured");
+		return {
+			success: false,
+			error:
+				"Model fetching not yet configured. Install and configure @repo/media package.",
+		};
+	},
 });

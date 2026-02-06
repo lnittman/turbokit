@@ -1,6 +1,6 @@
-import { PromptTemplate, compileXML } from './utils';
+import { compileXML, type PromptTemplate } from "./utils";
 
-export type AnimeVars = Record<'subject' | 'output', string>;
+export type AnimeVars = Record<"subject" | "output", string>;
 
 const xml = `<?xml version="1.0"?>
 <prompt>
@@ -26,15 +26,15 @@ const xml = `<?xml version="1.0"?>
 </prompt>`;
 
 export const animeTemplate: PromptTemplate<AnimeVars> = {
-  id: 'anime',
-  title: 'Anime',
-  vars: [
-    { name: 'subject', required: true },
-    { name: 'output', required: true },
-  ],
-  toXML: (vars) =>
-    compileXML(xml, vars, [
-      { name: 'subject', required: true },
-      { name: 'output', required: true },
-    ]),
+	id: "anime",
+	title: "Anime",
+	vars: [
+		{ name: "subject", required: true },
+		{ name: "output", required: true },
+	],
+	toXML: (vars) =>
+		compileXML(xml, vars, [
+			{ name: "subject", required: true },
+			{ name: "output", required: true },
+		]),
 };

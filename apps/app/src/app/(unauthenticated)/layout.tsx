@@ -1,13 +1,13 @@
-import React from 'react';
+import type React from "react";
 
 export default function UnauthenticatedLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }): React.ReactElement {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      {children}
-    </div>
-  );
-} 
+	return (
+		<div className="flex min-h-screen flex-col items-center justify-center">
+			{children}
+		</div>
+	);
+}

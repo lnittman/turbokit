@@ -1,27 +1,24 @@
 /**
  * Type exports for the backend package
- * 
+ *
  * This file re-exports generated Convex types and provides convenience aliases
  * to avoid brittle imports from _generated paths in consuming applications.
  */
 
-// Core Convex types
-export type { 
-  Doc, 
-  Id, 
-  DataModel 
-} from "./convex/_generated/dataModel";
-
 // Re-export API for clean imports
-export type { 
-  api 
-} from "./convex/_generated/api";
+export type { api } from "./convex/_generated/api";
+// Core Convex types
+export type {
+	DataModel,
+	Doc,
+	Id,
+} from "./convex/_generated/dataModel";
 
 // Re-export function types
 export type {
-  QueryCtx,
-  MutationCtx,
-  ActionCtx,
+	ActionCtx,
+	MutationCtx,
+	QueryCtx,
 } from "./convex/_generated/server";
 
 /**
@@ -54,20 +51,25 @@ export type StorageId = Id<"_storage">;
  * Subscription/billing types (from Autumn integration)
  * These are not Convex documents but useful to export
  */
-export type SubscriptionStatus = "active" | "trialing" | "past_due" | "cancelled" | "incomplete";
+export type SubscriptionStatus =
+	| "active"
+	| "trialing"
+	| "past_due"
+	| "cancelled"
+	| "incomplete";
 export type SubscriptionTier = "free" | "starter" | "pro" | "enterprise";
 
 /**
  * Common query/mutation argument types
  */
 export type PaginationArgs = {
-  cursor?: string;
-  limit?: number;
+	cursor?: string;
+	limit?: number;
 };
 
 export type DateRange = {
-  startDate: number;
-  endDate: number;
+	startDate: number;
+	endDate: number;
 };
 
 /**
@@ -78,12 +80,13 @@ export type DateRange = {
 export type WithoutSystemFields<T> = Omit<T, "_id" | "_creationTime">;
 
 // Make certain fields optional (useful for updates)
-export type PartialFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type PartialFields<T, K extends keyof T> = Omit<T, K> &
+	Partial<Pick<T, K>>;
 
 // Add timestamps to a type
 export type WithTimestamps<T> = T & {
-  createdAt: number;
-  updatedAt: number;
+	createdAt: number;
+	updatedAt: number;
 };
 
 /**
@@ -91,15 +94,15 @@ export type WithTimestamps<T> = T & {
  */
 export type UserRole = "user" | "admin";
 
-export type Permission = 
-  | "projects.create"
-  | "projects.read"
-  | "projects.update"
-  | "projects.delete"
-  | "users.read"
-  | "users.update"
-  | "users.delete"
-  | "admin.all";
+export type Permission =
+	| "projects.create"
+	| "projects.read"
+	| "projects.update"
+	| "projects.delete"
+	| "users.read"
+	| "users.update"
+	| "users.delete"
+	| "admin.all";
 
 /**
  * Status enums used across the app
@@ -111,21 +114,21 @@ export type MessageRole = "user" | "assistant" | "system";
  * Metadata types for flexible data storage
  */
 export type UserMetadata = {
-  bio?: string;
-  location?: string;
-  website?: string;
-  company?: string;
-  subscriptionTier?: SubscriptionTier;
-  customerId?: string;
-  [key: string]: any;
+	bio?: string;
+	location?: string;
+	website?: string;
+	company?: string;
+	subscriptionTier?: SubscriptionTier;
+	customerId?: string;
+	[key: string]: any;
 };
 
 export type ProjectSettings = {
-  isPublic?: boolean;
-  maxMembers?: number;
-  allowComments?: boolean;
-  features?: string[];
-  [key: string]: any;
+	isPublic?: boolean;
+	maxMembers?: number;
+	allowComments?: boolean;
+	features?: string[];
+	[key: string]: any;
 };
 
 /**
@@ -133,19 +136,19 @@ export type ProjectSettings = {
  */
 export type ConvexResult<T> = Promise<T | null>;
 export type ConvexPaginatedResult<T> = Promise<{
-  data: T[];
-  cursor?: string;
-  isDone: boolean;
+	data: T[];
+	cursor?: string;
+	isDone: boolean;
 }>;
 
 /**
  * Error types
  */
 export type ConvexErrorData = {
-  code: string;
-  message: string;
-  statusCode?: number;
-  details?: any;
+	code: string;
+	message: string;
+	statusCode?: number;
+	details?: any;
 };
 
 /**

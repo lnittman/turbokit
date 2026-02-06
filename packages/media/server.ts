@@ -6,8 +6,8 @@
  */
 
 export {
-  fetchOpenAIModels,
-  fetchOpenRouterModels,
-  getFalModelInfo,
-  clearModelCache,
-} from './src/utils/model-fetcher';
+	clearModelCache,
+	fetchOpenAIModels,
+	fetchOpenRouterModels,
+	getFalModelInfo,
+} from "./src/utils/model-fetcher";

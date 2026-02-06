@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
  * Redirects to home — create is overlay-only via (.)create intercept.
  */
 export default function CreatePage() {
-  redirect("/");
+	redirect("/");
 }

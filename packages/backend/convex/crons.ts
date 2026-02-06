@@ -1,5 +1,4 @@
 import { cronJobs } from "convex/server";
-import { internal } from "./_generated/api";
 
 // Register scheduled jobs here. Only schedule internal functions.
 const crons = cronJobs();

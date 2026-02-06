@@ -1,17 +1,15 @@
 // Client exports
-export { MediaClient, ImagesClient } from './client';
-export type { MediaClientConfig } from './client';
 
-// Legacy client (for OpenAI Responses API)
-export { ResponsesClient } from './responses-client';
-
-// Type exports
-export * from './types/enums';
-export * from './types/results';
-export * from './types/inputs';
-
+export type { MediaClientConfig } from "./client";
+export { ImagesClient, MediaClient } from "./client";
 // Prompt templates
-export * from './prompts';
+export * from "./prompts";
+// Legacy client (for OpenAI Responses API)
+export { ResponsesClient } from "./responses-client";
+// Type exports
+export * from "./types/enums";
+export * from "./types/inputs";
+export * from "./types/results";
 
 /**
  * NOTE: Model fetching utilities are SERVER-ONLY

@@ -1,1 +1,1 @@
-export { default } from '@repo/design/postcss.config.mjs';
+export { default } from "@repo/design/postcss.config.mjs";

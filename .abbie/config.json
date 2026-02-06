@@ -1,14 +1,14 @@
 {
-  "extends": "~/.abbie/templates/loop/turborepo.json",
-  "name": "turbokit",
-  "emoji": "📦",
-  "team": "TEMP",
-  "skills": {
-    "loop": {
-      "flywheel": "turborepo"
-    },
-    "pair": {
-      "enabled": true
-    }
-  }
+	"extends": "~/.abbie/templates/loop/turborepo.json",
+	"name": "turbokit",
+	"emoji": "📦",
+	"team": "TEMP",
+	"skills": {
+		"loop": {
+			"flywheel": "turborepo"
+		},
+		"pair": {
+			"enabled": true
+		}
+	}
 }

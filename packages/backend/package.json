@@ -1,50 +1,50 @@
 {
-  "name": "@repo/backend",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "convex dev",
-    "deploy": "convex deploy",
-    "typecheck": "tsc --noEmit"
-  },
-  "main": "./types.ts",
-  "exports": {
-    ".": "./types.ts",
-    "./types": "./types.ts",
-    "./api": "./convex/_generated/api.js",
-    "./schema": "./convex/schema.ts",
-    "./dataModel": "./convex/_generated/dataModel.d.ts"
-  },
-  "dependencies": {
-    "@repo/media": "workspace:*",
-    "@ai-sdk/openai": "^2.0.24",
-    "@convex-dev/action-cache": "^0.2.11",
-    "@convex-dev/action-retrier": "^0.2.1",
-    "@convex-dev/agent": "^0.2.7",
-    "@convex-dev/aggregate": "^0.1.23",
-    "@convex-dev/crons": "^0.1.9",
-    "@convex-dev/migrations": "^0.2.9",
-    "@convex-dev/persistent-text-streaming": "^0.2.3",
-    "@convex-dev/presence": "^0.1.5",
-    "@convex-dev/r2": "^0.7.3",
-    "@convex-dev/rag": "^0.5.2",
-    "@convex-dev/rate-limiter": "^0.2.12",
-    "@convex-dev/resend": "^0.1.12",
-    "@convex-dev/workflow": "^0.2.6",
-    "@convex-dev/workpool": "^0.2.18",
-    "@react-email/components": "^0.5.2",
-    "@react-email/render": "^1.2.2",
-    "@useautumn/convex": "^0.0.10",
-    "ai": "^5.0.33",
-    "convex": "^1.26.2",
-    "google-auth-library": "^9.15.0",
-    "react": "^19.2.0",
-    "svix": "^1.76.1",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@types/node": "24.7.0",
-    "@types/react": "^19.2.0",
-    "typescript": "^5.9.3"
-  }
+	"name": "@repo/backend",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "convex dev",
+		"deploy": "convex deploy",
+		"typecheck": "tsc --noEmit"
+	},
+	"main": "./types.ts",
+	"exports": {
+		".": "./types.ts",
+		"./types": "./types.ts",
+		"./api": "./convex/_generated/api.js",
+		"./schema": "./convex/schema.ts",
+		"./dataModel": "./convex/_generated/dataModel.d.ts"
+	},
+	"dependencies": {
+		"@repo/media": "workspace:*",
+		"@ai-sdk/openai": "^2.0.24",
+		"@convex-dev/action-cache": "^0.2.11",
+		"@convex-dev/action-retrier": "^0.2.1",
+		"@convex-dev/agent": "^0.2.7",
+		"@convex-dev/aggregate": "^0.1.23",
+		"@convex-dev/crons": "^0.1.9",
+		"@convex-dev/migrations": "^0.2.9",
+		"@convex-dev/persistent-text-streaming": "^0.2.3",
+		"@convex-dev/presence": "^0.1.5",
+		"@convex-dev/r2": "^0.7.3",
+		"@convex-dev/rag": "^0.5.2",
+		"@convex-dev/rate-limiter": "^0.2.12",
+		"@convex-dev/resend": "^0.1.12",
+		"@convex-dev/workflow": "^0.2.6",
+		"@convex-dev/workpool": "^0.2.18",
+		"@react-email/components": "^0.5.2",
+		"@react-email/render": "^1.2.2",
+		"@useautumn/convex": "^0.0.10",
+		"ai": "^5.0.33",
+		"convex": "^1.26.2",
+		"google-auth-library": "^9.15.0",
+		"react": "^19.2.0",
+		"svix": "^1.76.1",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@types/node": "24.7.0",
+		"@types/react": "^19.2.0",
+		"typescript": "^5.9.3"
+	}
 }

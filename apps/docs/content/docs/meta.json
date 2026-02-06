@@ -1,11 +1,11 @@
 {
-  "title": "Documentation",
-  "pages": [
-    "index",
-    "getting-started",
-    "layout-starters",
-    "abbie-integration",
-    "design-system",
-    "turbokit-vs-next-forge"
-  ]
+	"title": "Documentation",
+	"pages": [
+		"index",
+		"getting-started",
+		"layout-starters",
+		"abbie-integration",
+		"design-system",
+		"turbokit-vs-next-forge"
+	]
 }

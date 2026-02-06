@@ -1,46 +1,51 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "envMode": "loose",
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "**/generated/**", "convex/_generated/**"]
-    },
-    "analyze": {
-      "dependsOn": ["^analyze"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "deploy": {
-      "dependsOn": ["build"],
-      "cache": false
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**", "test-results/**"],
-      "cache": false
-    },
-    "test:unit": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
-      "cache": false
-    },
-    "test:e2e": {
-      "dependsOn": ["build"],
-      "outputs": ["test-results/**", "playwright-report/**"],
-      "cache": false
-    },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"envMode": "loose",
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": [
+				".next/**",
+				"!.next/cache/**",
+				"**/generated/**",
+				"convex/_generated/**"
+			]
+		},
+		"analyze": {
+			"dependsOn": ["^analyze"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"deploy": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"outputs": ["coverage/**", "test-results/**"],
+			"cache": false
+		},
+		"test:unit": {
+			"dependsOn": ["^build"],
+			"outputs": ["coverage/**"],
+			"cache": false
+		},
+		"test:e2e": {
+			"dependsOn": ["build"],
+			"outputs": ["test-results/**", "playwright-report/**"],
+			"cache": false
+		},
+		"typecheck": {
+			"dependsOn": ["^typecheck"]
+		},
+		"clean": {
+			"cache": false
+		},
+		"//#clean": {
+			"cache": false
+		}
+	}
 }

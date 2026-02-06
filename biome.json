@@ -1,19 +1,20 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
-    "extends": ["ultracite/next"],
-    "files": {
-        "includes": [
-            "**",
-            "!packages/design/components/ui",
-            "!packages/design/lib",
-            "!packages/design/hooks",
-            "!packages/backend/convex/_generated",
-            "!apps/docs/.source"
-        ]
-    },
-    "vcs": {
-        "enabled": true,
-        "clientKind": "git",
-        "useIgnoreFile": true
-    }
+	"$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+	"extends": ["ultracite/next"],
+	"files": {
+		"includes": [
+			"**",
+			"!packages/design/components/ui",
+			"!packages/design/lib",
+			"!packages/design/hooks",
+			"!packages/design/styles/globals.css",
+			"!packages/backend/convex/_generated",
+			"!apps/docs/.source"
+		]
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	}
 }

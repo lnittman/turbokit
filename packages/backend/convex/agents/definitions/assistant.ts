@@ -1,10 +1,10 @@
 import { Agent } from "@convex-dev/agent";
 import { components } from "../../_generated/api";
-import { getChatModel, getEmbeddingModel } from "../../lib/models";
+import { getChatModel } from "../../lib/models";
 
 export const assistantAgent = new Agent(components.agent, {
-  name: "assistant",
-  instructions: `
+	name: "assistant",
+	instructions: `
 You are a helpful AI assistant for the TurboKit platform.
 
 Your capabilities include:
@@ -20,49 +20,45 @@ Guidelines:
 - Admit when you don't know something
 - Never share sensitive user information
   `,
-  languageModel: getChatModel() as any,
-  tools: {
-    // Add custom tools here as needed
-  },
+	languageModel: getChatModel() as any,
+	tools: {
+		// Add custom tools here as needed
+	},
 });
 
 // Helper function to create a new conversation thread
-export async function createThread(
-  ctx: any,
-  userId: string,
-  title?: string
-) {
-  const { threadId } = await assistantAgent.createThread(ctx, {
-    userId,
-    title: title || "New conversation",
-  });
-  return threadId;
+export async function createThread(ctx: any, userId: string, title?: string) {
+	const { threadId } = await assistantAgent.createThread(ctx, {
+		userId,
+		title: title || "New conversation",
+	});
+	return threadId;
 }
 
 // Helper to send a message and get response
 export async function sendMessage(
-  ctx: any,
-  threadId: string,
-  prompt: string,
-  userId: string
+	ctx: any,
+	threadId: string,
+	prompt: string,
+	userId: string,
 ) {
-  // Persist the user message and stream a reply with deltas saved
-  const { saveMessage } = await import("@convex-dev/agent");
-  const { messageId } = await saveMessage(ctx, components.agent, {
-    threadId,
-    userId,
-    prompt,
-  });
+	// Persist the user message and stream a reply with deltas saved
+	const { saveMessage } = await import("@convex-dev/agent");
+	const { messageId } = await saveMessage(ctx, components.agent, {
+		threadId,
+		userId,
+		prompt,
+	});
 
-  const result = await assistantAgent.streamText(
-    ctx,
-    { threadId },
-    { prompt },
-    { saveStreamDeltas: true }
-  );
-  
-  // Consume the stream to ensure it completes
-  await result.consumeStream();
-  
-  return { success: true, messageId };
+	const result = await assistantAgent.streamText(
+		ctx,
+		{ threadId },
+		{ prompt },
+		{ saveStreamDeltas: true },
+	);
+
+	// Consume the stream to ensure it completes
+	await result.consumeStream();
+
+	return { success: true, messageId };
 }
