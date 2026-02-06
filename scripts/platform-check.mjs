@@ -183,6 +183,50 @@ for (const [name, spec] of Object.entries(contract.templates)) {
 	}
 }
 
+// --- Telemetry env matrix ---
+
+for (const [name, spec] of Object.entries(contract.templates)) {
+	if (!spec.telemetry) continue;
+	const templateDir = join(ROOT, spec.path);
+	console.log(`\n◆ ${name} telemetry`);
+
+	// Check .env.example documents all required vars
+	const envExamplePath = join(templateDir, ".env.example");
+	if (existsSync(envExamplePath)) {
+		const envContent = readFileSync(envExamplePath, "utf-8");
+		for (const [service, config] of Object.entries(spec.telemetry)) {
+			for (const envVar of config.requiredEnvVars) {
+				if (envContent.includes(envVar)) {
+					ok(`${service}: ${envVar} documented in .env.example`);
+				} else {
+					error(`${service}: ${envVar} missing from .env.example`);
+				}
+			}
+			if (config.gracefulDegradation) {
+				ok(`${service}: graceful degradation enabled`);
+			}
+		}
+	}
+
+	// Check .env.local for actual configuration (warn-only, not error)
+	const envLocalPath = join(templateDir, "apps/app/.env.local");
+	if (existsSync(envLocalPath)) {
+		const envLocal = readFileSync(envLocalPath, "utf-8");
+		for (const [service, config] of Object.entries(spec.telemetry)) {
+			for (const envVar of config.requiredEnvVars) {
+				const match = envLocal.match(new RegExp(`^${envVar}=(.+)$`, "m"));
+				if (match && match[1].trim()) {
+					ok(`${service}: ${envVar} configured locally`);
+				} else {
+					warn(`${service}: ${envVar} not set in .env.local (${config.gracefulDegradation ? "graceful" : "required"})`);
+				}
+			}
+		}
+	} else {
+		warn("no .env.local found (telemetry unconfigured for local dev)");
+	}
+}
+
 // --- Summary ---
 
 console.log("\n─────────────────────────────────");

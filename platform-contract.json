@@ -26,7 +26,21 @@
         "@lnittman/seo",
         "@lnittman/next-config"
       ],
-      "qualityGates": ["lint", "typecheck", "build", "test"]
+      "qualityGates": ["lint", "typecheck", "build", "test"],
+      "telemetry": {
+        "analytics": {
+          "provider": "posthog",
+          "requiredEnvVars": ["NEXT_PUBLIC_POSTHOG_KEY"],
+          "optionalEnvVars": ["NEXT_PUBLIC_POSTHOG_HOST"],
+          "gracefulDegradation": true
+        },
+        "observability": {
+          "provider": "sentry",
+          "requiredEnvVars": ["NEXT_PUBLIC_SENTRY_DSN"],
+          "optionalEnvVars": ["SENTRY_ORG", "SENTRY_PROJECT"],
+          "gracefulDegradation": true
+        }
+      }
     },
     "applekit": {
       "path": "applekit",
