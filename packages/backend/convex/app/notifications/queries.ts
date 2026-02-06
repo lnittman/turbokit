@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "../../_generated/server";
+import { internalQuery, query } from "../../_generated/server";
 import { requireAuth } from "../../lib/auth";
 
 // List user's notifications (paginated, real-time)
@@ -95,5 +95,16 @@ export const getById = query({
 		}
 
 		return notification;
+	},
+});
+
+// Internal query: fetch all device tokens for a target user.
+export const getDeviceTokensInternal = internalQuery({
+	args: { userId: v.id("users") },
+	handler: async (ctx, { userId }) => {
+		return await ctx.db
+			.query("deviceTokens")
+			.withIndex("by_user", (q) => q.eq("userId", userId))
+			.collect();
 	},
 });

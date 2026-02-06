@@ -252,6 +252,14 @@ export const unregisterDeviceToken = mutation({
 	},
 });
 
+// Internal: remove a device token (used for invalid token cleanup after push failures)
+export const deleteDeviceTokenInternal = internalMutation({
+	args: { tokenId: v.id("deviceTokens") },
+	handler: async (ctx, { tokenId }) => {
+		await ctx.db.delete(tokenId);
+	},
+});
+
 // Internal: Bulk create notifications (for system events)
 export const bulkCreate = internalMutation({
 	args: {

@@ -26,13 +26,19 @@ interface FCMMessage {
 	imageUrl?: string;
 }
 
+export interface PushSendResult {
+	success: boolean;
+	reason?: string;
+	statusCode?: number;
+}
+
 /**
  * Send push notification to Android device via FCM HTTP v1 API
  * Requires: GOOGLE_CLOUD_PROJECT_ID and GOOGLE_SERVICE_ACCOUNT_JSON env vars
  */
 export async function sendFCMNotification(
 	message: FCMMessage,
-): Promise<boolean> {
+): Promise<PushSendResult> {
 	const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
 	const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
@@ -40,7 +46,10 @@ export async function sendFCMNotification(
 		console.error(
 			"[FCM] Missing GOOGLE_CLOUD_PROJECT_ID or GOOGLE_SERVICE_ACCOUNT_JSON",
 		);
-		return false;
+		return {
+			success: false,
+			reason: "missing-fcm-config",
+		};
 	}
 
 	try {
@@ -86,14 +95,23 @@ export async function sendFCMNotification(
 		if (!response.ok) {
 			const error = await response.text();
 			console.error("[FCM] Send failed:", error);
-			return false;
+			return {
+				success: false,
+				reason: error,
+				statusCode: response.status,
+			};
 		}
 
 		console.log("[FCM] Notification sent successfully");
-		return true;
+		return {
+			success: true,
+		};
 	} catch (error) {
 		console.error("[FCM] Error:", error);
-		return false;
+		return {
+			success: false,
+			reason: error instanceof Error ? error.message : "fcm-send-failed",
+		};
 	}
 }
 
@@ -115,7 +133,7 @@ interface APNsMessage {
  */
 export async function sendAPNsNotification(
 	message: APNsMessage,
-): Promise<boolean> {
+): Promise<PushSendResult> {
 	const keyId = process.env.APNS_KEY_ID;
 	const teamId = process.env.APNS_TEAM_ID;
 	const keyP8 = process.env.APNS_KEY_P8; // Base64-encoded .p8 file
@@ -123,7 +141,10 @@ export async function sendAPNsNotification(
 
 	if (!keyId || !teamId || !keyP8) {
 		console.error("[APNs] Missing APNS_KEY_ID, APNS_TEAM_ID, or APNS_KEY_P8");
-		return false;
+		return {
+			success: false,
+			reason: "missing-apns-config",
+		};
 	}
 
 	try {
@@ -159,14 +180,23 @@ export async function sendAPNsNotification(
 		if (!response.ok) {
 			const error = await response.text();
 			console.error("[APNs] Send failed:", error);
-			return false;
+			return {
+				success: false,
+				reason: error,
+				statusCode: response.status,
+			};
 		}
 
 		console.log("[APNs] Notification sent successfully");
-		return true;
+		return {
+			success: true,
+		};
 	} catch (error) {
 		console.error("[APNs] Error:", error);
-		return false;
+		return {
+			success: false,
+			reason: error instanceof Error ? error.message : "apns-send-failed",
+		};
 	}
 }
 

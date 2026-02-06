@@ -32,11 +32,6 @@ import type * as app_notifications_queries from "../app/notifications/queries.js
 import type * as app_presence_mutations from "../app/presence/mutations.js";
 import type * as app_presence_presence from "../app/presence/presence.js";
 import type * as app_presence_queries from "../app/presence/queries.js";
-import type * as app_presets_actions from "../app/presets/actions.js";
-import type * as app_presets_index from "../app/presets/index.js";
-import type * as app_presets_mutations from "../app/presets/mutations.js";
-import type * as app_presets_queries from "../app/presets/queries.js";
-import type * as app_presets_seed from "../app/presets/seed.js";
 import type * as app_projects_internal from "../app/projects/internal.js";
 import type * as app_uploads_actions from "../app/uploads/actions.js";
 import type * as app_uploads_api from "../app/uploads/api.js";
@@ -102,11 +97,6 @@ declare const fullApi: ApiFromModules<{
   "app/presence/mutations": typeof app_presence_mutations;
   "app/presence/presence": typeof app_presence_presence;
   "app/presence/queries": typeof app_presence_queries;
-  "app/presets/actions": typeof app_presets_actions;
-  "app/presets/index": typeof app_presets_index;
-  "app/presets/mutations": typeof app_presets_mutations;
-  "app/presets/queries": typeof app_presets_queries;
-  "app/presets/seed": typeof app_presets_seed;
   "app/projects/internal": typeof app_projects_internal;
   "app/uploads/actions": typeof app_uploads_actions;
   "app/uploads/api": typeof app_uploads_api;

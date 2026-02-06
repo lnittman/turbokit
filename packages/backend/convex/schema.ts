@@ -139,7 +139,10 @@ export default defineSchema({
 		inputImage: v.optional(v.string()),
 		quality: v.optional(v.string()),
 		size: v.optional(v.string()),
+		outputFormat: v.optional(v.string()),
+		numImages: v.optional(v.number()),
 		model: v.optional(v.string()),
+		aspectRatio: v.optional(v.string()),
 		status: v.union(
 			v.literal("queued"),
 			v.literal("processing"),

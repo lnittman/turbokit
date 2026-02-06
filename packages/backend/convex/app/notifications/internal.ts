@@ -1,16 +1,45 @@
+"use node";
+
 import { v } from "convex/values";
-import { internalAction, internalQuery } from "../../_generated/server";
+import { api, internal } from "../../_generated/api";
+import { internalAction } from "../../_generated/server";
+import { sendAPNsNotification, sendFCMNotification } from "../../lib/push";
 
-// TODO: Re-enable when push.ts Node.js dependencies are resolved
-// import { sendFCMNotification, sendAPNsNotification } from "../../lib/push";
+const TOKEN_INVALIDATION_PATTERNS = [
+	"notregistered",
+	"registration-token-not-registered",
+	"invalid registration token",
+	"baddevicetoken",
+	"unregistered",
+	"410",
+];
 
-// Type for device tokens returned from query
-interface DeviceToken {
-	platform: "apns" | "fcm" | "web";
-	token: string;
+function toDataStrings(data: unknown): Record<string, string> | undefined {
+	if (!data || typeof data !== "object") {
+		return undefined;
+	}
+
+	return Object.entries(data).reduce(
+		(acc, [key, value]) => {
+			acc[key] = String(value);
+			return acc;
+		},
+		{} as Record<string, string>,
+	);
 }
 
-// Internal action: Send push notification to user's devices
+function shouldDeleteToken(reason: string | undefined): boolean {
+	if (!reason) {
+		return false;
+	}
+
+	const normalized = reason.toLowerCase();
+	return TOKEN_INVALIDATION_PATTERNS.some((pattern) =>
+		normalized.includes(pattern),
+	);
+}
+
+// Internal action: send push notification to a user's devices
 export const sendPush = internalAction({
 	args: {
 		userId: v.id("users"),
@@ -24,10 +53,14 @@ export const sendPush = internalAction({
 	handler: async (
 		ctx,
 		args,
-	): Promise<{ sent: number; failed: number; total?: number }> => {
-		// Get user's device tokens
+	): Promise<{
+		sent: number;
+		failed: number;
+		cleaned: number;
+		total: number;
+	}> => {
 		const tokens = await ctx.runQuery(
-			internal.app.notifications.internal.getDeviceTokens,
+			internal.app.notifications.queries.getDeviceTokensInternal,
 			{
 				userId: args.userId,
 			},
@@ -35,90 +68,87 @@ export const sendPush = internalAction({
 
 		if (tokens.length === 0) {
 			console.log(`[PUSH] No device tokens for user ${args.userId}`);
-			return { sent: 0, failed: 0 };
+			return { sent: 0, failed: 0, cleaned: 0, total: 0 };
 		}
 
+		const dataStrings = toDataStrings(args.data);
 		let sent = 0;
 		let failed = 0;
+		let cleaned = 0;
 
-		// Convert data to string key-value pairs (required by FCM)
-		const _dataStrings = args.data
-			? Object.entries(args.data).reduce(
-					(acc, [key, value]) => {
-						acc[key] = String(value);
-						return acc;
+		const fcmTokens = tokens.filter((tokenDoc) => tokenDoc.platform === "fcm");
+		for (const tokenDoc of fcmTokens) {
+			const result = await sendFCMNotification({
+				token: tokenDoc.token,
+				title: args.title,
+				body: args.body,
+				data: dataStrings,
+				imageUrl: args.imageUrl,
+			});
+
+			if (result.success) {
+				sent++;
+				continue;
+			}
+
+			failed++;
+			if (shouldDeleteToken(result.reason)) {
+				await ctx.runMutation(
+					internal.app.notifications.mutations.deleteDeviceTokenInternal,
+					{
+						tokenId: tokenDoc._id,
 					},
-					{} as Record<string, string>,
-				)
-			: undefined;
-
-		// TODO: Re-enable when push.ts Node.js dependencies are resolved
-		// Send to FCM (Android)
-		const fcmTokens = tokens.filter((t: DeviceToken) => t.platform === "fcm");
-		for (const _tokenDoc of fcmTokens) {
-			// const success = await sendFCMNotification({
-			//   token: tokenDoc.token,
-			//   title: args.title,
-			//   body: args.body,
-			//   data: dataStrings,
-			//   imageUrl: args.imageUrl,
-			// });
-			const success = false; // Stubbed - push not yet configured
-			if (success) {
-				sent++;
-			} else {
-				failed++;
+				);
+				cleaned++;
 			}
 		}
 
-		// Send to APNs (iOS)
-		const apnsTokens = tokens.filter((t: DeviceToken) => t.platform === "apns");
-		for (const _tokenDoc of apnsTokens) {
-			// const success = await sendAPNsNotification({
-			//   token: tokenDoc.token,
-			//   title: args.title,
-			//   body: args.body,
-			//   data: args.data,
-			//   badge: args.badge,
-			// });
-			const success = false; // Stubbed - push not yet configured
-			if (success) {
+		const apnsTokens = tokens.filter(
+			(tokenDoc) => tokenDoc.platform === "apns",
+		);
+		for (const tokenDoc of apnsTokens) {
+			const result = await sendAPNsNotification({
+				token: tokenDoc.token,
+				title: args.title,
+				body: args.body,
+				data: dataStrings,
+				badge: args.badge,
+			});
+
+			if (result.success) {
 				sent++;
-			} else {
-				failed++;
+				continue;
+			}
+
+			failed++;
+			if (shouldDeleteToken(result.reason)) {
+				await ctx.runMutation(
+					internal.app.notifications.mutations.deleteDeviceTokenInternal,
+					{
+						tokenId: tokenDoc._id,
+					},
+				);
+				cleaned++;
 			}
 		}
 
-		// Web Push (optional - implement separately)
-		const webTokens = tokens.filter((t: DeviceToken) => t.platform === "web");
+		const webTokens = tokens.filter((tokenDoc) => tokenDoc.platform === "web");
 		if (webTokens.length > 0) {
-			// Web Push implementation would use web-push library
-			// See: https://www.npmjs.com/package/web-push
-			console.log(
-				`[PUSH] Web Push: ${webTokens.length} tokens (not implemented)`,
+			failed += webTokens.length;
+			console.warn(
+				`[PUSH] Web Push delivery not implemented (${webTokens.length} tokens)`,
 			);
 		}
 
 		console.log(
-			`[PUSH] Sent ${sent}/${tokens.length} notifications to user ${args.userId}`,
+			`[PUSH] Sent ${sent}/${tokens.length} notifications to user ${args.userId} (failed=${failed}, cleaned=${cleaned})`,
 		);
 
-		return { sent, failed, total: tokens.length };
+		return { sent, failed, cleaned, total: tokens.length };
 	},
 });
 
-// Internal query: Get user's device tokens
-export const getDeviceTokens = internalQuery({
-	args: { userId: v.id("users") },
-	handler: async (ctx, { userId }) => {
-		return await ctx.db
-			.query("deviceTokens")
-			.withIndex("by_user", (q) => q.eq("userId", userId))
-			.collect();
-	},
-});
-
-// Internal action: Notify user (in-app + push)
+// Internal action: notify user (in-app + optional push)
 export const notifyUser = internalAction({
 	args: {
 		userId: v.id("users"),
@@ -131,7 +161,6 @@ export const notifyUser = internalAction({
 		sendPush: v.optional(v.boolean()),
 	},
 	handler: async (ctx, args): Promise<string | null> => {
-		// Create in-app notification
 		const notificationId = await ctx.runMutation(
 			api.app.notifications.mutations.create,
 			{
@@ -145,7 +174,6 @@ export const notifyUser = internalAction({
 			},
 		);
 
-		// Send push notification if requested
 		if (args.sendPush) {
 			await ctx.runAction(internal.app.notifications.internal.sendPush, {
 				userId: args.userId,
@@ -160,8 +188,7 @@ export const notifyUser = internalAction({
 	},
 });
 
-// Example: Workflow-triggered notification
-// This can be called from workflows or scheduled jobs
+// Example: workflow-triggered notification
 export const notifyUserWelcome = internalAction({
 	args: {
 		userId: v.id("users"),
@@ -180,7 +207,7 @@ export const notifyUserWelcome = internalAction({
 	},
 });
 
-// Example: Billing notification
+// Example: billing notification
 export const notifyBillingRenewal = internalAction({
 	args: {
 		userId: v.id("users"),
@@ -199,6 +226,3 @@ export const notifyBillingRenewal = internalAction({
 		});
 	},
 });
-
-// Import statements (place at top of file in actual implementation)
-import { api, internal } from "../../_generated/api";

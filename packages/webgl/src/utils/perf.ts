@@ -16,7 +16,8 @@ export function getPerfDefaults(): PerfDefaults {
 	let perf: PerfDefaults = { scale: 1, dpi: 1.5, fps: 24 };
 	if (typeof window === "undefined") return perf;
 
-	const mem = (navigator as any).deviceMemory || 4;
+	const navWithMemory = navigator as Navigator & { deviceMemory?: number };
+	const mem = navWithMemory.deviceMemory ?? 4;
 	const coarse = window.matchMedia("(pointer: coarse)").matches;
 
 	if (mem <= 1) perf = { scale: 0.5, dpi: 1.0, fps: 15 };

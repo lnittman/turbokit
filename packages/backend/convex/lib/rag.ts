@@ -3,89 +3,75 @@ import { components } from "../_generated/api";
 import type { ActionCtx } from "../_generated/server";
 import { getEmbeddingModel } from "./models";
 
-export const rag = new RAG(
-	components.rag as any,
-	{
-		embedder: getEmbeddingModel() as any,
-		chunkSize: 1000,
-		chunkOverlap: 200,
-	} as any,
+const DEFAULT_RAG_NAMESPACE = "global";
+const DEFAULT_TOP_K = 5;
+const DEFAULT_EMBEDDING_DIMENSION = 1536;
+
+const embeddingDimension = Number.parseInt(
+	process.env.OPENROUTER_EMBEDDING_DIMENSION ||
+		process.env.RAG_EMBEDDING_DIMENSION ||
+		`${DEFAULT_EMBEDDING_DIMENSION}`,
+	10,
 );
 
-/**
- * Helper: Ingest document into RAG system
- *
- * @example
- * await ingestDocument(ctx, {
- *   documentId: "user-guide-001",
- *   content: "Full text of user guide...",
- *   metadata: { type: "documentation", category: "user-guides" }
- * });
- *
- * NOTE: The RAG component API may vary - check the @convex-dev/rag docs
- * for the current method signatures.
- */
+export const rag = new RAG(components.rag as any, {
+	textEmbeddingModel: getEmbeddingModel() as any,
+	embeddingDimension: Number.isFinite(embeddingDimension)
+		? embeddingDimension
+		: DEFAULT_EMBEDDING_DIMENSION,
+});
+
+type IngestMetadata = Record<string, unknown> & {
+	namespace?: string;
+};
+
 export async function ingestDocument(
-	_ctx: ActionCtx,
-	_args: {
+	ctx: ActionCtx,
+	args: {
 		documentId: string;
 		content: string;
-		metadata?: Record<string, any>;
+		metadata?: IngestMetadata;
 	},
 ): Promise<void> {
-	// TODO: Update to match @convex-dev/rag API
-	// return await rag.ingest(ctx, { ... });
-	console.log("[RAG] ingestDocument not yet configured - see lib/rag.ts");
+	const namespace = args.metadata?.namespace || DEFAULT_RAG_NAMESPACE;
+	const { namespace: _namespace, ...metadata } = args.metadata || {};
+
+	await rag.add(ctx as any, {
+		namespace,
+		key: args.documentId,
+		text: args.content,
+		metadata: metadata as any,
+	});
 }
 
-/**
- * Helper: Search documents using semantic search
- *
- * @example
- * const results = await searchDocuments(ctx, "How do I reset my password?", {
- *   topK: 5,
- *   threshold: 0.7
- * });
- *
- * NOTE: The RAG component API may vary - check the @convex-dev/rag docs
- * for the current method signatures.
- */
 export async function searchDocuments(
-	_ctx: ActionCtx,
-	_query: string,
-	_options?: {
+	ctx: ActionCtx,
+	query: string,
+	options?: {
+		namespace?: string;
 		topK?: number;
 		threshold?: number;
-		filters?: Record<string, any>;
+		filters?: Record<string, unknown>;
 	},
 ): Promise<
 	Array<{ content: string; score: number; metadata: Record<string, unknown> }>
 > {
-	// TODO: Update to match @convex-dev/rag API
-	// return await rag.search(ctx, { ... });
-	console.log("[RAG] searchDocuments not yet configured - see lib/rag.ts");
-	return [];
-}
+	const namespace = options?.namespace || DEFAULT_RAG_NAMESPACE;
+	const filters = options?.filters ? ([options.filters] as any) : undefined;
 
-// Example ingestion patterns (implement in your domain logic):
-//
-// 1. Documentation ingestion:
-// await ingestDocument(ctx, {
-//   documentId: `doc-${docId}`,
-//   content: documentContent,
-//   metadata: { type: "documentation", category: "api" }
-// });
-//
-// 2. User-generated content:
-// await ingestDocument(ctx, {
-//   documentId: `post-${postId}`,
-//   content: postContent,
-//   metadata: { type: "post", userId, tags }
-// });
-//
-// 3. Code snippets:
-// await ingestDocument(ctx, {
-//   documentId: `snippet-${snippetId}`,
-//   content: codeSnippet,
-//   metadata: { type: "code", language: "typescript" }
-// });
+	const { results } = await rag.search(ctx as any, {
+		namespace,
+		query,
+		limit: options?.topK || DEFAULT_TOP_K,
+		vectorScoreThreshold: options?.threshold,
+		filters,
+	});
+
+	return results.map((result: any) => ({
+		content: (result.content || [])
+			.map((entry: { text: string }) => entry.text)
+			.join("\n"),
+		score: result.score,
+		metadata: result.content?.[0]?.metadata || {},
+	}));
+}
