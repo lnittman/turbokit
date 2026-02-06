@@ -1,62 +1,26 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-
-import {
-	Bell,
-	FileText,
-	GearSix,
-	Moon,
-	Plus,
-	MagnifyingGlass as Search,
-	Sidebar,
-	SignOut,
-	Sparkle,
-	Sun,
-	User,
-} from "@phosphor-icons/react";
+import { MagnifyingGlass as Search } from "@phosphor-icons/react";
 import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { commandModalAtom, sidebarCollapsedAtom } from "@/atoms/layout";
-import { starterLayoutAtom } from "@/atoms/preferences";
-import { turbokitConfig } from "@/config/turbokit.config";
-import { STARTER_LAYOUT_LABELS, type StarterLayout } from "@/layouts";
-
-interface CommandItem {
-	id: string;
-	title: string;
-	description?: string;
-	icon?: React.ReactNode;
-	shortcut?: string;
-	action: () => void | Promise<void>;
-	category?: string;
-}
-
-type ClerkWindow = Window & {
-	Clerk?: {
-		signOut: () => Promise<void>;
-	};
-};
+import { commandModalAtom } from "@/atoms/layout";
+import {
+	ACTION_CATEGORY_LABELS,
+	type AppAction,
+	useActionsForSurface,
+} from "@/components/layout/actions/registry";
 
 export function CommandMenuModal(): React.ReactElement {
 	const [commandModal, setCommandModal] = useAtom(commandModalAtom);
-	const [layout, setLayout] = useAtom(starterLayoutAtom);
-	const [sidebarCollapsed, setSidebarCollapsed] = useAtom(sidebarCollapsedAtom);
-	const { resolvedTheme, setTheme } = useTheme();
-	const isClerkConfigured = Boolean(
-		process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-	);
-
 	const isOpen = commandModal.open;
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const listRef = useRef<HTMLDivElement>(null);
-	const router = useRouter();
+	const commandItems = useActionsForSurface("command");
 
 	const setIsOpen = useCallback(
 		(open: boolean) => {
@@ -70,126 +34,6 @@ export function CommandMenuModal(): React.ReactElement {
 		[setCommandModal],
 	);
 
-	const setLayoutAndNavigate = useCallback(
-		(nextLayout: StarterLayout) => {
-			setLayout(nextLayout);
-			router.push("/");
-		},
-		[router, setLayout],
-	);
-
-	const commandItems = useMemo<CommandItem[]>(() => {
-		const layoutCommands: CommandItem[] = turbokitConfig.layout.options.map(
-			(starter, index) => ({
-				id: `layout-${starter}`,
-				title: `open ${STARTER_LAYOUT_LABELS[starter]}`,
-				description:
-					starter === layout ? "currently active" : "switch starter surface",
-				icon: <Sparkle className="h-4 w-4" />,
-				shortcut: `⌘${index + 1}`,
-				action: () => setLayoutAndNavigate(starter),
-				category: "layouts",
-			}),
-		);
-
-		return [
-			...layoutCommands,
-			{
-				id: "nav-settings",
-				title: "open settings",
-				description: "account, appearance, notifications",
-				icon: <GearSix className="h-4 w-4" />,
-				shortcut: "⌘,",
-				action: () => router.push("/settings"),
-				category: "navigation",
-			},
-			{
-				id: "nav-profile",
-				title: "open profile",
-				description: "view profile overlay",
-				icon: <User className="h-4 w-4" />,
-				action: () => router.push("/profile"),
-				category: "navigation",
-			},
-			{
-				id: "nav-notifications",
-				title: "open notifications",
-				description: "jump to notification preferences",
-				icon: <Bell className="h-4 w-4" />,
-				action: () => router.push("/settings?section=notifications"),
-				category: "navigation",
-			},
-			{
-				id: "nav-create",
-				title: "create new",
-				description: "open create overlay",
-				icon: <Plus className="h-4 w-4" />,
-				shortcut: "⌘N",
-				action: () => router.push("/create"),
-				category: "navigation",
-			},
-			{
-				id: "action-theme",
-				title: resolvedTheme === "dark" ? "switch to light" : "switch to dark",
-				description: "toggle active theme",
-				icon:
-					resolvedTheme === "dark" ? (
-						<Sun className="h-4 w-4" />
-					) : (
-						<Moon className="h-4 w-4" />
-					),
-				shortcut: "⌘T",
-				action: () => setTheme(resolvedTheme === "dark" ? "light" : "dark"),
-				category: "actions",
-			},
-			{
-				id: "action-sidebar",
-				title: sidebarCollapsed ? "expand sidebar" : "collapse sidebar",
-				description: "toggle shell navigation",
-				icon: <Sidebar className="h-4 w-4" />,
-				shortcut: "⌘B",
-				action: () => setSidebarCollapsed((current) => !current),
-				category: "actions",
-			},
-			{
-				id: "action-signout",
-				title: "sign out",
-				description: "end current session",
-				icon: <SignOut className="h-4 w-4" />,
-				action: async () => {
-					const clerk =
-						typeof window === "undefined"
-							? undefined
-							: (window as ClerkWindow).Clerk;
-
-					if (isClerkConfigured && typeof window !== "undefined" && clerk) {
-						await clerk.signOut();
-						return;
-					}
-					router.push("/signin");
-				},
-				category: "actions",
-			},
-			{
-				id: "help-docs",
-				title: "open documentation",
-				description: "open docs in a new tab",
-				icon: <FileText className="h-4 w-4" />,
-				action: () => window.open("/docs", "_blank", "noopener,noreferrer"),
-				category: "help",
-			},
-		];
-	}, [
-		isClerkConfigured,
-		layout,
-		resolvedTheme,
-		router,
-		setLayoutAndNavigate,
-		setSidebarCollapsed,
-		setTheme,
-		sidebarCollapsed,
-	]);
-
 	const filteredCommands = useMemo(
 		() =>
 			commandItems.filter(
@@ -198,7 +42,9 @@ export function CommandMenuModal(): React.ReactElement {
 					command.description
 						?.toLowerCase()
 						.includes(searchQuery.toLowerCase()) ||
-					command.category?.toLowerCase().includes(searchQuery.toLowerCase()),
+					ACTION_CATEGORY_LABELS[command.category]
+						.toLowerCase()
+						.includes(searchQuery.toLowerCase()),
 			),
 		[commandItems, searchQuery],
 	);
@@ -207,18 +53,18 @@ export function CommandMenuModal(): React.ReactElement {
 		() =>
 			filteredCommands.reduce(
 				(accumulator, command) => {
-					const category = command.category || "other";
+					const category = command.category;
 					if (!accumulator[category]) accumulator[category] = [];
 					accumulator[category].push(command);
 					return accumulator;
 				},
-				{} as Record<string, CommandItem[]>,
+				{} as Record<string, AppAction[]>,
 			),
 		[filteredCommands],
 	);
 
 	const executeCommand = useCallback(
-		async (command: CommandItem) => {
+		async (command: AppAction) => {
 			await command.action();
 			setIsOpen(false);
 		},
@@ -325,8 +171,10 @@ export function CommandMenuModal(): React.ReactElement {
 													</span>
 												)}
 											</div>
-											{command.shortcut && (
-												<kbd className="tk-cmd-kbd-sm">{command.shortcut}</kbd>
+											{command.commandShortcut && (
+												<kbd className="tk-cmd-kbd-sm">
+													{command.commandShortcut}
+												</kbd>
 											)}
 										</button>
 									);
