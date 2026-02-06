@@ -27,6 +27,22 @@ export function StarterLayoutSurface({
 
 export { LayoutSwitcher } from "./layout-switcher";
 export {
+	type CanvasNode,
+	type CanvasStarterData,
+	type ChatMessage,
+	type ChatStarterData,
+	type DashboardStarterData,
+	type FeedEvent,
+	type FeedStarterData,
+	type FeedType,
+	type KanbanColumn,
+	type KanbanStarterData,
+	StarterLayoutSeamProvider,
+	type StarterLayoutSeams,
+	type StarterSeamState,
+	type StarterSeamStatus,
+} from "./seams";
+export {
 	STARTER_LAYOUT_LABELS,
 	STARTER_LAYOUTS,
 	type StarterLayout,

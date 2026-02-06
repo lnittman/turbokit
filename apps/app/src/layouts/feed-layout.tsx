@@ -3,60 +3,35 @@
 import type React from "react";
 import { useMemo, useState } from "react";
 
-type FeedType = "all" | "product" | "system" | "team";
-
-const FILTERS: FeedType[] = ["all", "product", "system", "team"];
-
-const EVENTS = [
-	{
-		id: "1",
-		type: "product" as FeedType,
-		title: "new onboarding flow shipped",
-		summary: "convert-first landing + setup checklist now in production.",
-		tone: "var(--te-green)",
-		time: "2m ago",
-	},
-	{
-		id: "2",
-		type: "system" as FeedType,
-		title: "cache warm cycle completed",
-		summary: "all regions reported green latencies under p95 target.",
-		tone: "var(--te-blue)",
-		time: "9m ago",
-	},
-	{
-		id: "3",
-		type: "team" as FeedType,
-		title: "design review flagged contrast",
-		summary: "two CTA states need semantic warning color instead of neutral.",
-		tone: "var(--te-yellow)",
-		time: "16m ago",
-	},
-	{
-		id: "4",
-		type: "system" as FeedType,
-		title: "background sync retry failed",
-		summary: "queue item exceeded retries and moved to dead-letter list.",
-		tone: "var(--te-red)",
-		time: "31m ago",
-	},
-	{
-		id: "5",
-		type: "product" as FeedType,
-		title: "kanban starter adopted",
-		summary: "new project bootstrapped from kanban shell for client alpha.",
-		tone: "var(--te-orange)",
-		time: "47m ago",
-	},
-];
+import { type FeedType, useFeedStarterSeam } from "./seams";
+import { StarterLayoutState } from "./starter-layout-state";
 
 export function FeedLayout(): React.ReactElement {
+	const seam = useFeedStarterSeam();
 	const [activeFilter, setActiveFilter] = useState<FeedType>("all");
-
+	const { events, filters, canLoadMore } = seam.data;
 	const filteredEvents = useMemo(() => {
-		if (activeFilter === "all") return EVENTS;
-		return EVENTS.filter((event) => event.type === activeFilter);
-	}, [activeFilter]);
+		if (activeFilter === "all") return events;
+		return events.filter((event) => event.type === activeFilter);
+	}, [activeFilter, events]);
+
+	if (seam.status === "loading") {
+		return <StarterLayoutState layout="feed" state="loading" />;
+	}
+
+	if (seam.status === "error") {
+		return (
+			<StarterLayoutState
+				layout="feed"
+				state="error"
+				errorMessage={seam.errorMessage}
+			/>
+		);
+	}
+
+	if (events.length === 0) {
+		return <StarterLayoutState layout="feed" state="empty" />;
+	}
 
 	return (
 		<div className="h-full overflow-auto bg-background p-5 md:p-6">
@@ -78,7 +53,7 @@ export function FeedLayout(): React.ReactElement {
 				</header>
 
 				<div className="flex flex-wrap gap-2">
-					{FILTERS.map((filter) => (
+					{filters.map((filter) => (
 						<button
 							type="button"
 							key={filter}
@@ -127,9 +102,10 @@ export function FeedLayout(): React.ReactElement {
 
 				<button
 					type="button"
+					disabled={!canLoadMore}
 					className="mt-1 rounded-sm border border-dashed border-border bg-background-secondary px-4 py-2 text-xs text-foreground-tertiary"
 				>
-					load more events
+					{canLoadMore ? "load more events" : "no more events"}
 				</button>
 			</div>
 		</div>

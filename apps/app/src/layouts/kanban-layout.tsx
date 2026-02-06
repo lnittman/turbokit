@@ -1,63 +1,31 @@
 import type React from "react";
 
-const COLUMNS = [
-	{
-		id: "todo",
-		title: "todo",
-		cards: [
-			{
-				id: "t1",
-				title: "wire account settings",
-				priority: "high",
-				tone: "var(--te-red)",
-			},
-			{
-				id: "t2",
-				title: "finalize canvas minimap",
-				priority: "medium",
-				tone: "var(--te-yellow)",
-			},
-		],
-	},
-	{
-		id: "doing",
-		title: "doing",
-		cards: [
-			{
-				id: "d1",
-				title: "command palette actions",
-				priority: "high",
-				tone: "var(--te-orange)",
-			},
-			{
-				id: "d2",
-				title: "feed filtering states",
-				priority: "low",
-				tone: "var(--te-blue)",
-			},
-		],
-	},
-	{
-		id: "done",
-		title: "done",
-		cards: [
-			{
-				id: "dn1",
-				title: "sidebar cleanup",
-				priority: "done",
-				tone: "var(--te-green)",
-			},
-			{
-				id: "dn2",
-				title: "token baseline pass",
-				priority: "done",
-				tone: "var(--te-green)",
-			},
-		],
-	},
-];
+import { useKanbanStarterSeam } from "./seams";
+import { StarterLayoutState } from "./starter-layout-state";
 
 export function KanbanLayout(): React.ReactElement {
+	const seam = useKanbanStarterSeam();
+
+	if (seam.status === "loading") {
+		return <StarterLayoutState layout="kanban" state="loading" />;
+	}
+
+	if (seam.status === "error") {
+		return (
+			<StarterLayoutState
+				layout="kanban"
+				state="error"
+				errorMessage={seam.errorMessage}
+			/>
+		);
+	}
+
+	const { columns } = seam.data;
+
+	if (columns.length === 0) {
+		return <StarterLayoutState layout="kanban" state="empty" />;
+	}
+
 	return (
 		<div className="h-full overflow-auto bg-background p-5 md:p-6">
 			<div className="mx-auto flex w-full max-w-7xl flex-col gap-4">
@@ -71,7 +39,7 @@ export function KanbanLayout(): React.ReactElement {
 				</header>
 
 				<section className="grid gap-3 lg:grid-cols-3">
-					{COLUMNS.map((column) => (
+					{columns.map((column) => (
 						<article
 							key={column.id}
 							className="rounded-sm border border-border bg-background-secondary p-3"

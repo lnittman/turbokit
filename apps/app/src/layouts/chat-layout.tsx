@@ -1,29 +1,32 @@
 import type React from "react";
 
 import { PromptBar } from "@/components/shared/prompt-bar";
-
-const MESSAGES = [
-	{
-		id: "m1",
-		role: "user",
-		body: "design a restrained dashboard starter with realtime affordances.",
-		time: "10:14",
-	},
-	{
-		id: "m2",
-		role: "assistant",
-		body: "done. created a grayscale-first shell with functional status colors and layout switcher hooks.",
-		time: "10:15",
-	},
-	{
-		id: "m3",
-		role: "user",
-		body: "add kanban + canvas presets and make command palette route-aware.",
-		time: "10:16",
-	},
-];
+import { useChatStarterSeam } from "./seams";
+import { StarterLayoutState } from "./starter-layout-state";
 
 export function ChatLayout(): React.ReactElement {
+	const seam = useChatStarterSeam();
+
+	if (seam.status === "loading") {
+		return <StarterLayoutState layout="chat" state="loading" />;
+	}
+
+	if (seam.status === "error") {
+		return (
+			<StarterLayoutState
+				layout="chat"
+				state="error"
+				errorMessage={seam.errorMessage}
+			/>
+		);
+	}
+
+	const { messages, isStreaming, connectionLabel } = seam.data;
+
+	if (messages.length === 0) {
+		return <StarterLayoutState layout="chat" state="empty" />;
+	}
+
 	return (
 		<div className="flex h-full flex-col bg-background p-5 md:p-6">
 			<div className="mx-auto flex h-full w-full max-w-4xl min-h-0 flex-col gap-4">
@@ -42,14 +45,14 @@ export function ChatLayout(): React.ReactElement {
 								className="h-2 w-2 rounded-full"
 								style={{ backgroundColor: "var(--te-green)" }}
 							/>
-							connection stable
+							{connectionLabel}
 						</span>
 					</div>
 				</header>
 
 				<section className="min-h-0 flex-1 overflow-auto rounded-sm border border-border bg-background-secondary p-4">
 					<div className="space-y-3">
-						{MESSAGES.map((message) => (
+						{messages.map((message) => (
 							<article
 								key={message.id}
 								className="rounded-sm border border-border bg-background p-3"
@@ -64,17 +67,19 @@ export function ChatLayout(): React.ReactElement {
 							</article>
 						))}
 
-						<article className="rounded-sm border border-border bg-background p-3">
-							<div className="mb-1 flex items-center justify-between text-[11px] text-foreground-tertiary">
-								<span>assistant</span>
-								<span>typing…</span>
-							</div>
-							<div className="inline-flex items-center gap-1">
-								<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary" />
-								<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary [animation-delay:120ms]" />
-								<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary [animation-delay:220ms]" />
-							</div>
-						</article>
+						{isStreaming ? (
+							<article className="rounded-sm border border-border bg-background p-3">
+								<div className="mb-1 flex items-center justify-between text-[11px] text-foreground-tertiary">
+									<span>assistant</span>
+									<span>typing…</span>
+								</div>
+								<div className="inline-flex items-center gap-1">
+									<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary" />
+									<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary [animation-delay:120ms]" />
+									<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground-quaternary [animation-delay:220ms]" />
+								</div>
+							</article>
+						) : null}
 					</div>
 				</section>
 

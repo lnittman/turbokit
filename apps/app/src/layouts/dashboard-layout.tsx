@@ -1,70 +1,38 @@
 import type React from "react";
 
-const METRICS = [
-	{
-		label: "active projects",
-		value: "12",
-		delta: "+3 today",
-		tone: "var(--te-green)",
-	},
-	{ label: "messages", value: "3,842", delta: "+11%", tone: "var(--te-blue)" },
-	{ label: "alerts", value: "2", delta: "review now", tone: "var(--te-red)" },
-	{
-		label: "deploy status",
-		value: "healthy",
-		delta: "all systems",
-		tone: "var(--te-green)",
-	},
-];
-
-const ACTIVITY_BARS = [
-	{ id: "bar-01", value: 42 },
-	{ id: "bar-02", value: 58 },
-	{ id: "bar-03", value: 49 },
-	{ id: "bar-04", value: 61 },
-	{ id: "bar-05", value: 55 },
-	{ id: "bar-06", value: 73 },
-	{ id: "bar-07", value: 67 },
-	{ id: "bar-08", value: 79 },
-	{ id: "bar-09", value: 71 },
-	{ id: "bar-10", value: 64 },
-	{ id: "bar-11", value: 69 },
-	{ id: "bar-12", value: 81 },
-];
-
-const RECENT = [
-	{
-		title: "workspace shell polish",
-		meta: "updated 3m ago",
-		status: "live",
-		tone: "var(--te-green)",
-	},
-	{
-		title: "billing webhook retry",
-		meta: "updated 18m ago",
-		status: "warning",
-		tone: "var(--te-yellow)",
-	},
-	{
-		title: "permissions audit",
-		meta: "updated 1h ago",
-		status: "needs review",
-		tone: "var(--te-red)",
-	},
-	{
-		title: "docs starter refresh",
-		meta: "updated 2h ago",
-		status: "ready",
-		tone: "var(--te-blue)",
-	},
-];
+import { useDashboardStarterSeam } from "./seams";
+import { StarterLayoutState } from "./starter-layout-state";
 
 export function DashboardLayout(): React.ReactElement {
+	const seam = useDashboardStarterSeam();
+
+	if (seam.status === "loading") {
+		return <StarterLayoutState layout="dashboard" state="loading" />;
+	}
+
+	if (seam.status === "error") {
+		return (
+			<StarterLayoutState
+				layout="dashboard"
+				state="error"
+				errorMessage={seam.errorMessage}
+			/>
+		);
+	}
+
+	const { metrics, activityBars, recentItems } = seam.data;
+	const hasData =
+		metrics.length > 0 || activityBars.length > 0 || recentItems.length > 0;
+
+	if (!hasData) {
+		return <StarterLayoutState layout="dashboard" state="empty" />;
+	}
+
 	return (
 		<div className="h-full overflow-auto bg-background p-5 md:p-6">
 			<div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
 				<section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-					{METRICS.map((metric) => (
+					{metrics.map((metric) => (
 						<article
 							key={metric.label}
 							className="rounded-sm border border-border bg-background-secondary p-4"
@@ -97,16 +65,17 @@ export function DashboardLayout(): React.ReactElement {
 							</span>
 						</div>
 						<div className="flex h-44 items-end gap-2 rounded-sm border border-border bg-background p-3">
-							{ACTIVITY_BARS.map((bar, index) => (
+							{activityBars.map((bar, index) => (
 								<div key={bar.id} className="flex flex-1 flex-col justify-end">
 									<div
 										className="rounded-[1px]"
 										style={{
 											height: `${bar.value}%`,
 											background:
-												index > ACTIVITY_BARS.length - 4
+												bar.tone ||
+												(index > activityBars.length - 4
 													? "var(--te-orange)"
-													: "var(--foreground-quaternary)",
+													: "var(--foreground-quaternary)"),
 										}}
 									/>
 								</div>
@@ -119,9 +88,9 @@ export function DashboardLayout(): React.ReactElement {
 							recent work
 						</h2>
 						<div className="space-y-2">
-							{RECENT.map((item) => (
+							{recentItems.map((item) => (
 								<div
-									key={item.title}
+									key={item.id}
 									className="rounded-sm border border-border bg-background p-3"
 								>
 									<div className="flex items-center justify-between gap-3">

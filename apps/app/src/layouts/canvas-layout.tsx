@@ -1,16 +1,40 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const NODES = [
-	{ id: "n1", title: "landing flow", x: 10, y: 16, tone: "var(--te-blue)" },
-	{ id: "n2", title: "auth overlay", x: 48, y: 30, tone: "var(--te-green)" },
-	{ id: "n3", title: "settings graph", x: 72, y: 62, tone: "var(--te-orange)" },
-];
+import { useCanvasStarterSeam } from "./seams";
+import { StarterLayoutState } from "./starter-layout-state";
 
 export function CanvasLayout(): React.ReactElement {
+	const seam = useCanvasStarterSeam();
 	const [zoom, setZoom] = useState(100);
+
+	useEffect(() => {
+		if (seam.status === "ready") {
+			setZoom(seam.data.initialZoom);
+		}
+	}, [seam.status, seam.data.initialZoom]);
+
+	if (seam.status === "loading") {
+		return <StarterLayoutState layout="canvas" state="loading" />;
+	}
+
+	if (seam.status === "error") {
+		return (
+			<StarterLayoutState
+				layout="canvas"
+				state="error"
+				errorMessage={seam.errorMessage}
+			/>
+		);
+	}
+
+	const { nodes, maxZoom, minZoom } = seam.data;
+
+	if (nodes.length === 0) {
+		return <StarterLayoutState layout="canvas" state="empty" />;
+	}
 
 	return (
 		<div className="flex h-full flex-col bg-background p-5 md:p-6">
@@ -28,7 +52,9 @@ export function CanvasLayout(): React.ReactElement {
 						<button
 							type="button"
 							className="rounded-sm border border-border px-2 py-1 text-xs text-foreground-tertiary"
-							onClick={() => setZoom((current) => Math.max(50, current - 10))}
+							onClick={() =>
+								setZoom((current) => Math.max(minZoom, current - 10))
+							}
 						>
 							-
 						</button>
@@ -38,7 +64,9 @@ export function CanvasLayout(): React.ReactElement {
 						<button
 							type="button"
 							className="rounded-sm border border-border px-2 py-1 text-xs text-foreground-tertiary"
-							onClick={() => setZoom((current) => Math.min(200, current + 10))}
+							onClick={() =>
+								setZoom((current) => Math.min(maxZoom, current + 10))
+							}
 						>
 							+
 						</button>
@@ -56,7 +84,7 @@ export function CanvasLayout(): React.ReactElement {
 							transformOrigin: "top left",
 						}}
 					>
-						{NODES.map((node) => (
+						{nodes.map((node) => (
 							<article
 								key={node.id}
 								className="absolute w-40 rounded-sm border border-border bg-background p-3"
@@ -64,7 +92,7 @@ export function CanvasLayout(): React.ReactElement {
 							>
 								<p className="text-sm text-foreground">{node.title}</p>
 								<p className="mt-1 text-xs" style={{ color: node.tone }}>
-									connected
+									{node.status}
 								</p>
 							</article>
 						))}
