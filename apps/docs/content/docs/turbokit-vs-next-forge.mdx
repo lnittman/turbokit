@@ -1,33 +1,51 @@
 ---
 title: TurboKit vs next-forge
-description: Choosing the right starter based on realtime, AI, and product requirements
+description: Dated comparison matrix with concrete source references
 ---
 
 # TurboKit vs next-forge
 
-## TurboKit strengths
+Snapshot date: **February 6, 2026 (America/Detroit)**
 
-- Convex-native realtime architecture
-- built-in starter layouts for product UI shells
-- command palette + overlay patterns prewired
-- notification preferences and push token registration baseline
-- abbie-first loop/pair workflow configuration
+This matrix is intentionally evidence-backed. Every row maps to one or more concrete sources.
 
-## next-forge strengths
+## Comparison matrix
 
-- broader app pack matrix in some setups (marketing/docs/storybook/etc.)
-- mature scaffolding for common SaaS patterns
-- batteries-included conventions for general Next.js teams
+| Dimension | TurboKit | next-forge | Evidence |
+| --- | --- | --- | --- |
+| Starter app surfaces | Focused app + docs template (`apps/app`, `apps/docs`) | Multi-app scaffold (`web`, `app`, `api`, `docs`, `email`, `storybook`) | [T1], [N1] |
+| Backend default | Convex-native package as first-class backend (`packages/backend/convex`) | General Next.js/Turborepo starter with pluggable backend choices | [T1], [N1] |
+| Layout starters | Ships five UI shells (`dashboard`, `feed`, `chat`, `kanban`, `canvas`) | No equivalent 5-layout shell set in core README feature list | [T2], [N1] |
+| Realtime notifications baseline | Convex notification tables + queries/mutations/actions included | Notification capability listed, but implementation details are broader starter-level | [T3], [N1] |
+| Agent/loop workflow integration | Includes `.loop.json` + `.abbie/config.json` conventions for agent loops | No equivalent agent-specific loop contract in README | [T4], [N1] |
+| Ops integrations | Convex-first stack with optional add-ons | Explicit SaaS stack integrations called out (Sentry, Better Stack, Stripe, Resend, etc.) | [T1], [N1] |
 
-## Choose TurboKit when
+## Decision framing
 
-- realtime UX is central
-- Convex is your backend default
-- you want five polished starter shells immediately
-- you optimize for autonomous agent implementation loops
+Choose **TurboKit** when:
 
-## Choose next-forge when
+- realtime Convex workflows are the default architecture
+- you want opinionated starter shells to ship UI quickly
+- you run autonomous/assisted implementation loops with shared agent context
 
-- you need broader framework scaffolding breadth first
-- Convex is not a core requirement
-- your team prefers a more generic Next.js starter baseline
+Choose **next-forge** when:
+
+- you need a broader pre-scaffolded multi-app SaaS surface area
+- you want pre-wired integrations across analytics/payments/observability
+- your backend architecture is not Convex-first
+
+## Maintenance process
+
+- **Owner**: TEMP team owner (Luke) with implementation support from active coding agents.
+- **Weekly quick pass**: verify major claims still match `README`/docs changes.
+- **Monthly full pass**: refresh matrix rows, update references, and bump snapshot date.
+- **Trigger updates immediately**: when either template lands a major structural release.
+
+## Sources
+
+- [T1] `AGENTS.md` (TurboKit quick-start structure and stack), plus repository layout in this template.
+- [T2] `apps/app/src/layouts/types.ts` and `apps/app/src/config/turbokit.config.ts`.
+- [T3] `packages/backend/convex/schema.ts`, `packages/backend/convex/app/notifications/queries.ts`, `packages/backend/convex/app/notifications/mutations.ts`, `packages/backend/convex/app/notifications/internal.ts`.
+- [T4] `.loop.json` and `.abbie/config.json`.
+- [N1] `https://raw.githubusercontent.com/vercel/next-forge/main/README.md`
+- [N2] `https://www.next-forge.com/docs`

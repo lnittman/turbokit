@@ -18,6 +18,7 @@
 		"typecheck": "turbo typecheck --only --filter=app --filter=docs",
 		"test": "vitest run --config apps/app/vitest.config.ts --passWithNoTests && turbo test",
 		"test:e2e": "turbo test:e2e",
+		"reconcile:temp": "node scripts/reconcile-temp.mjs --prefix TEMP --commits 40 --output docs/reports/temp-reconciliation-latest.md",
 		"analyze": "turbo analyze",
 		"boundaries": "turbo boundaries",
 		"bump-deps": "npx npm-check-updates --deep -u -x react-day-picker && pnpm install",

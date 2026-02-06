@@ -30,6 +30,12 @@ pnpm dev
 - Preserve accessibility and keyboard navigation
 - Document architectural changes in this file
 
+### TEMP DoD v2 (required)
+
+- For TEMP work, use the checklist in `apps/docs/content/docs/delivery-anti-drift.mdx` before marking issues done.
+- Include the TEMP issue key in at least one commit message for each completed issue when possible.
+- Run `pnpm reconcile:temp` weekly (or at sprint end) and attach report findings to Linear.
+
 ---
 
 ## Architecture Overview

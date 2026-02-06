@@ -1,0 +1,72 @@
+---
+title: Delivery Anti-Drift
+description: DoD v2, reconciliation workflow, and linear-audit cadence for TEMP issues
+---
+
+# Delivery Anti-Drift
+
+This page defines the **DoD v2** contract for TEMP team execution and the recurring reconciliation loop between code, commits, TODOs, and Linear.
+
+## Definition of Done (DoD v2)
+
+Every TEMP issue is considered done only when all checklist items pass:
+
+- [ ] Acceptance criteria are copied into the issue and explicitly checked in final comment.
+- [ ] Code pointers are provided (`path:line` for key implementation areas).
+- [ ] Validation commands are listed with outcomes (`verify`, `pnpm lint`, `pnpm test`, `pnpm typecheck`, `pnpm build`).
+- [ ] At least one commit is linked to the issue outcome.
+- [ ] Follow-up work is split into explicit new issues (no silent TODO debt).
+- [ ] Issue state is moved to `Done` only after the above are true.
+
+## New issue authoring template (TEMP)
+
+Use this structure for all new TEMP issues:
+
+```md
+## Goal
+One outcome-focused sentence.
+
+## Scope
+- In-scope change 1
+- In-scope change 2
+
+## Acceptance Criteria
+- [ ] Observable behavior/result 1
+- [ ] Observable behavior/result 2
+- [ ] Validation commands + expected outcome
+
+## Code Pointers
+- `path/to/file.ts:line`
+- `path/to/other.tsx:line`
+
+## Size
+S / M / L
+```
+
+## Reconciliation workflow
+
+Run this at least weekly, and at every sprint close:
+
+```bash
+pnpm reconcile:temp
+```
+
+Artifacts:
+
+- `docs/reports/temp-reconciliation-latest.md` (rolling report)
+- `docs/reports/temp-reconciliation-2026-02-06.md` (dated baseline snapshot)
+
+Interpretation rules:
+
+1. Orphan TODO/FIXME lines: create/update issues so each TODO maps to a TEMP key.
+2. Orphan commits: backfill Linear comments with commit hashes, or open cleanup issues.
+3. Zero-link rows for active issues: add missing commit or TODO linkage.
+
+## Cadence and ownership
+
+| Activity | Cadence | Owner |
+| --- | --- | --- |
+| Reconciliation report (`pnpm reconcile:temp`) | Weekly | Active implementation agent |
+| Matrix/docs verification | Weekly quick pass | TEMP maintainer |
+| linear-audit + council planning pass | Sprint boundary (or bi-weekly) | TEMP maintainer + council |
+| DoD compliance audit | Before marking `Done` | Issue implementer |
