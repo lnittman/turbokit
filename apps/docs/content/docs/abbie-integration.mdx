@@ -1,0 +1,51 @@
+---
+title: Abbie Integration
+description: Loop-friendly project config for autonomous implementation workflows
+---
+
+# Abbie Integration
+
+TurboKit includes project-level abbie config for loop-style execution.
+
+## .loop.json
+
+```json
+{
+  "project": {
+    "name": "turbokit",
+    "team": "TEMP",
+    "workspace": "luke-labs"
+  },
+  "flywheel": "turborepo",
+  "commands": {
+    "lint": "pnpm lint",
+    "typecheck": "pnpm typecheck",
+    "build": "pnpm build",
+    "test": "pnpm test"
+  }
+}
+```
+
+## .abbie/config.json
+
+```json
+{
+  "extends": "~/.abbie/templates/loop/turborepo.json",
+  "name": "turbokit",
+  "emoji": "📦",
+  "team": "TEMP",
+  "skills": {
+    "loop": { "flywheel": "turborepo" },
+    "pair": { "enabled": true }
+  }
+}
+```
+
+## Quality gates
+
+Before closing implementation issues:
+
+1. run lint
+2. run tests
+3. run build
+4. only then commit and mark done

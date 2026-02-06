@@ -1,61 +1,14 @@
 {
-  "project": {
-    "name": "turbokit",
-    "team": "TEMPLATE",
-    "type": "convex-next",
-    "description": "World-class turborepo template with Convex, Next.js 15, React 19"
-  },
-  "commands": {
-    "dev": "pnpm dev",
-    "test": "verify --format=summary",
-    "lint": "biome check",
-    "typecheck": "pnpm typecheck",
-    "build": "pnpm build"
-  },
-  "qualityGates": {
-    "preCommit": [
-      {
-        "name": "Lint",
-        "command": "biome check",
-        "required": true
-      },
-      {
-        "name": "Type Check",
-        "command": "pnpm typecheck",
-        "required": true
-      },
-      {
-        "name": "Unit Tests",
-        "command": "verify --format=summary",
-        "required": true
-      }
-    ]
-  },
-  "structure": {
-    "apps": ["apps/app", "apps/docs"],
-    "packages": [
-      "packages/backend",
-      "packages/design",
-      "packages/auth",
-      "packages/media",
-      "packages/analytics",
-      "packages/observability",
-      "packages/seo",
-      "packages/testing",
-      "packages/webgl",
-      "packages/next-config",
-      "packages/typescript-config"
-    ]
-  },
-  "exploration": {
-    "entryPoints": [
-      "packages/backend/convex/schema.ts",
-      "packages/design/styles/globals.css",
-      "apps/app/src/app/layout.tsx"
-    ],
-    "commands": {
-      "outline": "outline packages/ -c -q",
-      "layer": "layer . --depth=2 -q"
+  "extends": "~/.abbie/templates/loop/turborepo.json",
+  "name": "turbokit",
+  "emoji": "📦",
+  "team": "TEMP",
+  "skills": {
+    "loop": {
+      "flywheel": "turborepo"
+    },
+    "pair": {
+      "enabled": true
     }
   }
 }

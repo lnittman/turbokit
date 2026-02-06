@@ -1,0 +1,43 @@
+---
+title: Design System
+description: Token-first styling with grayscale shell and functional color accents
+---
+
+# Design System
+
+TurboKit uses token-first styling in `packages/design/styles/globals.css`.
+
+## Visual direction
+
+- grayscale-first shell (backgrounds, borders, typography)
+- functional color only when meaning is required
+- lowercase labels and restrained hierarchy
+
+## Functional tokens
+
+```css
+--te-red: #ce2021;
+--te-yellow: #ffc003;
+--te-blue: #1270b8;
+--te-green: #1aa167;
+--te-orange: #e95c20;
+--user-accent: var(--te-orange);
+```
+
+Use these for status/state, not decoration.
+
+## User preferences
+
+Runtime preferences are synchronized via `UserPreferencesSync`.
+
+- accent color: `accentColorAtom`
+- font scale: `fontScaleAtom`
+- layout choice: `starterLayoutAtom`
+
+## Font scale tokens
+
+```css
+html[data-font-scale="sm"] { font-size: 15px; }
+html[data-font-scale="md"] { font-size: 16px; }
+html[data-font-scale="lg"] { font-size: 17px; }
+```

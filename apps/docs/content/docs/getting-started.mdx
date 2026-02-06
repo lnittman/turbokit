@@ -1,0 +1,40 @@
+---
+title: Getting Started
+description: Start a new TurboKit project with layout selection and immediate customization
+---
+
+# Getting Started
+
+## Install + run
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Build checks
+
+```bash
+pnpm build
+pnpm lint
+pnpm test
+```
+
+## Pick a starter layout
+
+The authenticated home page includes a layout switcher by default.
+
+- `dashboard` for metrics-heavy apps
+- `feed` for timelines and event streams
+- `chat` for AI or support interfaces
+- `kanban` for task workflows
+- `canvas` for spatial / whiteboard products
+
+Selection is persisted in local storage via `starterLayoutAtom`.
+
+## Core files
+
+- `apps/app/src/app/(authenticated)/page.tsx` layout surface entry
+- `apps/app/src/layouts/*` starter layout components
+- `apps/app/src/config/turbokit.config.ts` layout options and defaults
+- `packages/design/styles/globals.css` global design tokens

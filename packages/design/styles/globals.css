@@ -79,6 +79,14 @@
   --destructive: #ff4d4d;
   --destructive-foreground: #ffffff;
 
+  /* Functional color (TE-influenced) */
+  --te-red: #ce2021;
+  --te-yellow: #ffc003;
+  --te-blue: #1270b8;
+  --te-green: #1aa167;
+  --te-orange: #e95c20;
+  --user-accent: var(--te-orange);
+
   /* Card */
   --card: #161618;
   --card-foreground: var(--foreground);
@@ -157,6 +165,13 @@
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
+  --te-red: #ce2021;
+  --te-yellow: #ffc003;
+  --te-blue: #1270b8;
+  --te-green: #1aa167;
+  --te-orange: #e95c20;
+  --user-accent: var(--te-orange);
+
   --card: #ffffff;
   --card-foreground: var(--foreground);
 
@@ -193,6 +208,12 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-te-red: var(--te-red);
+  --color-te-yellow: var(--te-yellow);
+  --color-te-blue: var(--te-blue);
+  --color-te-green: var(--te-green);
+  --color-te-orange: var(--te-orange);
+  --color-user-accent: var(--user-accent);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-card: var(--card);
@@ -284,6 +305,18 @@
 html, body {
   margin: 0;
   padding: 0;
+}
+
+html[data-font-scale="sm"] {
+  font-size: 15px;
+}
+
+html[data-font-scale="md"] {
+  font-size: 16px;
+}
+
+html[data-font-scale="lg"] {
+  font-size: 17px;
 }
 
 body {

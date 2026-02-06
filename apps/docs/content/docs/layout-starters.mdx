@@ -1,0 +1,61 @@
+---
+title: Layout Starters
+description: Five production-ready UI shells with realtime-minded interaction patterns
+---
+
+# Layout Starters
+
+TurboKit includes five starter surfaces in `apps/app/src/layouts`.
+
+## Dashboard
+
+- metric cards with semantic status tones
+- activity chart scaffold
+- recent work panel
+- realtime live indicator
+
+## Feed
+
+- filter chips
+- chronological timeline
+- status-coded events
+- load-more affordance for infinite scroll patterns
+
+## Chat
+
+- message history list
+- streaming placeholder state
+- prompt bar input surface
+
+## Kanban
+
+- columns + cards
+- drag-ready markup hooks (`data-dnd-*`)
+- card status metadata
+
+## Canvas
+
+- grid-based infinite surface scaffold
+- zoom controls
+- minimap placeholder
+
+## Configuring defaults
+
+`apps/app/src/config/turbokit.config.ts` controls starter behavior.
+
+```ts
+export const turbokitConfig = {
+  layout: {
+    default: "dashboard",
+    options: ["dashboard", "feed", "chat", "kanban", "canvas"],
+    showSwitcher: true,
+  },
+} as const;
+```
+
+## Creating your own starter
+
+1. Add a component in `apps/app/src/layouts`.
+2. Add its key to `STARTER_LAYOUTS` in `apps/app/src/layouts/types.ts`.
+3. Add it to the layout component map in `apps/app/src/layouts/index.tsx`.
+4. Add docs for the new starter here.
